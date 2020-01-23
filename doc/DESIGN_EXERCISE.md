@@ -19,6 +19,11 @@ We reviewed one game code and discussed how we can refractor it.
 - Info about simulation in the configuration file: rule, type of simulation, steps, size of grid, initial states
 - How is UI updated: change color of specific cells that are changed 
 
+## CRC 
+![crc_1](crc_1.jpg)
+![crc_2](crc_2.jpg)
+![crc_3](crc_3.jpg)
+![crc_4](crc_4.jpg)
 
 
 
