@@ -1,5 +1,3 @@
-<<<<<<< HEAD:src/cellsociety/Main.java
-package cellsociety;
 
 import java.io.IOException;
 
@@ -11,11 +9,7 @@ import javafx.scene.Scene;
 import javafx.util.Duration;
 
 
-=======
->>>>>>> e1d29d0c34585c9c4ad2aa1b237e227d5817423a:src/Main.java
-/**
- * Feel free to completely change this code or delete it entirely. 
- */
+
 public class Main extends Application {
 
     private static final String TITLE = "Simulation";
