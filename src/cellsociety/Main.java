@@ -1,5 +1,5 @@
 
-import java.io.IOException;
+package cellsociety;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -21,7 +21,7 @@ public class Main extends Application {
 
     @Override
     public void start (Stage stage) {
-        myGameScene = Game.setupSimulation();
+        myGameScene = createGame.setupSimulation();
         stage.setScene(myGameScene);
         stage.setTitle(TITLE);
         stage.show();
@@ -33,6 +33,7 @@ public class Main extends Application {
     }
 
     private void step (double elapsedTime) {
+        //call step function in another class that checks if the rules have been applied
     }
 
 }
