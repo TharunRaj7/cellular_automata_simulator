@@ -25,6 +25,7 @@ public class Main extends Application {
         stage.setScene(myGameScene);
         stage.setTitle(TITLE);
         stage.show();
+        createGame.getFile(stage);
         KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
         Timeline animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
