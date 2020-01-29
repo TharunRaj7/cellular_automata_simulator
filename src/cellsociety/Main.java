@@ -16,12 +16,17 @@ public class Main extends Application {
     private static final int FRAMES_PER_SECOND = 60;
     private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-
+    Step myStepFunction = new Step() {
+        @Override
+        public void step(double elapsedTime) {
+            this.step(elapsedTime);
+        }
+    };
     private Scene myGameScene;
 
     @Override
     public void start (Stage stage) {
-        createGame.getFile(stage);
+        getXML.getFile(stage);
         myGameScene = createGame.setupSimulation();
         stage.setScene(myGameScene);
         stage.setTitle(TITLE);
@@ -34,8 +39,8 @@ public class Main extends Application {
     }
 
     private void step (double elapsedTime) {
-        //call step function in another class that checks if the rules have been applied
-            //updates the visuals
+        //call update grid in the backend
+            //executes based on button clicked
     }
 
 }
