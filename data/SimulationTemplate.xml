@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="" ?>
+<simulation>
+    <general>
+        <type>Simulation Type</type>
+        <title>Simulation Title</title>
+        <author>Au Thor</author>
+    </general>
+
+    <initialStates>
+        <gridWidth>300</gridWidth>
+        <gridHeight>150</gridHeight>
+        <cellConfig>FileName.txt</cellConfig>
+    </initialStates>
+
+    <parameters>
+        <color1>color1</color1>
+        <color2>color2</color2>
+        <otherPara1>para1</otherPara1>
+        <otherPara2>par2</otherPara2>
+    </parameters>
+</simulation>

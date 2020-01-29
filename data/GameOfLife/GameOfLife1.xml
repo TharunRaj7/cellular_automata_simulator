@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="" ?>
+<simulation>
+    <general>
+        <type>GameOfLife</type>
+        <title>Game of Life</title>
+        <author>Conway</author>
+    </general>
+
+    <initialStates>
+        <gridWidth>400</gridWidth>
+        <gridHeight>400</gridHeight>
+        <cellConfig>gol1.txt</cellConfig>
+    </initialStates>
+
+    <parameters>
+        <color1>white</color1>
+        <color2>black</color2>
+    </parameters>
+</simulation>
