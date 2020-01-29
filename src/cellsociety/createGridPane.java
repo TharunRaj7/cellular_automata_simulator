@@ -2,16 +2,18 @@ package cellsociety;
 
 
 import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.shape.Rectangle;
 
 public class createGridPane {
 
     private static final int GRID_WIDTH = 40;
 
-    private static javafx.scene.layout.GridPane myGrid = new javafx.scene.layout.GridPane();
+    private static GridPane myGrid = new GridPane();
+    private static int length = 0;
 
-    public static javafx.scene.layout.GridPane createGrid(int dimension) {
+    public static GridPane createGrid(int dimension) {
+        length = dimension;
         for(int i = 0; i < dimension; i++) {
             ColumnConstraints column = new ColumnConstraints(GRID_WIDTH);
             myGrid.getColumnConstraints().add(column);
@@ -25,5 +27,9 @@ public class createGridPane {
         myGrid.setLayoutX(5);
         myGrid.setLayoutY(5);
         return myGrid;
+    }
+
+    public static int returnSize(){
+        return length*GRID_WIDTH;
     }
 }
