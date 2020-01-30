@@ -13,7 +13,7 @@
     </initialStates>
 
     <colors>
-        <color1>white</color1>
-        <color2>black</color2>
+        <color1>#ffffff</color1>
+        <color2>#000000</color2>
     </colors>
 </simulation>
