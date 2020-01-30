@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <simulation>
     <general>
-        <type>Simulation Type</type>
-        <title>Simulation Title</title>
+        <type>ca.model.Simulation Type</type>
+        <title>ca.model.Simulation Title</title>
         <author>Au Thor</author>
         <inFolder>folderName</inFolder>
     </general>

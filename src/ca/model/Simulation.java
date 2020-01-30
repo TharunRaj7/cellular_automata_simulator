@@ -1,4 +1,7 @@
+package ca.model;
+
 import ca.controller.SimulationConfig;
+import ca.model.Grid;
 
 import java.io.File;
 

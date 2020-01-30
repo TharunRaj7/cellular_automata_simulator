@@ -1,12 +1,14 @@
 
-package visuals;
+package ca.view;
 
 import ca.controller.SimulationConfig;
+import ca.model.Grid;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
@@ -21,7 +23,7 @@ import javafx.util.Duration;
 
 public class Main extends Application {
 
-    private static final String TITLE = "Simulation";
+    private static final String TITLE = "ca.model.Simulation";
     private static final int FRAMES_PER_SECOND = 60;
     private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
@@ -33,6 +35,7 @@ public class Main extends Application {
 
     private SimulationConfig simulationConfig;
     private Grid grid;
+    private MyButton startMyButton;
 
     /**
      * This method creates a new instance of the file reader as well as the scene creation.
@@ -52,7 +55,7 @@ public class Main extends Application {
         Timeline animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
-        animation.play();
+        animation.play();   
     }
 
     /**
@@ -64,8 +67,10 @@ public class Main extends Application {
     public Scene setupSimulation(int size) {
         Group root = new Group();
         grid = new Grid(simulationConfig.getGridWidth(), simulationConfig.getGridHeight());
-        root.getChildren().add(grid);
-        root.getChildren().add(Button.createButton());
+        root.getChildren().add(grid.getGrid());
+
+        startMyButton = new MyButton();
+        root.getChildren().add(new Button());
         Scene scene = new Scene(root, size, size, BACKGROUND);
         return scene;
     }
@@ -80,4 +85,9 @@ public class Main extends Application {
         System.out.println("hello");
     }
 
+
+        myGrid.setGridLinesVisible(true);
+    fillGrid(myGrid, dimension);
+        myGrid.setLayoutX(GRID_OFFSET);
+        myGrid.setLayoutY(GRID_OFFSET);
 }

@@ -1,3 +1,5 @@
+package ca.model;
+
 public class Pair {
     int row;
     int col;

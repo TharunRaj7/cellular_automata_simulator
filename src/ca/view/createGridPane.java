@@ -1,4 +1,4 @@
-package visuals;
+package ca.view;
 
 
 import ca.controller.SimulationConfig;
@@ -23,30 +23,7 @@ public class createGridPane {
     private static final int GRID_OFFSET = 5;
     private static int length;
 
-    /**
-     * Here, the grid dimension or size is read in from the XML file.
-     * The corresponding rows and columns are generated and added to the grid.
-     * @param dimension
-     * @return GridPane
-     */
 
-    public GridPane createGrid(int dimension) {
-        GridPane myGrid = new GridPane();
-        length = dimension;
-        for(int i = 0; i < dimension; i++) {
-            RowConstraints row = new RowConstraints(GRID_WIDTH);
-            myGrid.getRowConstraints().add(row);
-        }
-        for(int j = 0; j < dimension; j++) {
-            ColumnConstraints column = new ColumnConstraints(GRID_WIDTH);
-            myGrid.getColumnConstraints().add(column);
-        }
-        myGrid.setGridLinesVisible(true);
-        fillGrid(myGrid, dimension);
-        myGrid.setLayoutX(GRID_OFFSET);
-        myGrid.setLayoutY(GRID_OFFSET);
-        return myGrid;
-    }
 
     /**
      * The grid is filled based on the colors received from the XML file.

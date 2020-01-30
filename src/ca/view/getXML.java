@@ -1,4 +1,4 @@
-package visuals;
+package ca.view;
 
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
