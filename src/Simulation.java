@@ -1,2 +1,5 @@
-public class Simulation {
+public abstract class Simulation {
+    public Simulation(){
+
+    }
 }
