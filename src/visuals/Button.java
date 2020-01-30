@@ -1,4 +1,4 @@
-package cellsociety;
+package visuals;
 
 /**
  * This method and class creates a button that when clicked, executes the step function.
@@ -6,7 +6,7 @@ package cellsociety;
 
 public class Button {
 
-    public static javafx.scene.control.Button createButton(int size){
+    public static javafx.scene.control.Button createButton(){
         int buttonLocation = createGridPane.returnSize();
         javafx.scene.control.Button myButton = new javafx.scene.control.Button("Step");
         myButton.setLayoutX(buttonLocation - myButton.getWidth());

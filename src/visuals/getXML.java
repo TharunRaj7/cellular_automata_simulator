@@ -1,4 +1,4 @@
-package cellsociety;
+package visuals;
 
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;

@@ -1,4 +1,4 @@
-package cellsociety;
+package visuals;
 
 
 import ca.controller.SimulationConfig;
@@ -6,7 +6,6 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
@@ -17,6 +16,7 @@ import java.util.List;
  * The class is responsible for creating the grid outline as well as filling each cell in the
  * grid with the correct color based on the initial cell states.
  */
+
 public class createGridPane {
 
     private static final int GRID_WIDTH = 40;
@@ -29,7 +29,8 @@ public class createGridPane {
      * @param dimension
      * @return GridPane
      */
-    public static GridPane createGrid(int dimension) {
+
+    public GridPane createGrid(int dimension) {
         GridPane myGrid = new GridPane();
         length = dimension;
         for(int i = 0; i < dimension; i++) {
@@ -53,7 +54,7 @@ public class createGridPane {
      * @param dimension
      */
     private void fillGrid(GridPane myGrid, int dimension){
-        List<Color> colors = new ArrayList<Color>(getCellColors());
+        List<Color> colors = new ArrayList<>(getCellColors());
         for(int i = 0; i< dimension; i++){
             for(int j = 0; j< dimension; j++){
                 Color cellColor = colors.get((dimension*i)+j);
@@ -64,16 +65,17 @@ public class createGridPane {
 
     /**
      * From the SimulationConfig, we grab the list of colors that correspond with the initial states.
-     * @return
+     * @return the list of colors
      */
     private List<javafx.scene.paint.Color> getCellColors() {
-        return SimulationConfig.getColors();
+        SimulationConfig colors = new SimulationConfig();
+        return colors.getColors();
     }
 
     /**
      * In order to place the button correctly in the scene, the grid's size is returned and then later called by the
      * Button class. In this way, the button does not overlap the grid.
-     * @return
+     * @return the size of the grid
      */
     public static int returnSize(){
         return length*GRID_WIDTH;
