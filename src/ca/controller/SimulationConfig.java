@@ -2,10 +2,8 @@ package ca.controller;
 
 import ca.SimulationType;
 import javafx.scene.paint.Color;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
+import org.w3c.dom.*;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
@@ -13,6 +11,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class reads in necessary simulation information, including
@@ -24,15 +24,24 @@ import java.util.List;
  * </ul>
  * from a xml file. An example xml file can be found under
  * {@code data.SimulationTemplate.xml}.
+ *
+ * Note, {@link #rowNum} and {@link #colNum} are given based
+ * on TXT file input, and hence should be checked whether fulfill
+ * the game design.
+ *
  * @author Cady Zhou
  * @version 1.1
  * @since 1.1
  */
 public class SimulationConfig {
-    String colorPattern = "#\\d{6}";
+    String colorPattern = "#......";
+    Logger logger;
 
     int gridWidth = -1;
     int gridHeight = -1;
+
+    int rowNum = -1;
+    int colNum = -1;
 
     File file;
     SimulationType simulationType;
@@ -46,6 +55,9 @@ public class SimulationConfig {
      */
     public SimulationConfig() {
         cellStates = new ArrayList<>();
+        colors = new ArrayList<>();
+        logger = Logger.getLogger(SimulationConfig.class.getName());
+        logger.setLevel(Level.WARNING);
     }
 
     /**
@@ -171,28 +183,36 @@ public class SimulationConfig {
         filename = "." + File.separatorChar + "data" + File.separatorChar + folderName + File.separatorChar + filename;
         String s = fileInput(filename);
 
+        boolean endOfFirstLine = false;
         for (Character c: s.toCharArray()) {
             if (Character.isDigit(c)) {
                 cellStates.add(Character.getNumericValue(c));
-            } else if (!c.equals(' ') && (int)c != 10 && (int)c != 13) {  // TODO: check whether 10 and 13 are universal
+            } else if ((int)c == 10) {  // line feed
+                rowNum++;
+            } else if (!c.equals(' ') && (int)c != 13) {  // TODO: check whether 10 and 13 are universal
                 throw new IllegalArgumentException("Initial State TXT has non-digit characters: " + (int) c);
+            }
+
+            if (!endOfFirstLine) {
+                colNum ++;
+                endOfFirstLine = true;
             }
         }
     }
 
     private void assignColors(Element element) {
-        if (element.hasAttributes()) {
-            NamedNodeMap nodeMap = element.getAttributes();
-            for (int i = 0; i < nodeMap.getLength(); i++) {
-                String colorCode = nodeMap.item(i).getNodeValue();
-                if (!isValidColor(colorCode)) {
-                    throw new IllegalArgumentException("The " + i + "th color is invalid!");
-                } else {
-                    colors.add(Color.web(colorCode));
-                }
+        NodeList nodeList = element.getElementsByTagName("*");
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            String colorCode = nodeList.item(i).getTextContent();
+            if (!isValidColor(colorCode)) {
+                throw new IllegalArgumentException("The " + i + "th color is invalid! (" + colorCode + ")");
+            } else {
+                Color c = Color.web(colorCode);
+                colors.add(c);
             }
         }
     }
+
 
     private boolean isValidColor(String colorCode) {
         return colorCode.matches(colorPattern);
@@ -214,10 +234,16 @@ public class SimulationConfig {
     }
 
     public int getGridHeight() {
+        if (gridHeight == -1) {
+            logger.warning("gridHeight has not been changed since initialization.");
+        }
         return gridHeight;
     }
 
     public int getGridWidth() {
+        if (gridWidth == -1) {
+            logger.warning("gridWidth has not been changed since initialization.");
+        }
         return gridWidth;
     }
 
@@ -231,5 +257,19 @@ public class SimulationConfig {
 
     public SimulationType getSimulationType() {
         return simulationType;
+    }
+
+    public int getColNum() {
+        if (colNum == -1) {
+            logger.warning("colNum has not been changed since initialization.");
+        }
+        return colNum;
+    }
+
+    public int getRowNum() {
+        if (rowNum == -1) {
+            logger.warning("rowNum has not been changed since initialization.");
+        }
+        return rowNum;
     }
 }
