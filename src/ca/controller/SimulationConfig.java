@@ -39,6 +39,7 @@ public class SimulationConfig {
     Document doc;
     List<Integer> cellStates;
     List<Color> colors;
+    String folderName;
 
     /**
      * Create a new instance without configuration file
@@ -66,6 +67,7 @@ public class SimulationConfig {
             doc = generateDocument();
 
             Element elementGeneral = getElementFromNode("general");
+            folderName = getNodeContent(elementGeneral, "inFolder");
             assignSimulationType(elementGeneral);
             Element elementInitialStates = getElementFromNode("initialStates");
             assignGridStates(elementInitialStates);
@@ -114,7 +116,7 @@ public class SimulationConfig {
         }
     }
 
-    private void assignGridStates(Element element) {
+    private void assignGridStates(Element element) throws Exception {
         // grid size
         String width = getNodeContent(element, "gridWidth");
         String height = getNodeContent(element, "gridHeight");
@@ -128,7 +130,7 @@ public class SimulationConfig {
         // initial states
         try {
             readCellStates(getNodeContent(element, "cellConfig"));
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -162,14 +164,18 @@ public class SimulationConfig {
         return s;
     }
 
-    private void readCellStates(String filename) {
+    private void readCellStates(String filename) throws Exception {
+        if (folderName == null) {
+            throw new Exception("The configuration file does not contain outer folder name!");
+        }
+        filename = "." + File.separatorChar + "data" + File.separatorChar + folderName + File.separatorChar + filename;
         String s = fileInput(filename);
 
         for (Character c: s.toCharArray()) {
             if (Character.isDigit(c)) {
                 cellStates.add(Character.getNumericValue(c));
-            } else if (!c.equals(' ')) {
-                throw new IllegalArgumentException("Initial State TXT has non-digit characters");
+            } else if (!c.equals(' ') && (int)c != 10 && (int)c != 13) {  // TODO: check whether 10 and 13 are universal
+                throw new IllegalArgumentException("Initial State TXT has non-digit characters: " + (int) c);
             }
         }
     }
