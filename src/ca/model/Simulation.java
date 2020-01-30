@@ -9,10 +9,11 @@ public abstract class Simulation {
     Grid gameGrid;
     SimulationConfig simulationConfig;
 
-    public Simulation(String simulationType) {
+    public Simulation(String simulationType, Grid grid) {
         simulationConfig = new SimulationConfig();
         File fileName = new File(simulationType);
         simulationConfig.readFile(fileName);
+        gameGrid = grid;
     }
 
     public abstract void runOneStep();

@@ -1,11 +1,14 @@
 
 package ca.view;
 
+import ca.controller.Controller;
 import ca.controller.SimulationConfig;
 import ca.model.Grid;
+import ca.model.Simulation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
@@ -35,7 +38,9 @@ public class Main extends Application {
 
     private SimulationConfig simulationConfig;
     private Grid grid;
-    private MyButton startMyButton;
+    private Button startButton;
+    private Controller controller;
+    private Simulation simulation;
 
     /**
      * This method creates a new instance of the file reader as well as the scene creation.
@@ -45,17 +50,25 @@ public class Main extends Application {
      */
     @Override
     public void start (Stage stage) {
+
         getXML retrieveFile = new getXML();
         retrieveFile.getFile(stage);
+
+        simulationConfig = new SimulationConfig(retrieveFile.getXMLfile());
+        controller = new Controller();
+
         Scene myGameScene = setupSimulation(SIZE);
         stage.setScene(myGameScene);
         stage.setTitle(TITLE);
         stage.show();
+
         KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY));
         Timeline animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
-        animation.play();   
+        animation.play();
+
+
     }
 
     /**
@@ -69,8 +82,16 @@ public class Main extends Application {
         grid = new Grid(simulationConfig.getGridWidth(), simulationConfig.getGridHeight());
         root.getChildren().add(grid.getGrid());
 
-        startMyButton = new MyButton();
-        root.getChildren().add(new Button());
+        startButton = new Button("Start");
+        startButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                controller.startAnimation();
+            }
+        });
+
+        root.getChildren().add(startButton);
+
         Scene scene = new Scene(root, size, size, BACKGROUND);
         return scene;
     }
@@ -82,12 +103,15 @@ public class Main extends Application {
      */
     public static void step () {
 
-        System.out.println("hello");
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 
 
         myGrid.setGridLinesVisible(true);
-    fillGrid(myGrid, dimension);
+        fillGrid(myGrid, dimension);
         myGrid.setLayoutX(GRID_OFFSET);
         myGrid.setLayoutY(GRID_OFFSET);
 }

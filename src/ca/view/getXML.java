@@ -27,7 +27,7 @@ public class getXML {
      * the file and read it.
      * @return File
      */
-    public File returnXML(){
+    public File getXMLfile(){
         return XMLfile;
     }
 }
