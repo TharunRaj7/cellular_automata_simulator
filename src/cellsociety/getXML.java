@@ -2,14 +2,18 @@ package cellsociety;
 
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import java.io.File;
 
+/**
+ * This class opens a file chooser at the start of the simulation.
+ * A file chooser is initiated and presented and the only acceptable type of file is of
+ * the XML format.
+ */
 public class getXML {
 
-    private static File XMLfile;
+    private File XMLfile;
 
-    public static File getFile(Stage stage) {
+    public File getFile(Stage stage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         fileChooser.getExtensionFilters().addAll(
@@ -18,8 +22,12 @@ public class getXML {
         return XMLfile;
     }
 
-    public static File returnXML(){
-        //need to send the XMLfile to the backend
+    /**
+     * Here, the file that is chosen in the above method is returned. In this way, the backend is able to retrieve
+     * the file and read it.
+     * @return File
+     */
+    public File returnXML(){
         return XMLfile;
     }
 }

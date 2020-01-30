@@ -8,7 +8,11 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.util.Duration;
 
-
+/**
+ * This class extends Application and is the Main class of the simulation.
+ * The stage is created and the scene is called to be made.
+ * The step function updates the cells every time the step button is clicked.
+ */
 
 public class Main extends Application {
 
@@ -23,12 +27,19 @@ public class Main extends Application {
             this.step(elapsedTime);
         }
     };
-    private Scene myGameScene;
 
+    /**
+     * This method creates a new instance of the file reader as well as the scene creation.
+     * Here, the file is retrieved and the simulation is begun.
+     * Additionally, the animation is started and a game loop is associated with the scene.
+     * @param stage
+     */
     @Override
     public void start (Stage stage) {
-        getXML.getFile(stage);
-        myGameScene = createGame.setupSimulation(SIZE);
+        getXML retrieveFile = new getXML();
+        retrieveFile.getFile(stage);
+        createGame setup = new createGame();
+        Scene myGameScene = setup.setupSimulation(SIZE);
         stage.setScene(myGameScene);
         stage.setTitle(TITLE);
         stage.show();
@@ -39,9 +50,12 @@ public class Main extends Application {
         animation.play();
     }
 
+    /**
+     * In this method, we will need to call the updateCells method in the other part of the code.
+     * This method is executed every time the step button on the user interface is clicked.
+     */
     public static void step () {
-        //call update grid in the backend
-            //executes based on button clicked
+
         System.out.println("hello");
     }
 
