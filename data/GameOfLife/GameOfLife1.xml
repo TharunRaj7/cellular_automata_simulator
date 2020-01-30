@@ -12,8 +12,8 @@
         <cellConfig>gol1.txt</cellConfig>
     </initialStates>
 
-    <parameters>
+    <colors>
         <color1>white</color1>
         <color2>black</color2>
-    </parameters>
+    </colors>
 </simulation>

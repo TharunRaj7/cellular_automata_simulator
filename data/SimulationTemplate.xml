@@ -12,9 +12,12 @@
         <cellConfig>FileName.txt</cellConfig>
     </initialStates>
 
-    <parameters>
+    <colors>
         <color1>color1</color1>
         <color2>color2</color2>
+    </colors>
+    
+    <parameters>
         <otherPara1>para1</otherPara1>
         <otherPara2>par2</otherPara2>
     </parameters>
