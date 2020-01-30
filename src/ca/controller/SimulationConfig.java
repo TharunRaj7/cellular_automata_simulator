@@ -187,17 +187,20 @@ public class SimulationConfig {
         for (Character c: s.toCharArray()) {
             if (Character.isDigit(c)) {
                 cellStates.add(Character.getNumericValue(c));
-            } else if ((int)c == 10) {  // line feed
+            } else if ((int)c == 10) {  // line
                 rowNum++;
+                endOfFirstLine = true;
             } else if (!c.equals(' ') && (int)c != 13) {  // TODO: check whether 10 and 13 are universal
                 throw new IllegalArgumentException("Initial State TXT has non-digit characters: " + (int) c);
             }
 
             if (!endOfFirstLine) {
                 colNum ++;
-                endOfFirstLine = true;
             }
         }
+
+        rowNum += 2; // because it starts at -1, and the last line does not have line feed
+        colNum = (colNum + 1) / 2;  // the last number of a row does not have a space follow it
     }
 
     private void assignColors(Element element) {
