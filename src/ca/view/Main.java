@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
@@ -39,8 +40,13 @@ public class Main extends Application {
     private SimulationConfig simulationConfig;
     private Grid grid;
     private Button startButton;
+    private Button stopButton;
+    private Button reloadFileButton;
+    private Button stepButton;
+    private Button submitButton;
     private Controller controller;
     private Simulation simulation;
+    private Stage stage;
 
     /**
      * This method creates a new instance of the file reader as well as the scene creation.
@@ -62,7 +68,7 @@ public class Main extends Application {
         stage.setTitle(TITLE);
         stage.show();
 
-        KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY));
+        KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), event -> step());
         Timeline animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
@@ -79,23 +85,26 @@ public class Main extends Application {
      */
     public Scene setupSimulation(int size) {
         Group root = new Group();
-        grid = new Grid(simulationConfig.getGridWidth(), simulationConfig.getGridHeight());
+        grid = new Grid(simulationConfig.getGridWidth(), simulationConfig.getGridHeight(), simulationConfig.getCellStates());
+        grid.setGridLinesVisible(true);
         root.getChildren().add(grid.getGrid());
-
-        startButton = new Button("Start");
-        startButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                controller.startAnimation();
-            }
-        });
-
+        MyButton button = new MyButton();
+        startButton = button.createButton("StartCommand", event -> controller.startAnimation());
+        stopButton = button.createButton("StopCommand", event -> controller.pauseAnimation());
+        reloadFileButton = button.createButton("ReloadCommand", event -> start(stage));
+        stepButton = button.createButton("StepCommand", event -> controller.runOneStep());
+        final TextField num = new TextField();
+        num.setPromptText("FillerCommand");
+        submitButton = button.createButton("SubmitCommand", event -> controller.setAnimationSpeed(Double.valueOf(num.getText())));
         root.getChildren().add(startButton);
-
+        root.getChildren().add(stopButton);
+        root.getChildren().add(reloadFileButton);
+        root.getChildren().add(stepButton);
+        root.getChildren().add(submitButton);
+        root.getChildren().add(num);
         Scene scene = new Scene(root, size, size, BACKGROUND);
         return scene;
     }
-
 
     /**
      * In this method, we will need to call the updateCells method in the other part of the code.
@@ -108,10 +117,4 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
-
-        myGrid.setGridLinesVisible(true);
-        fillGrid(myGrid, dimension);
-        myGrid.setLayoutX(GRID_OFFSET);
-        myGrid.setLayoutY(GRID_OFFSET);
 }

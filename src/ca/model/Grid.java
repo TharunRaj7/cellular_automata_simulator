@@ -7,6 +7,7 @@ import javafx.scene.layout.RowConstraints;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Grid {
     private int column;
@@ -19,7 +20,7 @@ public class Grid {
     GridPane grid;
 
 
-    public Grid(int row, int column, ArrayList<Integer> initialStates) {
+    public Grid(int row, int column, List<Integer> initialStates) {
         //make the grid
         gridMap = new HashMap<>();
         grid = new GridPane();
