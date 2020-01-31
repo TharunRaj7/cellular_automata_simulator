@@ -8,7 +8,7 @@ import java.beans.Statement;
 import java.lang.reflect.Method;
 
 /**
- * This method and class creates a button that when clicked, executes the step function.
+ * This method and class creates a button that when clicked, executes a certain method based on the handler.
  */
 
 public class MyButton {

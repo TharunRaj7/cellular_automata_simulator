@@ -78,8 +78,8 @@ public class Main extends Application {
     }
 
     /**
-     * Right now, this method uses a magic number for the XML_file_dimension which is the
-     * dimension of the grid. This value will need to be read in from the XML file.
+     * This method sets up the simulation and creates all the buttons for the simulation. It calls on the Grid class
+     * in the model to create the grid.
      * @param size the size of the scene
      * @return Scene
      */
