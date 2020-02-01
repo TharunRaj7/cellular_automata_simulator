@@ -33,6 +33,7 @@ public class Grid {
     public void updateGrid ( int row, int col, int state){
         for (Pair pair : gridMap.keySet()){
             if (pair.checkPair(row, col)){
+                gridMap.get(pair).setState(state);
             }
         }
     }
@@ -56,7 +57,7 @@ public class Grid {
         }
     }
 
-    public int getState (int r, int c){return 0;}
+    public int getCellState (int r, int c){return 0;}
 
     public static void main(String[] args) {
         //testing for Grid Class
@@ -65,6 +66,7 @@ public class Grid {
             temp.add(i);
         }
         Grid test = new Grid(3,3, temp);
+        //test.updateGrid(1,2, 454);
 
         for (Pair pair : test.gridMap.keySet()){
             System.out.println(pair);
