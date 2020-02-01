@@ -1,62 +1,57 @@
 package ca.model;
 
-import ca.model.Cell;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class Grid {
-    private int column;
-    private int row;
+    private int numOfColumns;
+    private int numOfRows;
 
-    private int cellWidth;
-    private int cellHeight;
+    Map<Pair, Cell> gridMap;
 
-    HashMap<Pair, Cell> gridMap;
-    GridPane grid;
-
-
-    public Grid(int row, int column, ArrayList<Integer> initialStates) {
+    public Grid(int numOfRows, int numOfColumns, ArrayList<Integer> initialStates) {
         //make the grid
-        gridMap = new HashMap<>();
-        grid = new GridPane();
+        this.numOfRows = numOfRows;
+        this.numOfColumns = numOfColumns;
+        gridMap = new LinkedHashMap<>();
+        createGridModel();
     }
 
-    public ArrayList<Cell> getNSEWNeigbours(){
-        return new ArrayList<>();
-    }
-    public ArrayList<Cell> getAllNeighbours(){
-        return new ArrayList<>();
+    private void createGridModel() {
+        int rowLooper;
+        int colLooper;
+        for(int i = 0; i < numOfRows; i++){
+            
+        }
     }
 
-    public void updateGrid(int row, int col, int state){
+    public ArrayList<Cell> getNSEWNeigbours(int row, int col){
+
+        return new ArrayList<>();
+    }
+    public ArrayList<Cell> getAllNeighbours(int row, int col){
+        return new ArrayList<>();
     }
 
     /**
-     * Here, the grid dimension or size is read in from the XML file.
-     * The corresponding rows and columns are generated and added to the grid.
-     * @param dimension
-     * @return GridPane
+     *
+     * @param row
+     * @param col
+     * @param state
+     * @param color
      */
+    public void updateGrid(int row, int col, int state, Color color){
 
-    private void createGrid() {
-        for(int i = 0; i < row; i++) {
-            RowConstraints rowConstraints = new RowConstraints(cellWidth);
-            grid.getRowConstraints().add(rowConstraints);
-        }
-
-        for(int j = 0; j < column; j++) {
-            ColumnConstraints column = new ColumnConstraints(cellHeight);
-            grid.getColumnConstraints().add(column);
-        }
-
-        // TODO: fill in the states
     }
 
+
     public GridPane getGrid() {
-        return grid;
+        return gridView;
     }
 }
