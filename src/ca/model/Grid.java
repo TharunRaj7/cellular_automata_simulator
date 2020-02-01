@@ -26,10 +26,10 @@ public class Grid {
         grid = new GridPane();
     }
 
-    public ArrayList<Cell> getNSEWNeigbours(){
+    public ArrayList<Cell> getNSEWNeigbors(int r, int c){
         return new ArrayList<>();
     }
-    public ArrayList<Cell> getAllNeighbours(){
+    public ArrayList<Cell> getAllNeighbors(int r, int c){
         return new ArrayList<>();
     }
 
