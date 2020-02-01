@@ -1,14 +1,13 @@
 package ca.model;
 
-import javafx.scene.Node;
+//import javafx.scene.Node;
 
 public class Cell {
     int state;
-    Node node;
+    //Node node;
 
-    public Cell(int state, Node node){
+    public Cell(int state){
         this.state = state;
-        this.node = node;
     }
 
     public int getState() {
@@ -18,6 +17,10 @@ public class Cell {
     public void setState(int state) {
         this.state = state;
     }
+
+  /*  public void setNode (Node node){
+        this.node = node;
+    }*/
 }
 
 

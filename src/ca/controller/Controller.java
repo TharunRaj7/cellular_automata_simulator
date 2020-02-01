@@ -6,6 +6,7 @@ package ca.controller;
 
 import ca.model.Simulation;
 import javafx.animation.Animation;
+import javafx.application.Application;
 import javafx.scene.input.KeyCode;
 
 public class Controller {

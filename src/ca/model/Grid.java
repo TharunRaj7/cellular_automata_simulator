@@ -1,7 +1,5 @@
 package ca.model;
 
-import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 
 import java.util.*;
 
@@ -11,25 +9,18 @@ public class Grid {
 
     Map<Pair, Cell> gridMap;
 
-    public Grid(int numOfRows, int numOfColumns, ArrayList<Integer> initialStates) {
-        HashMap<Pair, Cell> gridMap;
-        GridPane grid;
+    public Grid(int numOfRows, int numOfColumns,  List<Integer> initialStates) {
+        this.gridMap = new LinkedHashMap<>();
+        this.numOfRows = numOfRows;
+        this.numOfColumns = numOfColumns;
+        createGridModel(initialStates);
     }
 
 
-    public Grid( int row, int column, List<Integer > initialStates){
-            //make the grid
-            this.numOfRows = numOfRows;
-            this.numOfColumns = numOfColumns;
-            gridMap = new LinkedHashMap<>();
-            createGridModel();
-        }
-
-
-        public ArrayList<Cell> getNSEWNeigbors ( int r, int c){
+        public ArrayList<Cell> getNSEWNeigbors (int r, int c){
             return new ArrayList<>();
         }
-        public ArrayList<Cell> getAllNeighbors ( int r, int c){
+        public ArrayList<Cell> getAllNeighbors (int r, int c){
             return new ArrayList<>();
         }
 
@@ -38,18 +29,47 @@ public class Grid {
          * @param row
          * @param col
          * @param state
-         * @param color
          */
-        public void updateGrid ( int row, int col, int state, Color color){
+    public void updateGrid ( int row, int col, int state){
+        for (Pair pair : gridMap.keySet()){
+            if (pair.checkPair(row, col)){
+            }
+        }
+    }
 
+
+    private void createGridModel(List<Integer>initialStates) {
+        int rowLooper = 0;
+        int colLooper = 0;
+        for (int i = 0; i < numOfColumns*numOfRows; i++) {
+            Pair temp = new Pair(rowLooper, colLooper);
+            Cell tempCell = new Cell(initialStates.get(i));
+            System.out.println(initialStates.get(i));
+            gridMap.putIfAbsent(temp, tempCell);
+
+            if (colLooper == numOfColumns - 1){
+                colLooper = 0;
+                rowLooper++;
+                continue;
+            }
+            colLooper++;
+        }
+    }
+
+    public int getState (int r, int c){return 0;}
+
+    public static void main(String[] args) {
+        //testing for Grid Class
+        List<Integer> temp = new ArrayList<>();
+        for(int i = 0; i < 9; i++) {
+            temp.add(i);
+        }
+        Grid test = new Grid(3,3, temp);
+
+        for (Pair pair : test.gridMap.keySet()){
+            System.out.println(pair);
+            System.out.println("State = " + test.gridMap.get(pair).getState());
         }
 
-
-    private void createGridModel() {
-        int rowLooper;
-        int colLooper;
-        for (int i = 0; i < numOfRows; i++) {
-
-        }
     }
 }

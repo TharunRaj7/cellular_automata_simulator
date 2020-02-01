@@ -8,4 +8,16 @@ public class Pair {
         this.row = row;
         this.col = col;
     }
+
+    public boolean checkPair (int row, int col){
+        return (this.row == row && this.col == col);
+    }
+
+    @Override
+    public String toString() {
+        return "Pair{" +
+                "row=" + row +
+                ", col=" + col +
+                '}';
+    }
 }
