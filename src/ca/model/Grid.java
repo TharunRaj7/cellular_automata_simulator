@@ -17,12 +17,40 @@ public class Grid {
     }
 
 
-        public ArrayList<Cell> getNSEWNeigbors (int r, int c){
-            return new ArrayList<>();
+    public ArrayList<Cell> getNSEWNeigbors (int r, int c) {
+        ArrayList<Cell> ret = new ArrayList<>();
+        int [] rowIndices = {r-1, r+1};
+        int [] colIndices = {c+1, c-1}; //east first, then west
+
+        for (int i : rowIndices){
+            Pair temp = getPair(i, c);
+            if (temp != null){
+                ret.add(gridMap.get(temp));
+            }
         }
-        public ArrayList<Cell> getAllNeighbors (int r, int c){
-            return new ArrayList<>();
+
+        for (int i : colIndices){
+            Pair temp = getPair(r, i);
+            if (temp != null){
+                ret.add(gridMap.get(temp));
+            }
         }
+        return ret;
+    }
+
+    private Pair getPair(int r, int c) {
+        for (Pair pair : gridMap.keySet()){
+            if (pair.checkPair(r,c)){
+                return pair;
+            }
+        }
+        return null;
+    }
+
+
+    public ArrayList<Cell> getAllNeighbors (int r, int c){
+        return new ArrayList<>();
+    }
 
         /**
          *
@@ -66,12 +94,18 @@ public class Grid {
             temp.add(i);
         }
         Grid test = new Grid(3,3, temp);
-        //test.updateGrid(1,2, 454);
+        test.updateGrid(1,2, 454);
 
         for (Pair pair : test.gridMap.keySet()){
             System.out.println(pair);
             System.out.println("State = " + test.gridMap.get(pair).getState());
         }
+
+        ArrayList<Cell> tester = test.getNSEWNeigbors(2,2);
+        for (Cell cell : tester){
+            System.out.println(cell.getState());
+        }
+
 
     }
 }

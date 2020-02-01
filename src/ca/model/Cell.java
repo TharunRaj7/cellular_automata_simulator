@@ -3,7 +3,7 @@ package ca.model;
 //import javafx.scene.Node;
 
 public class Cell {
-    int state;
+    private int state;
     //Node node;
 
     public Cell(int state){
