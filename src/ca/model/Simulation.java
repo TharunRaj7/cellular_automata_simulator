@@ -1,18 +1,46 @@
 package ca.model;
 
-import ca.controller.SimulationConfig;
-import ca.model.Grid;
-
-import java.io.File;
+import java.util.ArrayList;
 
 public abstract class Simulation {
-    Grid gameGrid;
+    Grid grid;
 
-    public Simulation(String simulationType, Grid grid) {
-        File fileName = new File(simulationType);
-        gameGrid = grid;
+    public Simulation(Grid grid) {
+        this.grid = grid;
+    }
+
+    /**
+     * This method tells the number of neighbors that have a
+     * specific state. It can be either all eight neighbors or
+     * only NSWE neighbors by passing in different {@code mode}.
+     * @param r         an int of the row position of this cell
+     * @param c         an int of the col position of this cell
+     * @param mode      the number of neighbors chosen, ("EIGHT"/"NSWE")
+     * @param state     an int representing the state to find
+     * @return          the number of neighbors have {@code state}
+     */
+    public int getNeighborStateNumber(int r, int c, String mode, int state) {
+        ArrayList<Cell> neighbors;
+        switch (mode) {
+            case "EIGHT":
+                neighbors = grid.getAllNeighbors(r, c);
+                break;
+            case "NSWE":
+                neighbors = grid.getNSEWNeigbors(r, c);
+                break;
+            default:
+                neighbors = new ArrayList<>();
+        }
+
+        int num = 0;
+        for (Cell cell: neighbors) {
+            if (cell.getState() == state) {
+                num++;
+            }
+        }
+
+        return num;
     }
 
     public abstract void runOneStep();
-
 }

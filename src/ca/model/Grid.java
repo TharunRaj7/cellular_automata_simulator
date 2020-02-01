@@ -1,13 +1,9 @@
 package ca.model;
 
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Grid {
     private int numOfColumns;
@@ -16,42 +12,44 @@ public class Grid {
     Map<Pair, Cell> gridMap;
 
     public Grid(int numOfRows, int numOfColumns, ArrayList<Integer> initialStates) {
-        //make the grid
-        this.numOfRows = numOfRows;
-        this.numOfColumns = numOfColumns;
-        gridMap = new LinkedHashMap<>();
-        createGridModel();
+        HashMap<Pair, Cell> gridMap;
+        GridPane grid;
     }
+
+
+    public Grid( int row, int column, List<Integer > initialStates){
+            //make the grid
+            this.numOfRows = numOfRows;
+            this.numOfColumns = numOfColumns;
+            gridMap = new LinkedHashMap<>();
+            createGridModel();
+        }
+
+
+        public ArrayList<Cell> getNSEWNeigbors ( int r, int c){
+            return new ArrayList<>();
+        }
+        public ArrayList<Cell> getAllNeighbors ( int r, int c){
+            return new ArrayList<>();
+        }
+
+        /**
+         *
+         * @param row
+         * @param col
+         * @param state
+         * @param color
+         */
+        public void updateGrid ( int row, int col, int state, Color color){
+
+        }
+
 
     private void createGridModel() {
         int rowLooper;
         int colLooper;
-        for(int i = 0; i < numOfRows; i++){
-            
+        for (int i = 0; i < numOfRows; i++) {
+
         }
-    }
-
-    public ArrayList<Cell> getNSEWNeigbours(int row, int col){
-
-        return new ArrayList<>();
-    }
-    public ArrayList<Cell> getAllNeighbours(int row, int col){
-        return new ArrayList<>();
-    }
-
-    /**
-     *
-     * @param row
-     * @param col
-     * @param state
-     * @param color
-     */
-    public void updateGrid(int row, int col, int state, Color color){
-
-    }
-
-
-    public GridPane getGrid() {
-        return gridView;
     }
 }

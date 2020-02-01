@@ -49,14 +49,5 @@ public class createGridPane {
         return colors.getColors();
     }
 
-    /**
-     * In order to place the button correctly in the scene, the grid's size is returned and then later called by the
-     * Button class. In this way, the button does not overlap the grid.
-     * @return the size of the grid
-     */
-    public static int returnSize(){
-        return length*GRID_WIDTH;
-    }
-
 
 }
