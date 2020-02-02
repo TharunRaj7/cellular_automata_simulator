@@ -250,6 +250,7 @@ public class SimulationConfig {
     }
 
     public List<Color> getColors() {
+
         return colors;
     }
 

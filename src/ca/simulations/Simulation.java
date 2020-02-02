@@ -2,6 +2,7 @@ package ca.simulations;
 
 import ca.model.Cell;
 import ca.model.Grid;
+import javafx.scene.Scene;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ public abstract class Simulation {
     public Simulation(Grid grid) {
         this.grid = grid;
     }
+    public Simulation (){}
 
     /**
      * This method tells the number of neighbors that have a
@@ -57,6 +59,10 @@ public abstract class Simulation {
         }
 
         return cells;
+    }
+
+    public Grid getGrid() {
+        return grid;
     }
 
     public abstract void runOneStep();

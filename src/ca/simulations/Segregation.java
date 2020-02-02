@@ -34,7 +34,7 @@ public class Segregation extends Simulation {
 
         for (int r = 0; r < grid.getNumOfRows(); r++) {
             for (int c = 0; c < grid.getNumOfColumns(); c++) {
-                gridNextGen.updateState(r, c, determineCellState(r, c));
+                gridNextGen.setCellState(r, c, determineCellState(r, c));
             }
         }
         grid = gridNextGen;
