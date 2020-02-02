@@ -23,7 +23,11 @@ public class GridPaneHandler {
     private static List<Color> cellColors = new ArrayList<Color>();
     private int cellWidth;
     private int cellHeight;
-    private Grid grid;
+    private SimulationConfig simulationConfig;
+
+    public GridPaneHandler(SimulationConfig simulationConfig) {
+        this.simulationConfig = simulationConfig;
+    }
 
     /**
      * Creates the initial gridpane based on the number of columns, rows and width/height of the grid.
@@ -34,7 +38,7 @@ public class GridPaneHandler {
      * @param height - full grid height
      * @return GridPane - returns the Gridpane to the scene
      */
-    public GridPane createGrid(int c, int r, int width, int height){
+    public GridPane createGrid(int c, int r, int width, int height, Grid grid){
         cellWidth = width / c;
         cellHeight = height / r;
         GridPane myGrid = new GridPane();
@@ -48,7 +52,7 @@ public class GridPaneHandler {
         }
         myGrid.setGridLinesVisible(true);
         getCellColors();
-        fillGrid(myGrid, c, r, cellWidth, cellHeight);
+        fillGrid(myGrid, c, r, cellWidth, cellHeight, grid);
         return myGrid;
     }
 
@@ -60,12 +64,12 @@ public class GridPaneHandler {
      * @param cellWidth
      * @param cellHeight
      */
-    private void fillGrid(GridPane myGrid, int c, int r, int cellWidth, int cellHeight){
+    private void fillGrid(GridPane myGrid, int c, int r, int cellWidth, int cellHeight, Grid grid){
         for(int i = 0; i< c; i++){
             for(int j = 0; j< r; j++){
                 int cellState = grid.getCellState(r, c);
                 Color cellColor = cellColors.get(cellState);
-                myGrid.add(new Rectangle(cellWidth, cellHeight, cellColor), i, j);
+                myGrid.add(new Rectangle(cellWidth, cellHeight, cellColor), j, i);
             }
         }
     }
@@ -75,14 +79,6 @@ public class GridPaneHandler {
      * an array where the index is the state, and the item in the list is the corresponding color.
      */
     private void getCellColors() {
-        SimulationConfig getStateColors = new SimulationConfig();
-        List<Integer> states = getStateColors.getCellStates();
-        List<Color> colors = getStateColors.getColors();
-        for( int i = 0; i < colors.size();i++){
-            int index = i;
-            if( !cellColors.contains(colors.get(i))){
-                cellColors.add(states.get(i), colors.get(i));
-            }
-        }
+        cellColors = simulationConfig.getColors();
     }
 }
