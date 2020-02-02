@@ -113,6 +113,14 @@ public class Grid {
         }
     }
 
+    public Cell getCell(int row, int col) {
+        for (Pair pair: gridMap.keySet()) {
+            if (pair.checkPair(row, col)) {
+                return gridMap.get(pair);
+            }
+        }
+    }
+
 
     /**
      * Populates the Hashmap with cells and initializes their states based on a List of initial states.

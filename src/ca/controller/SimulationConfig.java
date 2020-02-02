@@ -213,9 +213,6 @@ public class SimulationConfig {
                 colors.add(c);
             }
         }
-        for (Color c: colors) {
-            System.out.println(c);
-        }
     }
 
 

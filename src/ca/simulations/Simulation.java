@@ -4,6 +4,7 @@ import ca.model.Cell;
 import ca.model.Grid;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Simulation {
     Grid grid;
@@ -43,6 +44,19 @@ public abstract class Simulation {
         }
 
         return num;
+    }
+
+    public List<Cell> getCellOfState(int state) {
+        List<Cell> cells = new ArrayList<>();
+        for (int r = 0; r < grid.getNumOfRows(); r++) {
+            for (int c = 0; c < grid.getNumOfColumns(); c++) {
+                if (grid.getCellState(r, c) == state) {
+                    cells.add(grid.getCell(r, c));
+                }
+            }
+        }
+
+        return cells;
     }
 
     public abstract void runOneStep();
