@@ -25,20 +25,6 @@ public class createGridPane {
 
 
 
-    /**
-     * The grid is filled based on the colors received from the XML file.
-     * @param myGrid
-     * @param dimension
-     */
-    private void fillGrid(GridPane myGrid, int dimension){
-        List<Color> colors = new ArrayList<>(getCellColors());
-        for(int i = 0; i< dimension; i++){
-            for(int j = 0; j< dimension; j++){
-                Color cellColor = colors.get((dimension*i)+j);
-                myGrid.add(new Rectangle(GRID_WIDTH,GRID_WIDTH, cellColor), i, j);
-            }
-        }
-    }
 
     /**
      * From the SimulationConfig, we grab the list of colors that correspond with the initial states.

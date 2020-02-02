@@ -3,21 +3,26 @@ package ca.view;
 
 import ca.controller.Controller;
 import ca.controller.SimulationConfig;
+import ca.controller.SimulationType;
 import ca.model.Grid;
-import ca.model.Simulation;
+import ca.simulations.GameOfLife;
+import ca.simulations.Simulation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.util.Duration;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class extends Application and is the Main class of the simulation.
@@ -39,14 +44,12 @@ public class Main extends Application {
 
     private SimulationConfig simulationConfig;
     private Grid grid;
-    private Button startButton;
-    private Button stopButton;
-    private Button reloadFileButton;
-    private Button stepButton;
-    private Button submitButton;
     private Controller controller;
-    private Simulation simulation;
     private Stage stage;
+    private GridPane gridPane;
+    private Simulation simulation;
+    private List<Color> colors;
+
 
     /**
      * This method creates a new instance of the file reader as well as the scene creation.
@@ -56,12 +59,9 @@ public class Main extends Application {
      */
     @Override
     public void start (Stage stage) {
-
-        getXML retrieveFile = new getXML();
+        XMLReader retrieveFile = new XMLReader();
         retrieveFile.getFile(stage);
-
-        simulationConfig = new SimulationConfig(retrieveFile.getXMLfile());
-        controller = new Controller();
+        readVariablesFromXML(retrieveFile);
 
         Scene myGameScene = setupSimulation(SIZE);
         stage.setScene(myGameScene);
@@ -73,8 +73,26 @@ public class Main extends Application {
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
         animation.play();
+    }
 
+    private void readVariablesFromXML(XMLReader retrieveFile) {
+        simulationConfig = new SimulationConfig(retrieveFile.getXMLfile());
+        controller = new Controller();
+        grid = new Grid(simulationConfig.getGridWidth(), simulationConfig.getGridHeight(), simulationConfig.getCellStates());
+        gridPane = new GridPane();
+        fillGrid();
+        colors = simulationConfig.getColors();
+        createSimulationInstance(simulationConfig.getSimulationType());
+    }
 
+    private void createSimulationInstance(SimulationType simulationType) {
+        switch (simulationType) {
+            case GameOfLife:
+                simulation = new GameOfLife(grid);
+                break;
+            default:
+                simulation = null;
+        }
     }
 
     /**
@@ -85,33 +103,40 @@ public class Main extends Application {
      */
     public Scene setupSimulation(int size) {
         Group root = new Group();
-        grid = new Grid(simulationConfig.getGridWidth(), simulationConfig.getGridHeight(), simulationConfig.getCellStates());
-        grid.setGridLinesVisible(true);
-        root.getChildren().add(grid.getGrid());
-        MyButton button = new MyButton();
-        startButton = button.createButton("StartCommand", event -> controller.startAnimation());
-        stopButton = button.createButton("StopCommand", event -> controller.pauseAnimation());
-        reloadFileButton = button.createButton("ReloadCommand", event -> start(stage));
-        stepButton = button.createButton("StepCommand", event -> controller.runOneStep());
-        final TextField num = new TextField();
+        Styler styler = new Styler();
+
+        Button startButton = styler.createButton("StartCommand", event -> controller.startAnimation());
+        Button stopButton = styler.createButton("StopCommand", event -> controller.pauseAnimation());
+        Button reloadFileButton = styler.createButton("ReloadCommand", event -> start(stage));
+        Button stepButton = styler.createButton("StepCommand", event -> controller.runOneStep());
+        TextField num = new TextField();
         num.setPromptText("FillerCommand");
-        submitButton = button.createButton("SubmitCommand", event -> controller.setAnimationSpeed(Double.valueOf(num.getText())));
-        root.getChildren().add(startButton);
-        root.getChildren().add(stopButton);
-        root.getChildren().add(reloadFileButton);
-        root.getChildren().add(stepButton);
-        root.getChildren().add(submitButton);
-        root.getChildren().add(num);
-        Scene scene = new Scene(root, size, size, BACKGROUND);
-        return scene;
+        Button submitButton = styler.createButton("SubmitCommand", event -> controller.setAnimationSpeed(Double.valueOf(num.getText())));
+
+        root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton, num);
+        return new Scene(root, size, size, BACKGROUND);
     }
 
     /**
      * In this method, we will need to call the updateCells method in the other part of the code.
      * This method is executed every time the step button on the user interface is clicked.
      */
-    public static void step () {
+    public void step () {
+        simulation.runOneStep();
+    }
 
+
+    /**
+     * The grid is filled based on the colors received from the XML file.
+     */
+    private void fillGrid(){
+        for(int i = 0; i< grid.getNumOfRows(); i++){
+            for(int j = 0; j< grid.getNumOfColumns(); j++){
+                Rectangle rectangle = new Rectangle();
+                rectangle.setFill(colors.get(grid.getCellState(i, j)));
+                gridPane.add(rectangle, j, i);
+            }
+        }
     }
 
     public static void main(String[] args) {

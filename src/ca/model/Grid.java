@@ -1,7 +1,9 @@
 package ca.model;
 
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class Grid {
 
@@ -38,13 +40,13 @@ public class Grid {
      * @param c
      * @return an arrayList of Pair objects
      */
-    public ArrayList<Cell> getNSEWNeigbors (int r, int c) {
+    public ArrayList<Cell> getNSEWNeighbors(int r, int c) {
         ArrayList<Cell> ret = new ArrayList<>();
         int [] rowIndices = {r-1, r+1};
         int [] colIndices = {c+1, c-1}; //east first, then west
 
         for (int i : rowIndices){
-            Pair temp = getPair(i, c);
+            Pair temp = getPair(i, c);  // TODO: talk about the better way
             if (temp != null){
                 ret.add(gridMap.get(temp));
             }
@@ -146,6 +148,11 @@ public class Grid {
             return gridMap.get(temp).getState();
         }
         return 0;
+    }
+
+    public void setCellState(int r, int c, int state) {
+        Pair temp = getPair(r, c);
+        gridMap.put(temp, new Cell(state));
     }
 
     /**

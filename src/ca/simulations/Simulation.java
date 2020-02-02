@@ -29,7 +29,7 @@ public abstract class Simulation {
                 neighbors = grid.getAllNeighbors(r, c);
                 break;
             case "NSWE":
-                neighbors = grid.getNSEWNeigbors(r, c);
+                neighbors = grid.getNSEWNeighbors(r, c);
                 break;
             default:
                 neighbors = new ArrayList<>();
