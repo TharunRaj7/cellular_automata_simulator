@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <simulation>
     <general>
-        <type>Segregation</type>
-        <title>Segregation</title>
-        <author>McCown</author>
-        <inFolder>Segregation</inFolder>
+        <type>Percolation</type>
+        <title>Percolation</title>
+        <author>Khanjary</author>
+        <inFolder>Percolation</inFolder>
     </general>
 
     <initialStates>
         <gridWidth>400</gridWidth>
         <gridHeight>400</gridHeight>
-        <cellConfig>seg1.txt</cellConfig>
+        <cellConfig>perc1.txt</cellConfig>
     </initialStates>
 
     <colors>
         <color0>#ffffff</color0>
-        <color1>#f40404</color1>
-        <color2>#0b04f4</color2>
+        <color1>#000000</color1>
+        <color2>#1C9fff</color2>
     </colors>
 </simulation>

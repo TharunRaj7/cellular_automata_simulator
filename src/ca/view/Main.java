@@ -16,14 +16,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.util.Duration;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * This class extends Application and is the Main class of the simulation.
@@ -39,16 +37,18 @@ public class Main extends Application {
     private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     private static final int SIZE = 600;
     private static final Paint BACKGROUND = Color.AZURE;
+    private static final String RESOURCE = "src/ca/resources";
+    private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCE + ".";
 
     private SimulationConfig simulationConfig;
     private GridPaneHandler gridPaneHandler;
-    private Grid grid;
     private GridPane myGrid;
     private Controller controller;
-    private GridPane gridPane;
     private Simulation simulation;
-    private List<Color> colors;
+    private Stage stage;
+    private ResourceBundle myResources;
 
+    Group root;
 
     /**
      * This method creates a new instance of the file reader as well as the scene creation.
@@ -58,12 +58,13 @@ public class Main extends Application {
      */
     @Override
     public void start (Stage stage) {
-//        XMLReader retrieveFile = new XMLReader();
-//        retrieveFile.getFile(stage);
-//        readVariablesFromXML(retrieveFile);
+        this.stage = stage;
+        XMLReader retrieveFile = new XMLReader();
+        retrieveFile.getFile(stage);
+        readVariablesFromXML(retrieveFile);
 
-        readVariablesFromXML();
-        Scene myGameScene = setupSimulation(SIZE);
+//        readVariablesFromXML();
+        Scene myGameScene = setupSimulation();
         stage.setScene(myGameScene);
         stage.setTitle(TITLE);
         stage.show();
@@ -76,17 +77,18 @@ public class Main extends Application {
 
     }
 
-//    private void readVariablesFromXML(XMLReader retrieveFile) {
-    private void readVariablesFromXML() {
-        simulationConfig = new SimulationConfig(new File("data\\GameOfLife\\GameOfLife1.xml"));
-//        simulationConfig = new SimulationConfig(retrieveFile.getXMLfile());
+    private void readVariablesFromXML(XMLReader retrieveFile) {
+//    private void readVariablesFromXML() {
+//        simulationConfig = new SimulationConfig(new File("data/GameOfLife\\GameOfLife1.xml"));
+        simulationConfig = new SimulationConfig(retrieveFile.getXMLfile());
         simulationConfig.readFile();
         controller = new Controller();
-        colors = simulationConfig.getColors();
-        createSimulationInstance(simulationConfig.getSimulationType());
+        gridPaneHandler = new GridPaneHandler(simulationConfig);
+        Grid grid = new Grid(simulationConfig.getRowNum(), simulationConfig.getColNum(), simulationConfig.getCellStates());
+        createSimulationInstance(simulationConfig.getSimulationType(), grid);
     }
 
-    private void createSimulationInstance(SimulationType simulationType) {
+    private void createSimulationInstance(SimulationType simulationType, Grid grid) {
         switch (simulationType) {
             case GameOfLife:
                 simulation = new GameOfLife(grid);
@@ -99,25 +101,23 @@ public class Main extends Application {
     /**
      * This method sets up the simulation and creates all the buttons for the simulation. It calls on the Grid class
      * in the model to create the grid.
-     * @param size the size of the scene
      * @return Scene
      */
-    public Scene setupSimulation(int size) {
-        Group root = new Group();
-        grid = new Grid(simulationConfig.getRowNum(), simulationConfig.getColNum(), simulationConfig.getCellStates());
-        myGrid = gridPaneHandler.createGrid(simulationConfig.getColNum(), simulationConfig.getRowNum(), simulationConfig.getGridWidth(), simulationConfig.getGridHeight());
-        root.getChildren().add(myGrid);
-        final TextField num = new TextField();
+    private Scene setupSimulation() {
+        root = new Group();
+        myGrid = gridPaneHandler.createGrid(simulationConfig.getColNum(), simulationConfig.getRowNum(), simulationConfig.getGridWidth(), simulationConfig.getGridHeight(), simulation.getGrid());
+       // myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "English");
+        TextField num = new TextField();
         Styler styler = new Styler();
-        Button startButton = styler.createButton("StartCommand", event -> controller.startAnimation());
-        Button stopButton = styler.createButton("StopCommand", event -> controller.pauseAnimation());
-        Button reloadFileButton = styler.createButton("ReloadCommand", event -> controller.reStartAnimation());
-        Button stepButton = styler.createButton("StepCommand", event -> controller.runOneStep());
+        Button startButton = styler.createButton("StartCommand", event -> controller.startAnimation(), simulationConfig.getGridHeight(), 0);
+        Button stopButton = styler.createButton("StopCommand", event -> controller.pauseAnimation(), simulationConfig.getGridHeight(), 1);
+        Button reloadFileButton = styler.createButton("ReloadCommand", event -> start(stage), simulationConfig.getGridHeight(), 2);
+        Button stepButton = styler.createButton("StepCommand", event -> controller.runOneStep(), simulationConfig.getGridHeight(), 3);
         num.setPromptText("FillerCommand");
-        Button submitButton = styler.createButton("SubmitCommand", event -> controller.setAnimationSpeed(Double.valueOf(num.getText())));
-
-        root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton, num);
-        return new Scene(root, size, size, BACKGROUND);
+        styler.setLocation(num, simulationConfig.getGridHeight());
+        Button submitButton = styler.createButton("SubmitCommand", event -> controller.setAnimationSpeed(Double.parseDouble(num.getText())), simulationConfig.getGridHeight(), 5);
+        root.getChildren().addAll(myGrid, startButton, stopButton, reloadFileButton, stepButton, submitButton, num);
+        return new Scene(root, Main.SIZE, Main.SIZE, BACKGROUND);
     }
 
     /**
@@ -125,9 +125,10 @@ public class Main extends Application {
      * This method is executed every time the step button on the user interface is clicked.
      */
     public void step () {
+        root.getChildren().remove(myGrid);
         simulation.runOneStep();
-        myGrid = gridPaneHandler.createGrid(simulationConfig.getColNum(), simulationConfig.getRowNum(), simulationConfig.getGridWidth(), simulationConfig.getGridHeight());
-
+        myGrid = gridPaneHandler.createGrid(simulationConfig.getColNum(), simulationConfig.getRowNum(), simulationConfig.getGridWidth(), simulationConfig.getGridHeight(), simulation.getGrid());
+        root.getChildren().addAll(myGrid);
     }
 
     public static void main(String[] args) {

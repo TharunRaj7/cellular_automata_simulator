@@ -61,5 +61,9 @@ public abstract class Simulation {
         return cells;
     }
 
+    public Grid getGrid() {
+        return grid;
+    }
+
     public abstract void runOneStep();
 }
