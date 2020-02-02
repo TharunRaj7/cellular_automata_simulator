@@ -13,6 +13,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
@@ -33,12 +34,11 @@ public class Main extends Application {
     private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     private static final int SIZE = 600;
     private static final Paint BACKGROUND = Color.AZURE;
-    private static final int XML_file_dimension = 10;
-
-    private int XML_dimension;
 
     private SimulationConfig simulationConfig;
+    private GridPaneHandler gridPaneHandler;
     private Grid grid;
+    private GridPane myGrid;
     private Button startButton;
     private Button stopButton;
     private Button reloadFileButton;
@@ -73,8 +73,6 @@ public class Main extends Application {
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
         animation.play();
-
-
     }
 
     /**
@@ -85,9 +83,9 @@ public class Main extends Application {
      */
     public Scene setupSimulation(int size) {
         Group root = new Group();
-        grid = new Grid(simulationConfig.getGridWidth(), simulationConfig.getGridHeight(), simulationConfig.getCellStates());
-        grid.setGridLinesVisible(true);
-        root.getChildren().add(grid.getGrid());
+        grid = new Grid(simulationConfig.getColNum(), simulationConfig.getRowNum(), simulationConfig.getCellStates());
+        myGrid = gridPaneHandler.createGrid(simulationConfig.getColNum(), simulationConfig.getRowNum(), simulationConfig.getGridWidth(), simulationConfig.getGridHeight());
+        root.getChildren().add(myGrid);
         MyButton button = new MyButton();
         startButton = button.createButton("StartCommand", event -> controller.startAnimation());
         stopButton = button.createButton("StopCommand", event -> controller.pauseAnimation());
@@ -110,8 +108,9 @@ public class Main extends Application {
      * In this method, we will need to call the updateCells method in the other part of the code.
      * This method is executed every time the step button on the user interface is clicked.
      */
-    public static void step () {
-
+    public void step () {
+       grid.updateGrid();
+       myGrid = gridPaneHandler.createGrid(simulationConfig.getColNum(), simulationConfig.getRowNum(), simulationConfig.getGridWidth(), simulationConfig.getGridHeight());
     }
 
     public static void main(String[] args) {
