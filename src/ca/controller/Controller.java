@@ -4,9 +4,8 @@ package ca.controller;
  * This class handles user inputs.
  */
 
-import ca.model.Simulation;
+import ca.simulations.Simulation;
 import javafx.animation.Animation;
-import javafx.application.Application;
 import javafx.scene.input.KeyCode;
 
 public class Controller {

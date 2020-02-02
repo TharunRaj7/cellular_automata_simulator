@@ -1,9 +1,12 @@
 package ca.model;
 
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class Grid {
+
     private int numOfColumns;
     private int numOfRows;
 
@@ -21,19 +24,29 @@ public class Grid {
         this.numOfColumns = numOfColumns;
         createGridModel(initialStates);
     }
+
     /**
-     *
+     * Copies another Grid object
+     * @param grid
+     */
+    public Grid (Grid grid){
+        this.numOfRows = grid.getNumOfRows();
+        this.numOfColumns = grid.getNumOfColumns();
+        this.gridMap = grid.gridMap;
+    }
+    /**
+     * Gets the neighboring cells (North, South, East, West of the specified cell)
      * @param r
      * @param c
-     * @return an arraylist of 4 neighboring  (North, south, east, west)
+     * @return an arrayList of Pair objects
      */
-    public ArrayList<Cell> getNSEWNeigbors (int r, int c) {
+    public ArrayList<Cell> getNSEWNeighbors(int r, int c) {
         ArrayList<Cell> ret = new ArrayList<>();
         int [] rowIndices = {r-1, r+1};
         int [] colIndices = {c+1, c-1}; //east first, then west
 
         for (int i : rowIndices){
-            Pair temp = getPair(i, c);
+            Pair temp = getPair(i, c);  // TODO: talk about the better way
             if (temp != null){
                 ret.add(gridMap.get(temp));
             }
@@ -53,7 +66,7 @@ public class Grid {
      * Returns all the neighbors surrouding a given cell (Up to 8).
      * @param r
      * @param c
-     * @return an array of all the neighboring cells.
+     * @return an arrayList of all the neighboring cells.
      */
     public ArrayList<Cell> getAllNeighbors (int r, int c){
         int [] rowIndices = {r-1, r-1, r, r+1, r+1, r+1, r, r-1};
@@ -69,6 +82,13 @@ public class Grid {
         return ret;
     }
 
+
+    /**
+     * Helper method to identify and return the pair object given the row and column
+     * @param r
+     * @param c
+     * @return a Pair object
+     */
     private Pair getPair(int r, int c) {
         for (Pair pair : gridMap.keySet()){
             if (pair.checkPair(r,c)){
@@ -85,7 +105,7 @@ public class Grid {
          * @param col
          * @param state
          */
-    public void updateGrid ( int row, int col, int state){
+    public void updateState ( int row, int col, int state){
         for (Pair pair : gridMap.keySet()){
             if (pair.checkPair(row, col)){
                 gridMap.get(pair).setState(state);
@@ -93,14 +113,26 @@ public class Grid {
         }
     }
 
+    public Cell getCell(int row, int col) {
+        for (Pair pair: gridMap.keySet()) {
+            if (pair.checkPair(row, col)) {
+                return gridMap.get(pair);
+            }
+        }
+    }
 
+
+    /**
+     * Populates the Hashmap with cells and initializes their states based on a List of initial states.
+     * @param initialStates
+     */
     private void createGridModel(List<Integer>initialStates) {
         int rowLooper = 0;
         int colLooper = 0;
+
         for (int i = 0; i < numOfColumns*numOfRows; i++) {
             Pair temp = new Pair(rowLooper, colLooper);
             Cell tempCell = new Cell(initialStates.get(i));
-            System.out.println(initialStates.get(i));
             gridMap.putIfAbsent(temp, tempCell);
 
             if (colLooper == numOfColumns - 1){
@@ -112,7 +144,41 @@ public class Grid {
         }
     }
 
-    public int getCellState (int r, int c){return 0;}
+    /**
+     * Returns the state of cell specified by r and c. Returns 0 by default if the given r and/or c are not valid
+     * @param r
+     * @param c
+     * @return the state of a cell.
+     */
+    public int getCellState (int r, int c){
+        Pair temp = getPair(r, c);
+        if (temp != null){
+            return gridMap.get(temp).getState();
+        }
+        return 0;
+    }
+
+    public void setCellState(int r, int c, int state) {
+        Pair temp = getPair(r, c);
+        gridMap.put(temp, new Cell(state));
+    }
+
+    /**
+     * getter method for the number of columns
+     * @return numOfColumns
+     */
+    public int getNumOfColumns() {
+        return numOfColumns;
+    }
+
+    /**
+     * getter method for the number of rows
+     * @return numOfRows
+     */
+    public int getNumOfRows() {
+        return numOfRows;
+    }
+
 
     public static void main(String[] args) {
         //testing for Grid Class
@@ -121,7 +187,7 @@ public class Grid {
             temp.add(i);
         }
         Grid test = new Grid(3,3, temp);
-        test.updateGrid(1,2, 454);
+        test.updateState(1,2, 454);
 
         for (Pair pair : test.gridMap.keySet()){
             System.out.println(pair);

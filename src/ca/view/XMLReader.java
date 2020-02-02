@@ -9,7 +9,7 @@ import java.io.File;
  * A file chooser is initiated and presented and the only acceptable type of file is of
  * the XML format.
  */
-public class getXML {
+public class XMLReader {
 
     private File XMLfile;
 
