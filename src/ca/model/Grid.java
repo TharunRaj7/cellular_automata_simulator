@@ -108,7 +108,21 @@ public class Grid {
     public Cell getCell(int row, int col) {
         Pair temp = getPair(row, col);
         return gridMap.get(temp);
+    }
 
+    /**
+     * Returns all the cells on the grid in order.
+     * @return
+     */
+    public List<Cell> getAllCells() {
+        List<Cell> ret = new ArrayList<>();
+
+        for (int r = 0; r < numOfRows; r++) {
+            for (int c = 0; c < numOfColumns; c++) {
+                ret.add(gridMap.get(getPair(r, c)));
+            }
+        }
+        return ret;
     }
 
 
@@ -156,7 +170,7 @@ public class Grid {
      */
     public void setCellState(int r, int c, int state) {
         Pair temp = getPair(r, c);
-        gridMap.put(temp, new Cell(state));
+        gridMap.get(temp).setState(state);
     }
 
     /**
