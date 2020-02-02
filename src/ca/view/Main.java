@@ -39,12 +39,11 @@ public class Main extends Application {
     private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     private static final int SIZE = 600;
     private static final Paint BACKGROUND = Color.AZURE;
-    private static final int XML_file_dimension = 10;
-
-    private int XML_dimension;
 
     private SimulationConfig simulationConfig;
+    private GridPaneHandler gridPaneHandler;
     private Grid grid;
+    private GridPane myGrid;
     private Controller controller;
     private GridPane gridPane;
     private Simulation simulation;
@@ -74,6 +73,7 @@ public class Main extends Application {
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
         animation.play();
+
     }
 
 //    private void readVariablesFromXML(XMLReader retrieveFile) {
@@ -82,9 +82,6 @@ public class Main extends Application {
 //        simulationConfig = new SimulationConfig(retrieveFile.getXMLfile());
         simulationConfig.readFile();
         controller = new Controller();
-        grid = new Grid(simulationConfig.getRowNum(), simulationConfig.getColNum(), simulationConfig.getCellStates());
-        gridPane = new GridPane();
-        fillGrid();
         colors = simulationConfig.getColors();
         createSimulationInstance(simulationConfig.getSimulationType());
     }
@@ -107,13 +104,15 @@ public class Main extends Application {
      */
     public Scene setupSimulation(int size) {
         Group root = new Group();
+        grid = new Grid(simulationConfig.getRowNum(), simulationConfig.getColNum(), simulationConfig.getCellStates());
+        myGrid = gridPaneHandler.createGrid(simulationConfig.getColNum(), simulationConfig.getRowNum(), simulationConfig.getGridWidth(), simulationConfig.getGridHeight());
+        root.getChildren().add(myGrid);
+        final TextField num = new TextField();
         Styler styler = new Styler();
-
         Button startButton = styler.createButton("StartCommand", event -> controller.startAnimation());
         Button stopButton = styler.createButton("StopCommand", event -> controller.pauseAnimation());
         Button reloadFileButton = styler.createButton("ReloadCommand", event -> controller.reStartAnimation());
         Button stepButton = styler.createButton("StepCommand", event -> controller.runOneStep());
-        TextField num = new TextField();
         num.setPromptText("FillerCommand");
         Button submitButton = styler.createButton("SubmitCommand", event -> controller.setAnimationSpeed(Double.valueOf(num.getText())));
 
@@ -127,22 +126,8 @@ public class Main extends Application {
      */
     public void step () {
         simulation.runOneStep();
-    }
+        myGrid = gridPaneHandler.createGrid(simulationConfig.getColNum(), simulationConfig.getRowNum(), simulationConfig.getGridWidth(), simulationConfig.getGridHeight());
 
-
-    /**
-     * The grid is filled based on the colors received from the XML file.
-     */
-    private void fillGrid(){
-        for(int i = 0; i< grid.getNumOfRows(); i++){
-            for(int j = 0; j< grid.getNumOfColumns(); j++){
-                Rectangle rectangle = new Rectangle();
-                System.out.println(grid.getCellState(i, j));
-                System.out.println(colors.get(0));;
-                rectangle.setFill(colors.get(grid.getCellState(i, j)));
-                gridPane.add(rectangle, j, i);
-            }
-        }
     }
 
     public static void main(String[] args) {
