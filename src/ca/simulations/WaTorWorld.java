@@ -1,4 +1,4 @@
 package ca.simulations;
 
-public class PreyPredator {
+public class WaTorWorld extends {
 }

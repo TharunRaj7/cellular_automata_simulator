@@ -100,25 +100,14 @@ public class Grid {
 
 
     /**
-         *Updates the grid for the given row,col pair and the new state
-         * @param row
-         * @param col
-         * @param state
-         */
-    public void updateState ( int row, int col, int state){
-        for (Pair pair : gridMap.keySet()){
-            if (pair.checkPair(row, col)){
-                gridMap.get(pair).setState(state);
-            }
-        }
-    }
-
+     * Returns a specified cell
+     * @param row
+     * @param col
+     * @return
+     */
     public Cell getCell(int row, int col) {
-        for (Pair pair: gridMap.keySet()) {
-            if (pair.checkPair(row, col)) {
-                return gridMap.get(pair);
-            }
-        }
+        Pair temp = getPair(row, col);
+        return gridMap.get(temp);
     }
 
 
@@ -158,6 +147,12 @@ public class Grid {
         return 0;
     }
 
+    /**
+     *Updates the grid for the given row,col pair and the new state
+     * @param r
+     * @param c
+     * @param state
+     */
     public void setCellState(int r, int c, int state) {
         Pair temp = getPair(r, c);
         gridMap.put(temp, new Cell(state));
@@ -187,7 +182,7 @@ public class Grid {
             temp.add(i);
         }
         Grid test = new Grid(3,3, temp);
-        test.updateState(1,2, 454);
+        test.setCellState(1,2, 454);
 
         for (Pair pair : test.gridMap.keySet()){
             System.out.println(pair);
