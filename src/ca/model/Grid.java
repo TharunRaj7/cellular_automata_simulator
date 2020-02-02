@@ -9,14 +9,18 @@ public class Grid {
 
     Map<Pair, Cell> gridMap;
 
+    /**
+     * Constructs the grid data structure.
+     * @param numOfRows
+     * @param numOfColumns
+     * @param initialStates
+     */
     public Grid(int numOfRows, int numOfColumns,  List<Integer> initialStates) {
         this.gridMap = new LinkedHashMap<>();
         this.numOfRows = numOfRows;
         this.numOfColumns = numOfColumns;
         createGridModel(initialStates);
     }
-
-
     /**
      *
      * @param r
@@ -44,18 +48,9 @@ public class Grid {
         return ret;
     }
 
-    private Pair getPair(int r, int c) {
-        for (Pair pair : gridMap.keySet()){
-            if (pair.checkPair(r,c)){
-                return pair;
-            }
-        }
-        return null;
-    }
-
 
     /**
-     *
+     * Returns all the neighbors surrouding a given cell (Up to 8).
      * @param r
      * @param c
      * @return an array of all the neighboring cells.
@@ -74,8 +69,18 @@ public class Grid {
         return ret;
     }
 
-        /**
-         *
+    private Pair getPair(int r, int c) {
+        for (Pair pair : gridMap.keySet()){
+            if (pair.checkPair(r,c)){
+                return pair;
+            }
+        }
+        return null;
+    }
+
+
+    /**
+         *Updates the grid for the given row,col pair and the new state
          * @param row
          * @param col
          * @param state
