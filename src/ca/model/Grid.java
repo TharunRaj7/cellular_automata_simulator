@@ -17,6 +17,12 @@ public class Grid {
     }
 
 
+    /**
+     *
+     * @param r
+     * @param c
+     * @return an arraylist of 4 neighboring  (North, south, east, west)
+     */
     public ArrayList<Cell> getNSEWNeigbors (int r, int c) {
         ArrayList<Cell> ret = new ArrayList<>();
         int [] rowIndices = {r-1, r+1};
@@ -48,8 +54,24 @@ public class Grid {
     }
 
 
+    /**
+     *
+     * @param r
+     * @param c
+     * @return an array of all the neighboring cells.
+     */
     public ArrayList<Cell> getAllNeighbors (int r, int c){
-        return new ArrayList<>();
+        int [] rowIndices = {r-1, r-1, r, r+1, r+1, r+1, r, r-1};
+        int [] colIndices = {c, c+1, c+1, c+1, c, c-1, c-1, c-1};
+        ArrayList<Cell> ret = new ArrayList<>();
+
+        for (int i = 0; i < 8; i++){
+            Pair temp = getPair(rowIndices[i], colIndices[i]);
+            if (temp != null){
+                ret.add(gridMap.get(temp));
+            }
+        }
+        return ret;
     }
 
         /**
@@ -101,7 +123,7 @@ public class Grid {
             System.out.println("State = " + test.gridMap.get(pair).getState());
         }
 
-        ArrayList<Cell> tester = test.getNSEWNeigbors(2,2);
+        ArrayList<Cell> tester = test.getAllNeighbors(2,2);
         for (Cell cell : tester){
             System.out.println(cell.getState());
         }
