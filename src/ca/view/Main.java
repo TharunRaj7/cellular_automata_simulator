@@ -21,6 +21,7 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.util.Duration;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +46,6 @@ public class Main extends Application {
     private SimulationConfig simulationConfig;
     private Grid grid;
     private Controller controller;
-    private Stage stage;
     private GridPane gridPane;
     private Simulation simulation;
     private List<Color> colors;
@@ -59,10 +59,11 @@ public class Main extends Application {
      */
     @Override
     public void start (Stage stage) {
-        XMLReader retrieveFile = new XMLReader();
-        retrieveFile.getFile(stage);
-        readVariablesFromXML(retrieveFile);
+//        XMLReader retrieveFile = new XMLReader();
+//        retrieveFile.getFile(stage);
+//        readVariablesFromXML(retrieveFile);
 
+        readVariablesFromXML();
         Scene myGameScene = setupSimulation(SIZE);
         stage.setScene(myGameScene);
         stage.setTitle(TITLE);
@@ -75,10 +76,13 @@ public class Main extends Application {
         animation.play();
     }
 
-    private void readVariablesFromXML(XMLReader retrieveFile) {
-        simulationConfig = new SimulationConfig(retrieveFile.getXMLfile());
+//    private void readVariablesFromXML(XMLReader retrieveFile) {
+    private void readVariablesFromXML() {
+        simulationConfig = new SimulationConfig(new File("data\\GameOfLife\\GameOfLife1.xml"));
+//        simulationConfig = new SimulationConfig(retrieveFile.getXMLfile());
+        simulationConfig.readFile();
         controller = new Controller();
-        grid = new Grid(simulationConfig.getGridWidth(), simulationConfig.getGridHeight(), simulationConfig.getCellStates());
+        grid = new Grid(simulationConfig.getRowNum(), simulationConfig.getColNum(), simulationConfig.getCellStates());
         gridPane = new GridPane();
         fillGrid();
         colors = simulationConfig.getColors();
@@ -107,7 +111,7 @@ public class Main extends Application {
 
         Button startButton = styler.createButton("StartCommand", event -> controller.startAnimation());
         Button stopButton = styler.createButton("StopCommand", event -> controller.pauseAnimation());
-        Button reloadFileButton = styler.createButton("ReloadCommand", event -> start(stage));
+        Button reloadFileButton = styler.createButton("ReloadCommand", event -> controller.reStartAnimation());
         Button stepButton = styler.createButton("StepCommand", event -> controller.runOneStep());
         TextField num = new TextField();
         num.setPromptText("FillerCommand");
@@ -133,6 +137,8 @@ public class Main extends Application {
         for(int i = 0; i< grid.getNumOfRows(); i++){
             for(int j = 0; j< grid.getNumOfColumns(); j++){
                 Rectangle rectangle = new Rectangle();
+                System.out.println(grid.getCellState(i, j));
+                System.out.println(colors.get(0));;
                 rectangle.setFill(colors.get(grid.getCellState(i, j)));
                 gridPane.add(rectangle, j, i);
             }

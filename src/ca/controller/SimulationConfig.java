@@ -213,6 +213,9 @@ public class SimulationConfig {
                 colors.add(c);
             }
         }
+        for (Color c: colors) {
+            System.out.println(c);
+        }
     }
 
 
@@ -254,9 +257,6 @@ public class SimulationConfig {
     }
 
     public List<Integer> getCellStates() {
-        for (int i = 0; i < cellStates.size(); i++) {
-            System.out.println(cellStates.get(i));
-        }
         return cellStates;
     }
 
@@ -277,4 +277,5 @@ public class SimulationConfig {
         }
         return rowNum;
     }
+
 }

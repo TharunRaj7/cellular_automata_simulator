@@ -121,10 +121,10 @@ public class Grid {
     private void createGridModel(List<Integer>initialStates) {
         int rowLooper = 0;
         int colLooper = 0;
+
         for (int i = 0; i < numOfColumns*numOfRows; i++) {
             Pair temp = new Pair(rowLooper, colLooper);
             Cell tempCell = new Cell(initialStates.get(i));
-            System.out.println(initialStates.get(i));
             gridMap.putIfAbsent(temp, tempCell);
 
             if (colLooper == numOfColumns - 1){
