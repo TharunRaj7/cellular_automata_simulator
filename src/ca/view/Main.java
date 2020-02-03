@@ -1,4 +1,3 @@
-
 package ca.view;
 
 import ca.controller.Controller;
@@ -7,6 +6,7 @@ import ca.controller.SimulationType;
 import ca.model.Grid;
 import ca.simulations.GameOfLife;
 import ca.simulations.Simulation;
+import ca.simulations.WaTorWorld;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -46,6 +46,7 @@ public class Main extends Application {
     private Controller controller;
     private Simulation simulation;
     private Stage stage;
+    private Scene scene;
     private ResourceBundle myResources;
 
     Group root;
@@ -59,33 +60,32 @@ public class Main extends Application {
     @Override
     public void start (Stage stage) {
         this.stage = stage;
-        XMLReader retrieveFile = new XMLReader();
-        retrieveFile.getFile(stage);
-        readVariablesFromXML(retrieveFile);
+//        XMLReader retrieveFile = new XMLReader();
+//        retrieveFile.getFile(stage);
+//        readVariablesFromXML(retrieveFile);
 
-//        readVariablesFromXML();
-        Scene myGameScene = setupSimulation();
-        stage.setScene(myGameScene);
-        stage.setTitle(TITLE);
-        stage.show();
+        readVariablesFromXML();
+        scene = setupSimulation();
+        setStage();
 
-        KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), event -> step());
+        KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), event -> step(SECOND_DELAY));
         Timeline animation = new Timeline();
+        controller.setTimeline(animation);
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
         animation.play();
-
     }
 
-    private void readVariablesFromXML(XMLReader retrieveFile) {
-//    private void readVariablesFromXML() {
-//        simulationConfig = new SimulationConfig(new File("data/GameOfLife\\GameOfLife1.xml"));
-        simulationConfig = new SimulationConfig(retrieveFile.getXMLfile());
+//    private void readVariablesFromXML(XMLReader retrieveFile) {
+    private void readVariablesFromXML() {
+        simulationConfig = new SimulationConfig(new File("data\\GameOfLife\\GameOfLife1.xml"));
+//        simulationConfig = new SimulationConfig(retrieveFile.getXMLfile());
         simulationConfig.readFile();
         controller = new Controller();
         gridPaneHandler = new GridPaneHandler(simulationConfig);
         Grid grid = new Grid(simulationConfig.getRowNum(), simulationConfig.getColNum(), simulationConfig.getCellStates());
         createSimulationInstance(simulationConfig.getSimulationType(), grid);
+        controller.setSimulation(simulation);
     }
 
     private void createSimulationInstance(SimulationType simulationType, Grid grid) {
@@ -96,6 +96,12 @@ public class Main extends Application {
             default:
                 simulation = null;
         }
+    }
+
+    private void setStage() {
+        stage.setScene(scene);
+        stage.setTitle(TITLE);
+        stage.show();
     }
 
     /**
@@ -124,7 +130,8 @@ public class Main extends Application {
      * In this method, we will need to call the updateCells method in the other part of the code.
      * This method is executed every time the step button on the user interface is clicked.
      */
-    public void step () {
+    public void step (double elapsedTime) {
+        controller.setAnimationSpeed(elapsedTime);
         root.getChildren().remove(myGrid);
         simulation.runOneStep();
         myGrid = gridPaneHandler.createGrid(simulationConfig.getColNum(), simulationConfig.getRowNum(), simulationConfig.getGridWidth(), simulationConfig.getGridHeight(), simulation.getGrid());

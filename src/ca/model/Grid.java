@@ -1,17 +1,13 @@
 package ca.model;
 
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
 public class Grid {
-
     private int numOfColumns;
     private int numOfRows;
-
     private Map<Pair, Cell> gridMap;
-
     /**
      * Constructs the grid data structure.
      * @param numOfRows
@@ -40,22 +36,21 @@ public class Grid {
      * @param c
      * @return an arrayList of Cell objects
      */
-    public ArrayList<Cell> getNSEWNeighbors(int r, int c) {
-        ArrayList<Cell> ret = new ArrayList<>();
-        int [] rowIndices = {r-1, r+1};
-        int [] colIndices = {c+1, c-1}; //east first, then west
+    public List<Cell> getNSEWNeighbors(int r, int c) {
+        List<Cell> ret = new ArrayList<>();
+        int[] rowIndices = {r, r, r-1, r+1};
+        int[] colIndices = {c+1, c-1, c, c}; //east first, then west
+        return loopThroughNeighbors(rowIndices, colIndices, ret);
+    }
 
-        for (int i : rowIndices){
-            Pair temp = getPair(i, c);  // TODO: talk about the better way
-            if (temp != null){
-                ret.add(gridMap.get(temp));
-            }
-        }
+    private boolean inBound(int r, int c) {
+        return (0 <= r) && (r < numOfRows) && (0 <= c) && (c < numOfColumns);
+    }
 
-        for (int i : colIndices){
-            Pair temp = getPair(r, i);
-            if (temp != null){
-                ret.add(gridMap.get(temp));
+    private List<Cell> loopThroughNeighbors(int[] rowIndices, int[] colIndices, List<Cell> ret) {
+        for (int i = 0; i < rowIndices.length; i++) {
+            if (inBound(rowIndices[i], colIndices[i])) {
+                ret.add(gridMap.get(new Pair(rowIndices[i], colIndices[i])));
             }
         }
         return ret;
@@ -68,34 +63,11 @@ public class Grid {
      * @param c
      * @return an arrayList of all the neighboring cells.
      */
-    public ArrayList<Cell> getAllNeighbors (int r, int c){
-        int [] rowIndices = {r-1, r-1, r, r+1, r+1, r+1, r, r-1};
-        int [] colIndices = {c, c+1, c+1, c+1, c, c-1, c-1, c-1};
-        ArrayList<Cell> ret = new ArrayList<>();
-
-        for (int i = 0; i < 8; i++){
-            Pair temp = getPair(rowIndices[i], colIndices[i]);
-            if (temp != null){
-                ret.add(gridMap.get(temp));
-            }
-        }
-        return ret;
-    }
-
-
-    /**
-     * Helper method to identify and return the pair object given the row and column
-     * @param r
-     * @param c
-     * @return a Pair object
-     */
-    private Pair getPair(int r, int c) {
-        for (Pair pair : gridMap.keySet()){
-            if (pair.checkPair(r,c)){
-                return pair;
-            }
-        }
-        return null;
+    public List<Cell> getAllNeighbors (int r, int c) {
+        List<Cell> ret = new ArrayList<>();
+        int[] rowIndices = {r-1, r-1, r, r+1, r+1, r+1, r, r-1};
+        int[] colIndices = {c, c+1, c+1, c+1, c, c-1, c-1, c-1};
+        return loopThroughNeighbors(rowIndices, colIndices, ret);
     }
 
     /**
@@ -114,14 +86,14 @@ public class Grid {
 
 
     /**
-     * Returns a specified cell
-     * @param row
-     * @param col
-     * @return
+     * Returns the state of cell specified by r and c. Returns 0 by default if the given r and/or c are not valid
+     * @param r
+     * @param c
+     * @return the state of a cell.
      */
-    public Cell getCell(int row, int col) {
-        Pair temp = getPair(row, col);
-        return gridMap.get(temp);
+
+    public Cell getCell(int r, int c) {
+       return gridMap.get(new Pair(r, c));
     }
 
     /**
@@ -130,10 +102,9 @@ public class Grid {
      */
     public List<Cell> getAllCells() {
         List<Cell> ret = new ArrayList<>();
-
         for (int r = 0; r < numOfRows; r++) {
             for (int c = 0; c < numOfColumns; c++) {
-                ret.add(gridMap.get(getPair(r, c)));
+                ret.add(gridMap.get(new Pair(r, c)));
             }
         }
         return ret;
@@ -163,31 +134,6 @@ public class Grid {
     }
 
     /**
-     * Returns the state of cell specified by r and c. Returns 0 by default if the given r and/or c are not valid
-     * @param r
-     * @param c
-     * @return the state of a cell.
-     */
-    public int getCellState (int r, int c){
-        Pair temp = getPair(r, c);
-        if (temp != null){
-            return gridMap.get(temp).getState();
-        }
-        return 0;
-    }
-
-    /**
-     *Updates the grid for the given row,col pair and the new state
-     * @param r
-     * @param c
-     * @param state
-     */
-    public void setCellState(int r, int c, int state) {
-        Pair temp = getPair(r, c);
-        gridMap.get(temp).setState(state);
-    }
-
-    /**
      * getter method for the number of columns
      * @return numOfColumns
      */
@@ -203,30 +149,38 @@ public class Grid {
         return numOfRows;
     }
 
-
-    public static void main(String[] args) {
-        //testing for Grid Class
-        List<Integer> temp = new ArrayList<>();
-        for(int i = 0; i < 9; i++) {
-            temp.add(i);
-        }
-        Grid test = new Grid(3,3, temp);
-        test.setCellState(1,2, 454);
-
-        for (Pair pair : test.gridMap.keySet()){
-            System.out.println(pair);
-            System.out.println("State = " + test.gridMap.get(pair).getState());
-        }
-
-        ArrayList<Cell> tester = test.getAllNeighbors(2,2);
-        for (Cell cell : tester){
-            System.out.println(cell.getState());
-        }
-
-        Pair pairTest = test.getPairGivenCell(test.getCell(1,2));
-        System.out.println(pairTest);
-        System.out.println(test.getCellState(pairTest.getRow(), pairTest.getCol()));
-
-
+    public int getCellState(int r, int c) {
+        return getCell(r, c).getState();
     }
+
+    public void setCellState(int r, int c, int state) {
+        gridMap.get(new Pair(r, c)).setState(state);
+    }
+
+
+//    public static void main(String[] args) {
+//        //testing for Grid Class
+//        List<Integer> temp = new ArrayList<>();
+//        for(int i = 0; i < 9; i++) {
+//            temp.add(i);
+//        }
+//        Grid test = new Grid(3,3, temp);
+//        test.setCellState(1,2, 454);
+//
+//        for (Pair pair : test.gridMap.keySet()){
+//            System.out.println(pair);
+//            System.out.println("State = " + test.gridMap.get(pair).getState());
+//        }
+//
+//        ArrayList<Cell> tester = test.getAllNeighbors(2,2);
+//        for (Cell cell : tester){
+//            System.out.println(cell.getState());
+//        }
+//
+//        Pair pairTest = test.getPairGivenCell(test.getCell(1,2));
+//        System.out.println(pairTest);
+//        System.out.println(test.getCellState(pairTest.getRow(), pairTest.getCol()));
+//
+//
+//    }
 }

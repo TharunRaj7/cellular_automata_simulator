@@ -22,31 +22,16 @@ public class Segregation extends Simulation {
     int AGENT_2 = 2;
     double percent = 0.3;
 
-    String mode = "EIGHT";
-
     public Segregation(Grid grid) {
         super(grid);
     }
 
-    @Override
-    public void runOneStep() {
-        Grid gridNextGen = new Grid(grid);
-
-        for (int r = 0; r < grid.getNumOfRows(); r++) {
-            for (int c = 0; c < grid.getNumOfColumns(); c++) {
-                gridNextGen.setCellState(r, c, determineCellState(r, c));
-            }
+    int determineCellState(int r, int c) {
+        if (grid.getCellState(r, c) == VACANT_CELL) {
+            return VACANT_CELL;
+        } else {
+            return checkAgents(r, c, grid.getCellState(r, c));
         }
-        grid = gridNextGen;
-    }
-
-    private int determineCellState(int r, int c) {
-        if (grid.getCellState(r, c) == AGENT_1) {
-            return checkAgents(r, c, AGENT_1);
-        } else if (grid.getCellState(r, c) == AGENT_2) {
-            return checkAgents(r, c, AGENT_2);
-        }
-        return VACANT_CELL;
     }
 
     /**
@@ -61,7 +46,7 @@ public class Segregation extends Simulation {
         int sameNeighbors = getNeighborStateNumber(r, c, mode, agent);
         int numNeighbors = grid.getAllNeighbors(r,c).size();
         int isSatisfied = sameNeighbors/numNeighbors;
-        return (isSatisfied >= percent) ? agent : moveToAnyVacant(agent, VACANT_CELL);
+        return (isSatisfied >= percent) ? agent : moveToAnyVacant(agent);
     }
 
     /**
@@ -69,15 +54,14 @@ public class Segregation extends Simulation {
      * the state becomes the agent passed in and the state of the cell that the agent was previously at becomes
      * vacant. This is only called if the agent is not satisfied in its original cell.
      * @param agent
-     * @param VACANT_CELL
      * @return
      */
-    private int moveToAnyVacant(int agent, int VACANT_CELL){
+    private int moveToAnyVacant(int agent){
         for (int r = 0; r < grid.getNumOfRows(); r++) {
             for (int c = 0; c < grid.getNumOfColumns(); c++) {
-              if(grid.getCellState(r, c) == VACANT_CELL){
-                  grid.setCellState(r, c, agent);
-              }
+                if (grid.getCellState(r, c) == VACANT_CELL){
+                    grid.setCellState(r, c, agent);
+                }
             }
         }
         return VACANT_CELL;

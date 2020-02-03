@@ -10,11 +10,16 @@ import java.util.List;
 
 public abstract class Simulation {
     Grid grid;
+    String mode;
+
+    public Simulation (){
+        mode = "EIGHT";
+    }
 
     public Simulation(Grid grid) {
+        this();
         this.grid = grid;
     }
-    public Simulation (){}
 
     /**
      * This method tells the number of neighbors that have a
@@ -27,7 +32,7 @@ public abstract class Simulation {
      * @return          the number of neighbors have {@code state}
      */
     public int getNeighborStateNumber(int r, int c, String mode, int state) {
-        ArrayList<Cell> neighbors;
+        List<Cell> neighbors;
         switch (mode) {
             case "EIGHT":
                 neighbors = grid.getAllNeighbors(r, c);
@@ -78,5 +83,15 @@ public abstract class Simulation {
         return grid;
     }
 
-    public abstract void runOneStep();
+    public void runOneStep() {
+        Grid gridNextGen = new Grid(grid);
+        for (int r = 0; r < grid.getNumOfRows(); r++) {
+            for (int c = 0; c < grid.getNumOfColumns(); c++) {
+                gridNextGen.setCellState(r, c, determineCellState(r, c));
+            }
+        }
+        grid = gridNextGen;
+    }
+
+    abstract int determineCellState(int r, int c);
 }

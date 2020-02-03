@@ -1,7 +1,5 @@
 package ca.model;
 
-//import javafx.scene.Node;
-
 public class Cell {
     private int state;
     //Node node;

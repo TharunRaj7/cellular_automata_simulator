@@ -88,6 +88,11 @@ public class WaTorWorld extends Simulation {
         }
     }
 
+    @Override
+    int determineCellState(int r, int c) {
+        return 0;
+    }
+
     private void runFishHandler(int r, int c) {
         moveAndBreedCombo(r,c, FISH);
     }

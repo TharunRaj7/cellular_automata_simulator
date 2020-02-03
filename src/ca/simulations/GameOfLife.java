@@ -21,26 +21,12 @@ public class GameOfLife extends Simulation {
     int DEAD_CELL = 0;
     int LIVE_CELL = 1;
 
-    String mode = "EIGHT";
-
     public GameOfLife(Grid grid) {
         super(grid);
     }
 
     @Override
-    public void runOneStep() {
-        Grid gridNextGen = new Grid(grid);
-
-        for (int r = 0; r < grid.getNumOfRows(); r++) {
-            for (int c = 0; c < grid.getNumOfColumns(); c++) {
-                gridNextGen.setCellState(r, c, determineCellState(r, c));
-            }
-        }
-
-        grid = gridNextGen;
-    }
-
-    private int determineCellState(int r, int c) {
+    int determineCellState(int r, int c) {
         if (grid.getCellState(r, c) == LIVE_CELL) {
             int liveNeighbors = getNeighborStateNumber(r, c, mode, LIVE_CELL);
             return (liveNeighbors == 2 || liveNeighbors == 3) ? LIVE_CELL : DEAD_CELL;

@@ -1,5 +1,7 @@
 package ca.model;
 
+import java.awt.*;
+
 public class Pair {
     private int row;
     private int col;
@@ -15,14 +17,22 @@ public class Pair {
      * @param col
      * @return true or false
      */
-    public boolean checkPair (int row, int col){
-        return (this.row == row && this.col == col);
+
+    @Override
+    public boolean equals(Object obj) {
+       if (obj instanceof Pair) {
+           return (((Pair) obj).getRow() == row) && (((Pair) obj).getCol() == col);
+       }
+       return false;
+    }
+
+    public boolean equals(int r, int c) {
+        return (row == r) && (col == c);
     }
 
     public int getRow() {
         return row;
     }
-
 
     public int getCol() {
         return col;
@@ -42,5 +52,10 @@ public class Pair {
                 "row=" + row +
                 ", col=" + col +
                 '}';
+    }
+
+    @Override
+    public int hashCode() {
+        return row * Integer.MAX_VALUE + col;
     }
 }
