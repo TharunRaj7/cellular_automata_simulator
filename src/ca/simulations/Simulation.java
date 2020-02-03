@@ -2,7 +2,8 @@ package ca.simulations;
 
 import ca.model.Cell;
 import ca.model.Grid;
-import javafx.scene.Scene;
+import ca.model.Pair;
+//import javafx.scene.Scene;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public abstract class Simulation {
             case "EIGHT":
                 neighbors = grid.getAllNeighbors(r, c);
                 break;
-            case "NSWE":
+            case "NSEW":
                 neighbors = grid.getNSEWNeighbors(r, c);
                 break;
             default:
@@ -59,6 +60,18 @@ public abstract class Simulation {
         }
 
         return cells;
+    }
+
+    public List<Cell> getNeighboringCellsOfState(int r, int c, int state) {
+        List<Cell> ret = new ArrayList<>();
+        List<Cell> temp = grid.getNSEWNeighbors(r,c);
+        for (Cell cell : temp){
+            if (cell.getState() == state){
+                ret.add(cell);
+            }
+        }
+
+        return ret;
     }
 
     public Grid getGrid() {

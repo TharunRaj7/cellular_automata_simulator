@@ -10,7 +10,7 @@ public class Grid {
     private int numOfColumns;
     private int numOfRows;
 
-    Map<Pair, Cell> gridMap;
+    private Map<Pair, Cell> gridMap;
 
     /**
      * Constructs the grid data structure.
@@ -38,7 +38,7 @@ public class Grid {
      * Gets the neighboring cells (North, South, East, West of the specified cell)
      * @param r
      * @param c
-     * @return an arrayList of Pair objects
+     * @return an arrayList of Cell objects
      */
     public ArrayList<Cell> getNSEWNeighbors(int r, int c) {
         ArrayList<Cell> ret = new ArrayList<>();
@@ -92,6 +92,20 @@ public class Grid {
     private Pair getPair(int r, int c) {
         for (Pair pair : gridMap.keySet()){
             if (pair.checkPair(r,c)){
+                return pair;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * returns a pair given a cell
+     * @param cell
+     * @return
+     */
+    public Pair getPairGivenCell(Cell cell){
+        for (Pair pair : gridMap.keySet()){
+            if (gridMap.get(pair) == cell){
                 return pair;
             }
         }
@@ -208,6 +222,10 @@ public class Grid {
         for (Cell cell : tester){
             System.out.println(cell.getState());
         }
+
+        Pair pairTest = test.getPairGivenCell(test.getCell(1,2));
+        System.out.println(pairTest);
+        System.out.println(test.getCellState(pairTest.getRow(), pairTest.getCol()));
 
 
     }
