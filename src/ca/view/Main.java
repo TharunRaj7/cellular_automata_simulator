@@ -4,9 +4,7 @@ import ca.controller.Controller;
 import ca.controller.SimulationConfig;
 import ca.controller.SimulationType;
 import ca.model.Grid;
-import ca.simulations.GameOfLife;
-import ca.simulations.Simulation;
-import ca.simulations.WaTorWorld;
+import ca.simulations.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -60,11 +58,11 @@ public class Main extends Application {
     @Override
     public void start (Stage stage) {
         this.stage = stage;
-//        XMLReader retrieveFile = new XMLReader();
-//        retrieveFile.getFile(stage);
-//        readVariablesFromXML(retrieveFile);
+        XMLReader retrieveFile = new XMLReader();
+        retrieveFile.getFile(stage);
+        readVariablesFromXML(retrieveFile);
 
-        readVariablesFromXML();
+      //  readVariablesFromXML();
         scene = setupSimulation();
         setStage();
 
@@ -76,10 +74,10 @@ public class Main extends Application {
         animation.play();
     }
 
-//    private void readVariablesFromXML(XMLReader retrieveFile) {
-    private void readVariablesFromXML() {
-        simulationConfig = new SimulationConfig(new File("data\\GameOfLife\\GameOfLife1.xml"));
-//        simulationConfig = new SimulationConfig(retrieveFile.getXMLfile());
+    private void readVariablesFromXML(XMLReader retrieveFile) {
+   // private void readVariablesFromXML() {
+//        simulationConfig = new SimulationConfig(new File("data\\GameOfLife\\GameOfLife1.xml"));
+        simulationConfig = new SimulationConfig(retrieveFile.getXMLfile());
         simulationConfig.readFile();
         controller = new Controller();
         gridPaneHandler = new GridPaneHandler(simulationConfig);
@@ -92,6 +90,12 @@ public class Main extends Application {
         switch (simulationType) {
             case GameOfLife:
                 simulation = new GameOfLife(grid);
+                break;
+            case Segregation:
+                simulation = new Segregation(grid);
+                break;
+            case Percolation:
+                simulation = new Percolation(grid);
                 break;
             default:
                 simulation = null;

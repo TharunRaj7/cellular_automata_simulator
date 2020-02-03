@@ -122,6 +122,12 @@ public class SimulationConfig {
             case "GameOfLife":
                 simulationType = SimulationType.GameOfLife;
                 break;
+            case "Percolation":
+                simulationType = SimulationType.Percolation;
+                break;
+            case "Segregation":
+                simulationType = SimulationType.Segregation;
+                break;
             default:
                 throw new Exception("ca.model.Simulation Type not defined!");
         }
