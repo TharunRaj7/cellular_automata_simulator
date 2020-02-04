@@ -1,6 +1,10 @@
 package ca.simulations;
 
+import ca.model.Cell;
 import ca.model.Grid;
+
+import java.util.List;
+import java.util.Random;
 
 /**
  * This class is the implementation of Segregation. The rules
@@ -16,6 +20,7 @@ import ca.model.Grid;
  * animation loop.
  */
 
+
 public class Segregation extends Simulation {
     int VACANT_CELL = 0;
     int AGENT_1 = 1;
@@ -26,44 +31,43 @@ public class Segregation extends Simulation {
         super(grid);
     }
 
-    int determineCellState(int r, int c) {
-        if (grid.getCellState(r, c) == VACANT_CELL) {
-            return VACANT_CELL;
-        } else {
-            return checkAgents(r, c, grid.getCellState(r, c));
-        }
-    }
 
     /**
+     * The logic that is run at each step of the code.
      * Takes the number of neighbors and the number of neighbors that are the same. If the percent calculated is
      * greater than or equal to the desired percent, the agent remains. Otherwise, it is moved to a vacant cell.
-     * @param r
-     * @param c
-     * @param agent
-     * @return
      */
-    private int checkAgents(int r, int c, int agent){
-        int sameNeighbors = getNeighborStateNumber(r, c, mode, agent);
-        int numNeighbors = grid.getAllNeighbors(r,c).size();
-        int isSatisfied = sameNeighbors/numNeighbors;
-        return (isSatisfied >= percent) ? agent : moveToAnyVacant(agent);
-    }
-
-    /**
-     * This method goes through the grid, looking for the first cell that is marked vacant. If it is vacant, then
-     * the state becomes the agent passed in and the state of the cell that the agent was previously at becomes
-     * vacant. This is only called if the agent is not satisfied in its original cell.
-     * @param agent
-     * @return
-     */
-    private int moveToAnyVacant(int agent){
+    @Override
+    public void runOneStep() {
         for (int r = 0; r < grid.getNumOfRows(); r++) {
             for (int c = 0; c < grid.getNumOfColumns(); c++) {
-                if (grid.getCellState(r, c) == VACANT_CELL){
-                    grid.setCellState(r, c, agent);
+                int sameNeighbors = getNeighborStateNumber(r, c, mode, grid.getCellState(r, c));
+                int numNeighbors = grid.getAllNeighbors(r,c).size();
+                int isSatisfied = sameNeighbors/numNeighbors;
+                if ((grid.getCellState(r,c) != VACANT_CELL) && (isSatisfied <= percent)){
+                    moveToVacant(r,c, grid.getCellState(r, c));
                 }
             }
         }
+    }
+
+    /**
+     * Takes all of the current vacant cells and moves the unsatisfied agent to one of them.
+     * @param r
+     * @param c
+     * @param agent
+     */
+    public void moveToVacant(int r, int c, int agent){
+        List<Cell> vacantCells = getCellOfState(VACANT_CELL);
+        Cell currentCell = grid.getCell(r,c);
+        Random rand = new Random();
+        Cell newPosition = vacantCells.get(rand.nextInt(vacantCells.size()));
+        currentCell.setState(VACANT_CELL);
+        newPosition.setState(agent);
+    }
+
+    @Override
+    int determineCellState(int r, int c){
         return VACANT_CELL;
     }
 }

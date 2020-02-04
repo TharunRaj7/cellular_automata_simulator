@@ -61,7 +61,12 @@ Data files needed:
     - perc1.txt
 
 * WaTorWorld
+    - WaTorWorld1.xml
+    - wtw1.txt
+    
 * Spreading Of Fire
+    - SpreadingOfFire.xml
+    - sof1.txt
 
 Features implemented:
 
