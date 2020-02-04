@@ -1,10 +1,12 @@
 import ca.controller.Controller;
+import ca.view.GraphHandler;
 import ca.view.SimulationView;
 import ca.view.Styler;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
+import javafx.scene.chart.Chart;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -34,6 +36,7 @@ public class Main extends Application {
     public static final String DEFAULT_RESOURCE_PACKAGE = RESOURCE + ".";
 
     private SimulationView simulationView;
+    private GraphHandler graphHandler;
     private Timeline animation;
     private Stage stage;
     private ResourceBundle myResources;
@@ -71,6 +74,8 @@ public class Main extends Application {
 
         GridPane gridPane = simulationView.getCurrentGridPane();
         Controller controller = simulationView.getController();
+        Chart lineChart = graphHandler.createGraph(System.currentTimeMillis());
+
         int buttonHeight = simulationView.getButtonHeight();
 
         styler.styleTextField("FillerCommand", num,
@@ -86,7 +91,7 @@ public class Main extends Application {
         Button submitButton = styler.createButton("SubmitCommand", event -> controller.setAnimationSpeed(Double.parseDouble(num.getText())),
                 buttonHeight, 5, myResources);
 
-        root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton, num);
+        root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton, num, lineChart);
         return new Scene(root, SIZE, SIZE, BACKGROUND);
     }
 
@@ -105,6 +110,7 @@ public class Main extends Application {
         System.out.println(animation.getRate());
         root.getChildren().remove(simulationView.getCurrentGridPane());
         simulationView.getSimulation().runOneStep();
+        graphHandler.updateGraph(System.currentTimeMillis());
         root.getChildren().addAll(simulationView.getCurrentGridPane());
     }
 
