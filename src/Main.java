@@ -81,7 +81,7 @@ public class Main extends Application {
                 buttonHeight, 1, myResources);
         Button reloadFileButton = styler.createButton("ReloadCommand", event -> reloadFile(),
                 buttonHeight, 2, myResources);
-        Button stepButton = styler.createButton("StepCommand", event -> controller.runOneStep(),
+        Button stepButton = styler.createButton("StepCommand", event -> step(),
                 buttonHeight, 3, myResources);
         Button submitButton = styler.createButton("SubmitCommand", event -> controller.setAnimationSpeed(Double.parseDouble(num.getText())),
                 buttonHeight, 5, myResources);
@@ -101,16 +101,17 @@ public class Main extends Application {
      * In this method, we will need to call the updateCells method in the other part of the code.
      * This method is executed every time the step button on the user interface is clicked.
      */
-    public void step (double elapsedTime) {
-        simulationView.getController().setAnimationSpeed(elapsedTime);
+    public void step () {
+        System.out.println(animation.getRate());
         root.getChildren().remove(simulationView.getCurrentGridPane());
         simulationView.getSimulation().runOneStep();
         root.getChildren().addAll(simulationView.getCurrentGridPane());
     }
 
     public void startAnimation() {
-        KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), event -> step(SECOND_DELAY));
+        KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), event -> step());
         animation = new Timeline();
+        animation.setRate(SECOND_DELAY);
         simulationView.getController().setTimeline(animation);
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
