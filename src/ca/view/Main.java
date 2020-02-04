@@ -35,7 +35,7 @@ public class Main extends Application {
     private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     private static final int SIZE = 600;
     private static final Paint BACKGROUND = Color.AZURE;
-    private static final String RESOURCE = "src/ca/resources";
+    private static final String RESOURCE = "ca/resources";
     private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCE + ".";
 
     private SimulationConfig simulationConfig;
@@ -116,16 +116,15 @@ public class Main extends Application {
     private Scene setupSimulation() {
         root = new Group();
         myGrid = gridPaneHandler.createGrid(simulationConfig.getColNum(), simulationConfig.getRowNum(), simulationConfig.getGridWidth(), simulationConfig.getGridHeight(), simulation.getGrid());
-       // myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "English");
+        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "English");
         TextField num = new TextField();
         Styler styler = new Styler();
-        Button startButton = styler.createButton("StartCommand", event -> controller.startAnimation(), simulationConfig.getGridHeight(), 0);
-        Button stopButton = styler.createButton("StopCommand", event -> controller.pauseAnimation(), simulationConfig.getGridHeight(), 1);
-        Button reloadFileButton = styler.createButton("ReloadCommand", event -> start(stage), simulationConfig.getGridHeight(), 2);
-        Button stepButton = styler.createButton("StepCommand", event -> controller.runOneStep(), simulationConfig.getGridHeight(), 3);
-        num.setPromptText("FillerCommand");
-        styler.setLocation(num, simulationConfig.getGridHeight());
-        Button submitButton = styler.createButton("SubmitCommand", event -> controller.setAnimationSpeed(Double.parseDouble(num.getText())), simulationConfig.getGridHeight(), 5);
+        Button startButton = styler.createButton("StartCommand", event -> controller.startAnimation(), simulationConfig.getGridHeight(), 0, myResources);
+        Button stopButton = styler.createButton("StopCommand", event -> controller.pauseAnimation(), simulationConfig.getGridHeight(), 1, myResources);
+        Button reloadFileButton = styler.createButton("ReloadCommand", event -> start(stage), simulationConfig.getGridHeight(), 2, myResources);
+        Button stepButton = styler.createButton("StepCommand", event -> controller.runOneStep(), simulationConfig.getGridHeight(), 3, myResources);
+        styler.styleTextField("FillerCommand", num, simulationConfig.getGridHeight(), myResources);
+        Button submitButton = styler.createButton("SubmitCommand", event -> controller.setAnimationSpeed(Double.parseDouble(num.getText())), simulationConfig.getGridHeight(), 5, myResources);
         root.getChildren().addAll(myGrid, startButton, stopButton, reloadFileButton, stepButton, submitButton, num);
         return new Scene(root, Main.SIZE, Main.SIZE, BACKGROUND);
     }
