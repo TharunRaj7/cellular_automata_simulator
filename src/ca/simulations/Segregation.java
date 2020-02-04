@@ -26,14 +26,20 @@ public class Segregation extends Simulation {
     public static final int AGENT_2 = 2;
     public static final int PLACE_HOLDER = 3;
 
-    double percent = 0.7;
-    int vacantNumber;
-    List<Integer> needRelocation;
+    private double percent;
+    private int vacantNumber;
+    private List<Integer> needRelocation;
 
-    public Segregation(Grid grid) {
+    public Segregation(Grid grid, List<String> additionalParameters) {
         super(grid);
         vacantNumber = calcVacantNumber();
         needRelocation = new ArrayList<>();
+
+        try {
+            percent = Double.parseDouble(additionalParameters.get(0));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
     }
 
     private int calcVacantNumber() {

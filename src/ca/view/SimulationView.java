@@ -45,7 +45,7 @@ public class SimulationView {
                 simulation = new GameOfLife(grid);
                 break;
             case Segregation:
-                simulation = new Segregation(grid);
+                simulation = new Segregation(grid, simulationConfig.getOtherParameters());
                 break;
             case Percolation:
                 simulation = new Percolation(grid);
