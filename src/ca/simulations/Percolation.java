@@ -25,7 +25,7 @@ public class Percolation extends Simulation {
     }
 
     @Override
-    int determineCellState(int r, int c) {
+    protected int determineCellState(int r, int c) {
        if (grid.getCellState(r, c) == PERCOLATED) {
             return PERCOLATED;
        } else if(grid.getCellState(r, c) == OPEN){
