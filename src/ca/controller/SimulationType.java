@@ -4,5 +4,6 @@ public enum SimulationType {
     GameOfLife,
     Segregation,
     Percolation,
-    WaTorWorld
+    WaTorWorld,
+    Fire
 }
