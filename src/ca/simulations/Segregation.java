@@ -3,8 +3,7 @@ package ca.simulations;
 import ca.model.Cell;
 import ca.model.Grid;
 
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * This class is the implementation of Segregation. The rules
@@ -22,52 +21,65 @@ import java.util.Random;
 
 
 public class Segregation extends Simulation {
-    int VACANT_CELL = 0;
-    int AGENT_1 = 1;
-    int AGENT_2 = 2;
-    double percent = 0.3;
+    public static final int VACANT_CELL = 0;
+    public static final int AGENT_1 = 1;
+    public static final int AGENT_2 = 2;
+    public static final int PLACE_HOLDER = 3;
+
+    double percent = 0.7;
+    int vacantNumber;
+    List<Integer> needRelocation;
 
     public Segregation(Grid grid) {
         super(grid);
+        vacantNumber = calcVacantNumber();
+        needRelocation = new ArrayList<>();
     }
 
-
-    /**
-     * The logic that is run at each step of the code.
-     * Takes the number of neighbors and the number of neighbors that are the same. If the percent calculated is
-     * greater than or equal to the desired percent, the agent remains. Otherwise, it is moved to a vacant cell.
-     */
-    @Override
-    public void runOneStep() {
-        for (int r = 0; r < grid.getNumOfRows(); r++) {
-            for (int c = 0; c < grid.getNumOfColumns(); c++) {
-                int sameNeighbors = getNeighborStateNumber(r, c, mode, grid.getCellState(r, c));
-                int numNeighbors = grid.getAllNeighbors(r,c).size();
-                int isSatisfied = sameNeighbors/numNeighbors;
-                if ((grid.getCellState(r,c) != VACANT_CELL) && (isSatisfied <= percent)){
-                    moveToVacant(r,c, grid.getCellState(r, c));
+    private int calcVacantNumber() {
+        for (int i = 0; i < grid.getNumOfRows(); i++) {
+            for (int j = 0; j < grid.getNumOfColumns(); j++) {
+                if (grid.getCellState(i, j) == VACANT_CELL) {
+                    vacantNumber ++;
                 }
             }
         }
-    }
-
-    /**
-     * Takes all of the current vacant cells and moves the unsatisfied agent to one of them.
-     * @param r
-     * @param c
-     * @param agent
-     */
-    public void moveToVacant(int r, int c, int agent){
-        List<Cell> vacantCells = getCellOfState(VACANT_CELL);
-        Cell currentCell = grid.getCell(r,c);
-        Random rand = new Random();
-        Cell newPosition = vacantCells.get(rand.nextInt(vacantCells.size()));
-        currentCell.setState(VACANT_CELL);
-        newPosition.setState(agent);
+        return vacantNumber;
     }
 
     @Override
-    int determineCellState(int r, int c){
-        return VACANT_CELL;
+    protected Grid additionalActions(Grid gridNextGen) {
+        for (int i = 0; i < gridNextGen.getNumOfRows(); i++) {
+            for (int j = 0; j < gridNextGen.getNumOfColumns(); j++) {
+                if (gridNextGen.getCellState(i, j) == PLACE_HOLDER) {
+                    if (needRelocation.size() > 0) {
+                        int random = new Random().nextInt(needRelocation.size());
+                        gridNextGen.setCellState(i, j, needRelocation.get(random));
+                        needRelocation.remove(random);
+                    } else {
+                        gridNextGen.setCellState(i, j, VACANT_CELL);
+                    }
+                }
+            }
+        }
+        return gridNextGen;
+    }
+
+    @Override
+    protected int determineCellState(int r, int c) {
+        int currentState = grid.getCellState(r, c);
+        {
+            if (currentState == VACANT_CELL) {
+                return PLACE_HOLDER;
+            }
+
+            int satisfiedAgent = getNeighborStateNumber(r, c, mode, currentState);
+            int nonVacantAgent = getNeighborStateNumber(r, c, mode, AGENT_1) + getNeighborStateNumber(r, c, mode, AGENT_2);
+            if ((double) satisfiedAgent / nonVacantAgent < percent && needRelocation.size() < vacantNumber) {
+                needRelocation.add(currentState);
+                return VACANT_CELL;
+            }
+            return currentState;
+        }
     }
 }

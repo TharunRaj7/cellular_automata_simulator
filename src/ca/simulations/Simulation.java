@@ -90,8 +90,11 @@ public abstract class Simulation {
                 gridNextGen.setCellState(r, c, determineCellState(r, c));
             }
         }
-        grid = gridNextGen;
+        grid = additionalActions(gridNextGen);
     }
 
-    abstract int determineCellState(int r, int c);
+    protected Grid additionalActions(Grid gridNextGen){
+        return gridNextGen;
+    };
+    protected abstract int determineCellState(int r, int c);
 }

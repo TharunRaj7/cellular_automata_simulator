@@ -89,7 +89,7 @@ public class WaTorWorld extends Simulation {
     }
 
     @Override
-    int determineCellState(int r, int c) {
+    protected int determineCellState(int r, int c) {
         return 0;
     }
 
