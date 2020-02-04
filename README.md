@@ -85,6 +85,8 @@ Assumptions or Simplifications:
 - There will always be an XML file with a corresponding text file to read in the initial states
 - The numbers or states used in the text file correspond to those specified in the simulation code
 - The grid size will never exceed that of the scene size 
+- For the segregation simulation, the percent that makes an agent satisfied will be hardcoded into the simulation. This
+way, the user cannot change the number nor update it. 
 
 Interesting data files:
 
