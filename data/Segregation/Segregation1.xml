@@ -18,4 +18,8 @@
         <color1>#f40404</color1>
         <color2>#0b04f4</color2>
     </colors>
+
+    <parameters>
+        <percentage>0.7</percentage>
+    </parameters>
 </simulation>

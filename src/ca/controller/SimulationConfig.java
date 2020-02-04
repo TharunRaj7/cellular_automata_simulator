@@ -33,21 +33,22 @@ import java.util.logging.Logger;
  * @since 1.1
  */
 public class SimulationConfig {
-    String colorPattern = "#......";
-    Logger logger;
+    private String colorPattern = "#......";
+    private Logger logger;
 
-    int gridWidth = -1;
-    int gridHeight = -1;
+    private int gridWidth = -1;
+    private int gridHeight = -1;
 
-    int rowNum = -1;
-    int colNum = -1;
+    private int rowNum = -1;
+    private int colNum = -1;
 
-    File file;
-    SimulationType simulationType;
-    Document doc;
-    List<Integer> cellStates;
-    List<Color> colors;
-    String folderName;
+    private File file;
+    private SimulationType simulationType;
+    private Document doc;
+    private List<Integer> cellStates;
+    private List<Color> colors;
+    private String folderName;
+    private List<String> otherParameters;
 
     /**
      * Create a new instance without configuration file
@@ -55,6 +56,7 @@ public class SimulationConfig {
     public SimulationConfig() {
         cellStates = new ArrayList<>();
         colors = new ArrayList<>();
+        otherParameters = new ArrayList<>();
         logger = Logger.getLogger(SimulationConfig.class.getName());
         logger.setLevel(Level.WARNING);
     }
@@ -84,6 +86,8 @@ public class SimulationConfig {
             assignGridStates(elementInitialStates);
             Element elementColors = getElementFromNode("colors");
             assignColors(elementColors);
+            Element elementOthers = getElementFromNode("parameters");
+            readOtherParameters(elementOthers);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -221,6 +225,13 @@ public class SimulationConfig {
         }
     }
 
+    private void readOtherParameters(Element element) {
+        NodeList nodeList = element.getElementsByTagName("*");
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            otherParameters.add(nodeList.item(i).getTextContent());
+        }
+    }
+
 
     private boolean isValidColor(String colorCode) {
         return colorCode.matches(colorPattern);
@@ -282,4 +293,7 @@ public class SimulationConfig {
         return rowNum;
     }
 
+    public List<String> getOtherParameters() {
+        return otherParameters;
+    }
 }
