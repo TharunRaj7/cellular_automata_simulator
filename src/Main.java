@@ -33,7 +33,8 @@ public class Main extends Application {
     public static final String RESOURCE = "ca/resources";
     public static final String DEFAULT_RESOURCE_PACKAGE = RESOURCE + ".";
 
-    SimulationView simulationView;
+    private SimulationView simulationView;
+    private Timeline animation;
     private Stage stage;
     private ResourceBundle myResources;
     private Group root;
@@ -93,7 +94,7 @@ public class Main extends Application {
         simulationView = new SimulationView();
         Scene scene = setupSimulation();
         stage.setScene(scene);
-        startAnimation();
+        simulationView.getController().setTimeline(animation);
     }
 
     /**
@@ -109,7 +110,7 @@ public class Main extends Application {
 
     public void startAnimation() {
         KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), event -> step(SECOND_DELAY));
-        Timeline animation = new Timeline();
+        animation = new Timeline();
         simulationView.getController().setTimeline(animation);
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
