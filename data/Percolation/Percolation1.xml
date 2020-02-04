@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<simulation>
+    <general>
+        <type>Percolation</type>
+        <title>Percolation</title>
+        <author>Khanjary</author>
+        <inFolder>Percolation</inFolder>
+    </general>
+
+    <initialStates>
+        <gridWidth>400</gridWidth>
+        <gridHeight>400</gridHeight>
+        <cellConfig>perc1.txt</cellConfig>
+    </initialStates>
+
+    <colors>
+        <color0>#ffffff</color0>
+        <color1>#000000</color1>
+        <color2>#1C9fff</color2>
+    </colors>
+</simulation>

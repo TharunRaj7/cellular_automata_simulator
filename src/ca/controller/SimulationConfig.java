@@ -1,6 +1,5 @@
 package ca.controller;
 
-import ca.SimulationType;
 import javafx.scene.paint.Color;
 import org.w3c.dom.*;
 
@@ -17,8 +16,8 @@ import java.util.logging.Logger;
 /**
  * This class reads in necessary simulation information, including
  * <ul>
- *     <li>Simulation Name/Type</li>
- *     <li>Grid Size</li>
+ *     <li>ca.model.Simulation Name/Type</li>
+ *     <li>ca.model.Grid Size</li>
  *     <li>Initial cell states</li>
  *     <li>Colors corresponding to each state</li>
  * </ul>
@@ -98,7 +97,7 @@ public class SimulationConfig {
         Document doc = db.parse(file);
 
         if (!checkFileValidity(doc)) {
-            throw new Exception("Invalid Simulation Configuration File! (Root node is not 'simulation')");
+            throw new Exception("Invalid ca.model.Simulation Configuration File! (Root node is not 'simulation')");
         }
         doc.getDocumentElement().normalize();
         return doc;
@@ -123,8 +122,14 @@ public class SimulationConfig {
             case "GameOfLife":
                 simulationType = SimulationType.GameOfLife;
                 break;
+            case "Percolation":
+                simulationType = SimulationType.Percolation;
+                break;
+            case "Segregation":
+                simulationType = SimulationType.Segregation;
+                break;
             default:
-                throw new Exception("Simulation Type not defined!");
+                throw new Exception("ca.model.Simulation Type not defined!");
         }
     }
 
@@ -251,6 +256,7 @@ public class SimulationConfig {
     }
 
     public List<Color> getColors() {
+
         return colors;
     }
 
@@ -275,4 +281,5 @@ public class SimulationConfig {
         }
         return rowNum;
     }
+
 }
