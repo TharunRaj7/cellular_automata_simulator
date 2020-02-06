@@ -1,11 +1,13 @@
 package ca.controller;
 
-import ca.model.Pair;
+import ca.exceptions.FileNotValidException;
 import javafx.scene.paint.Color;
 import org.w3c.dom.*;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -41,9 +43,6 @@ import java.util.logging.Logger;
  * @since 1.1
  */
 public class SimulationConfig {
-    private String colorPattern = "#......";
-    private Logger logger;
-
     private int gridWidth = -1;
     private int gridHeight = -1;
 
@@ -65,8 +64,6 @@ public class SimulationConfig {
         cellStates = new ArrayList<>();
         colors = new ArrayList<>();
         otherParameters = new ArrayList<>();
-        logger = Logger.getLogger(SimulationConfig.class.getName());
-        logger.setLevel(Level.WARNING);
     }
 
     /**
@@ -88,12 +85,12 @@ public class SimulationConfig {
      * @param file          configuration XML file
      * @throws Exception    when the input is not a XML file
      */
-    public void setFile(File file) throws Exception {
+    public void setFile(File file) throws FileNotValidException {
         String fileName = file.getName();
         String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1, file.getName().length());
         if (!fileExtension.equals("xml")) {
             this.file = null;
-            throw new Exception("This is not an XML File!");
+            throw new FileNotValidException("This is not an XML File!");
         }
         this.file = file;
     }
@@ -106,7 +103,7 @@ public class SimulationConfig {
      */
     public void readFile() throws Exception {
         if (file == null) {
-            throw new NullPointerException("Set the XML configuration file first!");
+            throw new FileNotValidException("Set the XML configuration file first!");
         }
         readFile(file);
     }
@@ -119,7 +116,8 @@ public class SimulationConfig {
      * @see #setFile(File)
      * @see #getElementFromNode(String)
      */
-    public void readFile(File file) throws Exception {
+    public void readFile(File file) throws RuntimeException, FileNotValidException,
+            IOException, SAXException, ParserConfigurationException {
         setFile(file);
 
         doc = generateDocument();
@@ -127,7 +125,7 @@ public class SimulationConfig {
         try {
             Element elementOthers = getElementFromNode("parameters");
             readOtherParameters(elementOthers);
-        } catch (Exception e) {
+        } catch (FileNotValidException e) {
             System.out.println("Warning: " + e.getMessage());
         }
 
@@ -140,14 +138,14 @@ public class SimulationConfig {
         assignColors(elementColors);
     }
 
-    private Document generateDocument() throws Exception {
+    private Document generateDocument() throws ParserConfigurationException, IOException, SAXException, FileNotValidException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db;
         db = dbf.newDocumentBuilder();
         Document doc = db.parse(file);
 
         if (!checkFileValidity(doc)) {
-            throw new Exception("Invalid Simulation Configuration File! (Root node is not 'simulation')");
+            throw new FileNotValidException("Invalid Simulation Configuration File! (Root node is not 'simulation')");
         }
         doc.getDocumentElement().normalize();
         return doc;
@@ -157,15 +155,15 @@ public class SimulationConfig {
         return doc.getDocumentElement().getNodeName().equals("simulation");
     }
 
-    private Element getElementFromNode(String tagName) throws Exception {
+    private Element getElementFromNode(String tagName) throws FileNotValidException {
         Node node = doc.getElementsByTagName(tagName).item(0);
         if (node == null || node.getNodeType() != Node.ELEMENT_NODE) {
-            throw new Exception("Warning: XML file node '" + tagName + "' is not found!");
+            throw new FileNotValidException("Warning: XML file node '" + tagName + "' is not found!");
         }
         return (Element) node;
     }
 
-    private void assignSimulationType(Element element) throws Exception {
+    private void assignSimulationType(Element element) throws RuntimeException, FileNotValidException {
         String type = getNodeContent(element, "type");
 
         switch (type) {
@@ -179,11 +177,11 @@ public class SimulationConfig {
                 simulationType = SimulationType.Segregation;
                 break;
             default:
-                throw new Exception("Simulation Type not defined!");
+                throw new RuntimeException("Simulation Type not defined!");
         }
     }
 
-    private void assignGridStates(Element element) throws Exception {
+    private void assignGridStates(Element element) throws FileNotValidException {
         // grid size
         String width = getNodeContent(element, "gridWidth");
         String height = getNodeContent(element, "gridHeight");
@@ -207,9 +205,9 @@ public class SimulationConfig {
     }
 
 
-    private String getNodeContent(Element element, String tagName) throws Exception {
+    private String getNodeContent(Element element, String tagName) throws FileNotValidException {
         if (element.getElementsByTagName(tagName).item(0) == null) {
-            throw new Exception(tagName + " does not exist underneath " + element.getNodeName());
+            throw new FileNotValidException(tagName + " does not exist underneath " + element.getNodeName());
         }
         return element.getElementsByTagName(tagName).item(0).getTextContent();
     }
@@ -241,7 +239,7 @@ public class SimulationConfig {
     }
 
     //TODO: start from here
-    private void readCellStates(String filename) throws Exception {
+    private void readCellStates(String filename) throws FileNotValidException {
         filename = "." + File.separatorChar + "data" + File.separatorChar + folderName + File.separatorChar + filename;
         String s = fileInput(filename);
 
@@ -253,7 +251,7 @@ public class SimulationConfig {
                 rowNum++;
                 endOfFirstLine = true;
             } else if (!c.equals(' ') && (int)c != 13) {  // TODO: check whether 10 and 13 are universal
-                throw new Exception("Initial State TXT has non-digit characters: " + (int) c);
+                throw new FileNotValidException("Initial State TXT has non-digit characters: " + (int) c);
             }
 
             if (!endOfFirstLine) {
@@ -265,12 +263,13 @@ public class SimulationConfig {
         colNum = (colNum + 1) / 2;  // the last number of a row does not have a space follow it
     }
 
-    private void assignColors(Element element) throws Exception {
+    private void assignColors(Element element) throws RuntimeException {
         NodeList nodeList = element.getElementsByTagName("*");
         for (int i = 0; i < nodeList.getLength(); i++) {
             String colorCode = nodeList.item(i).getTextContent();
             if (!isValidColor(colorCode)) {
-                throw new Exception("The " + i + "th color is invalid! (" + colorCode + ")");
+                System.out.println("The " + i + "th color is invalid! (" + colorCode + ")");
+                throw new RuntimeException("The " + i + "th color is invalid! (" + colorCode + ")");
             } else {
                 Color c = Color.web(colorCode);
                 colors.add(c);
@@ -287,6 +286,7 @@ public class SimulationConfig {
 
 
     private boolean isValidColor(String colorCode) {
+        String colorPattern = "#......";
         return colorCode.matches(colorPattern);
     }
 
