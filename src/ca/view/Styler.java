@@ -13,12 +13,12 @@ import java.util.ResourceBundle;
 
 public class Styler {
 
-    private static int BUTTON_WIDTH = 85;
-    private static int BUTTON_HEIGHT = 10;
-    private static int BUTTON_OFFSET = 5;
-    private static int TEXTFIELD_WIDTH = 85;
-    private static int TEXTFIELD_HEIGHT = 10;
-    private static int TEXTFIELD_LOCATION = 4;
+    public final static int BUTTON_WIDTH = 85;
+    public final static int BUTTON_HEIGHT = 10;
+    public final static int BUTTON_OFFSET = 5;
+    public final static int TEXTFIELD_WIDTH = 85;
+    public final static int TEXTFIELD_HEIGHT = 10;
+    public final static int TEXTFIELD_LOCATION = 4;
 
     public Button createButton(String name, EventHandler<ActionEvent> handler, int gridHeight, int numButton, ResourceBundle myResources){
         Button button = new Button();

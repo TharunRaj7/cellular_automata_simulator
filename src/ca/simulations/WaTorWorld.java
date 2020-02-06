@@ -33,9 +33,9 @@ import java.util.Random;
  */
 public class WaTorWorld extends Simulation {
     // 3 types of states on cells
-    private final int EMPTY = 0;
-    private final int FISH = 1;
-    private final int SHARK = 2;
+    public static final int EMPTY = 0;
+    public static final int FISH = 1;
+    public static final int SHARK = 2;
     private Map<Cell, Pair> turnsMade;
 
     private int numOfTurnsFish;
