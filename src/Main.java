@@ -44,7 +44,6 @@ public class Main extends Application {
     private ResourceBundle myResources;
     private Group root;
     private Slider setNumRows;
-    private GridPane gridPane;
 
     /**
      * This method creates a new instance of the file reader as well as the scene creation.
@@ -76,7 +75,7 @@ public class Main extends Application {
         Styler styler = new Styler();
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "English");
 
-        gridPane = simulationView.getCurrentGridPane();
+        GridPane gridPane = simulationView.getCurrentGridPane();
         Controller controller = simulationView.getController();
         //Chart lineChart = graphHandler.createGraph(System.currentTimeMillis());
 
@@ -116,7 +115,6 @@ public class Main extends Application {
     public void step () {
         //System.out.println(animation.getRate());
         root.getChildren().remove(simulationView.getCurrentGridPane());
-        root.getChildren().remove(gridPane);
         simulationView.getSimulation().runOneStep();
         System.out.println(setNumRows.getValue());
         simulationView.updateNumRows(setNumRows.getValue());

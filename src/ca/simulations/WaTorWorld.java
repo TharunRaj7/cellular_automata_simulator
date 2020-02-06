@@ -5,6 +5,7 @@ import ca.model.Cell;
 import ca.model.Grid;
 import ca.model.Pair;
 
+import java.sql.Time;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,10 +41,10 @@ public class WaTorWorld extends Simulation {
     private int numOfTurnsFish;
     private int numOfTurnsShark;
 
-    public WaTorWorld (Grid grid, int numOfTurnsFish, int numOfTurnsShark){
+    public WaTorWorld (Grid grid, List<String>parameters){
         super(grid);
-        this.numOfTurnsFish = numOfTurnsFish;
-        this.numOfTurnsShark = numOfTurnsShark;
+        this.numOfTurnsFish = Integer.parseInt(parameters.get(0));
+        this.numOfTurnsShark = Integer.parseInt(parameters.get(1));
         turnsMade = new HashMap<>();
         populateTurnsMade();    //Sets up the data structure required to keep track of the number of turns
     }
@@ -134,6 +135,7 @@ public class WaTorWorld extends Simulation {
         this.turnsMade.get(fishToEat).setRow(EMPTY); this.turnsMade.get(fishToEat).setCol(0);
     }
 
+    @SuppressWarnings("DuplicatedCode")
     private Cell movementProtocol(Cell currentCell, List<Cell> emptyCells) {
         int objectType = turnsMade.get(currentCell).getRow();
         int turnsMade = this.turnsMade.get(currentCell).getCol();

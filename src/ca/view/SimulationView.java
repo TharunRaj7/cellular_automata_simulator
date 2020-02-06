@@ -23,8 +23,9 @@ public class SimulationView {
     }
 
     private void readVariablesFromXML() {
+
         simulationConfig = new SimulationConfig(getXMLfile(new Stage()));
-//        simulationConfig = new SimulationConfig(new File("data\\Segregation\\Segregation1.xml"));
+        //simulationConfig = new SimulationConfig(new File("data\\Segregation\\Segregation1.xml"));
         simulationConfig.readFile();
 
         controller = new Controller();
@@ -50,6 +51,9 @@ public class SimulationView {
             case Percolation:
                 simulation = new Percolation(grid);
                 break;
+            case WaTorWorld:
+                simulation = new WaTorWorld(grid, simulationConfig.getOtherParameters());
+                break;
             default:
                 simulation = null;
                 throw new NullPointerException("This simulation type does not exist!");
@@ -64,10 +68,10 @@ public class SimulationView {
                 simulationConfig.getGridHeight(),
                 simulation.getGrid());
     }
-
-    public void updateNumRows(double newRowNum){
-        simulationConfig.setRowNum(newRowNum);
-    }
+    //pass in row number and col number
+//    public void updateNumRows(double newRowNum){
+//        simulation.setGridSize(newRowNum);
+//    }
 
     public Controller getController() {
         return controller;

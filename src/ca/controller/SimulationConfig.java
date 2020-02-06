@@ -132,6 +132,9 @@ public class SimulationConfig {
             case "Segregation":
                 simulationType = SimulationType.Segregation;
                 break;
+            case "WaTorWorld":
+                simulationType = SimulationType.WaTorWorld;
+                break;
             default:
                 throw new Exception("ca.model.Simulation Type not defined!");
         }
@@ -264,10 +267,6 @@ public class SimulationConfig {
             logger.warning("gridWidth has not been changed since initialization.");
         }
         return gridWidth;
-    }
-
-    public void setRowNum(double newRowNum){
-        rowNum = (int)newRowNum;
     }
 
     public List<Color> getColors() {
