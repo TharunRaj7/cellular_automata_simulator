@@ -19,8 +19,6 @@ import java.util.List;
  */
 
 public class GridPaneHandler {
-
-    private static List<Color> cellColors = new ArrayList<Color>();
     private int cellWidth;
     private int cellHeight;
     private SimulationConfig simulationConfig;
@@ -51,7 +49,6 @@ public class GridPaneHandler {
             myGrid.getRowConstraints().add(row);
         }
         myGrid.setGridLinesVisible(true);
-        getCellColors();
         fillGrid(myGrid, c, r, cellWidth, cellHeight, grid);
         return myGrid;
     }
@@ -68,17 +65,9 @@ public class GridPaneHandler {
         for(int i = 0; i< r; i++){
             for(int j = 0; j< c; j++){
                 int cellState = grid.getCellState(i, j);
-                Color cellColor = cellColors.get(cellState);
+                Color cellColor = simulationConfig.getColors().get(cellState);
                 myGrid.add(new Rectangle(cellWidth, cellHeight, cellColor), j, i);
             }
         }
-    }
-
-    /**
-     * From the SimulationConfig, we grab the list of colors that correspond with the initial states and create
-     * an array where the index is the state, and the item in the list is the corresponding color.
-     */
-    private void getCellColors() {
-        cellColors = simulationConfig.getColors();
     }
 }
