@@ -132,6 +132,9 @@ public class SimulationConfig {
             case "Segregation":
                 simulationType = SimulationType.Segregation;
                 break;
+            case "WaTorWorld":
+                simulationType = SimulationType.WaTorWorld;
+                break;
             default:
                 throw new Exception("ca.model.Simulation Type not defined!");
         }
