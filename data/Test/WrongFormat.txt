@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<simulation>
+    <general>
+        <type>ca.model.Simulation Type</type>
+        <title>ca.model.Simulation Title</title>
+        <author>Au Thor</author>
+        <inFolder>folderName</inFolder>
+    </general>
+
+    <initialStates>
+        <gridWidth>300</gridWidth>
+        <gridHeight>150</gridHeight>
+        <cellConfig>FileName.txt</cellConfig>
+    </initialStates>
+
+    <colors>
+        <color1>color1</color1>
+        <color2>color2</color2>
+    </colors>
+
+    <parameters>
+        <otherPara1>para1</otherPara1>
+        <otherPara2>para2</otherPara2>
+    </parameters>
+</simulation>
