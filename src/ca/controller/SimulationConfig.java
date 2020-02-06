@@ -1,5 +1,6 @@
 package ca.controller;
 
+import ca.model.Pair;
 import javafx.scene.paint.Color;
 import org.w3c.dom.*;
 
@@ -24,6 +25,12 @@ import java.util.logging.Logger;
  * from a xml file. An example xml file can be found under
  * {@code data.SimulationTemplate.xml}.
  *
+ * To use this class, a {@link File} needs to be passed in. If this
+ * {@@code File} is not specified in the constructor, it is required
+ * to manually set this {@code File} by calling {@link #readFile(File),
+ * or with {@link #setFile(File)} and call {@link #readFile()} to start
+ * reading before getting any parameters.
+ *
  * Note, {@link #rowNum} and {@link #colNum} are given based
  * on TXT file input, and hence should be checked whether fulfill
  * the game design.
@@ -34,7 +41,6 @@ import java.util.logging.Logger;
  */
 public class SimulationConfig {
     private String colorPattern = "#......";
-    private Logger logger;
 
     private int gridWidth = -1;
     private int gridHeight = -1;
@@ -57,41 +63,79 @@ public class SimulationConfig {
         cellStates = new ArrayList<>();
         colors = new ArrayList<>();
         otherParameters = new ArrayList<>();
-        logger = Logger.getLogger(SimulationConfig.class.getName());
-        logger.setLevel(Level.WARNING);
     }
 
     /**
      * Create a new instance with known configuration file
-     * @param file  configuration xml file
+     * @param file          configuration XML file
+     * @throws Exception    when the input file does not fulfill
+     *                      the requirement
+     * @see #setFile(File)
+     * @see #readFile
      */
-    public SimulationConfig(File file) {
+    public SimulationConfig(File file) throws Exception {
         this();
+        setFile(file);
+        readFile();
+    }
+
+    /**
+     * Pass in simulation configuration file
+     * @param file          configuration XML file
+     * @throws Exception    when the input is not a XML file
+     */
+    public void setFile(File file) throws Exception {
+        String fileName = file.getName();
+        String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1, file.getName().length());
+        if (!fileExtension.equals("xml")) {
+            this.file = null;
+            throw new Exception("This is not an XML File!");
+        }
+
         this.file = file;
     }
 
     /**
-     * Read all required information for simulations
-     * @param file  the xml configuration file
+     * Read with pre-assigned XML information
+     * @throws Exception    when the input file is not set
+     *                      or does not fulfill requirement
+     * @see #readFile(File)
      */
-    public void readFile(File file) {
-        this.file = file;
-        try {
-            doc = generateDocument();
+    public void readFile() throws Exception {
+        if (file == null) {
+            throw new NullPointerException("Set the XML configuration file first!");
+        }
 
-            Element elementGeneral = getElementFromNode("general");
-            folderName = getNodeContent(elementGeneral, "inFolder");
-            assignSimulationType(elementGeneral);
-            Element elementInitialStates = getElementFromNode("initialStates");
-            assignGridStates(elementInitialStates);
-            Element elementColors = getElementFromNode("colors");
-            assignColors(elementColors);
+        readFile(file);
+    }
+
+    /**
+     * Read all required information for simulations
+     * @param file          the XML configuration file
+     * @throws Exception    When the input XML file does not fulfill
+     *                      the required format
+     * @see #setFile(File)
+     * @see #getElementFromNode(String)
+     */
+    public void readFile(File file) throws Exception {
+        setFile(file);
+
+        doc = generateDocument();
+
+        try {
             Element elementOthers = getElementFromNode("parameters");
             readOtherParameters(elementOthers);
-
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Warning: " + e.getMessage());
         }
+
+        Element elementGeneral = getElementFromNode("general");
+        folderName = getNodeContent(elementGeneral, "inFolder");
+        assignSimulationType(elementGeneral);
+        Element elementInitialStates = getElementFromNode("initialStates");
+        assignGridStates(elementInitialStates);
+        Element elementColors = getElementFromNode("colors");
+        assignColors(elementColors);
     }
 
     private Document generateDocument() throws Exception {
@@ -101,7 +145,7 @@ public class SimulationConfig {
         Document doc = db.parse(file);
 
         if (!checkFileValidity(doc)) {
-            throw new Exception("Invalid ca.model.Simulation Configuration File! (Root node is not 'simulation')");
+            throw new Exception("Invalid Simulation Configuration File! (Root node is not 'simulation')");
         }
         doc.getDocumentElement().normalize();
         return doc;
@@ -113,15 +157,15 @@ public class SimulationConfig {
 
     private Element getElementFromNode(String tagName) throws Exception {
         Node node = doc.getElementsByTagName(tagName).item(0);
-        if (node.getNodeType() == Node.ELEMENT_NODE) {
-            return (Element) node;
-        } else {
-            throw new Exception("Invalid xml file node: " + tagName + "!");
+        if (node == null || node.getNodeType() != Node.ELEMENT_NODE) {
+            throw new Exception("XML file node '" + tagName + "' is not found!");
         }
+        return (Element) node;
     }
 
     private void assignSimulationType(Element element) throws Exception {
         String type = getNodeContent(element, "type");
+
         switch (type) {
             case "GameOfLife":
                 simulationType = SimulationType.GameOfLife;
@@ -133,10 +177,11 @@ public class SimulationConfig {
                 simulationType = SimulationType.Segregation;
                 break;
             default:
-                throw new Exception("ca.model.Simulation Type not defined!");
+                throw new Exception("Simulation Type not defined!");
         }
     }
 
+    //TODO: start from here
     private void assignGridStates(Element element) throws Exception {
         // grid size
         String width = getNodeContent(element, "gridWidth");
@@ -157,7 +202,10 @@ public class SimulationConfig {
     }
 
 
-    private String getNodeContent(Element element, String tagName) {
+    private String getNodeContent(Element element, String tagName) throws Exception {
+        if (element.getElementsByTagName(tagName).item(0) == null) {
+            throw new Exception(tagName + " does not exist underneath " + element.getNodeName());
+        }
         return element.getElementsByTagName(tagName).item(0).getTextContent();
     }
 
@@ -237,37 +285,22 @@ public class SimulationConfig {
         return colorCode.matches(colorPattern);
     }
 
-    /**
-     * Read with pre-assigned xml information
-     */
-    public void readFile() {
-        try {
-            if (file == null) {
-                throw new NullPointerException("Set the xml configuration file first!");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        readFile(file);
-    }
 
     public int getGridHeight() {
         if (gridHeight == -1) {
-            logger.warning("gridHeight has not been changed since initialization.");
+            errorLogger.warning("gridHeight has not been changed since initialization.");
         }
         return gridHeight;
     }
 
     public int getGridWidth() {
         if (gridWidth == -1) {
-            logger.warning("gridWidth has not been changed since initialization.");
+            errorLogger.warning("gridWidth has not been changed since initialization.");
         }
         return gridWidth;
     }
 
     public List<Color> getColors() {
-
         return colors;
     }
 
@@ -281,14 +314,14 @@ public class SimulationConfig {
 
     public int getColNum() {
         if (colNum == -1) {
-            logger.warning("colNum has not been changed since initialization.");
+            errorLogger.warning("colNum has not been changed since initialization.");
         }
         return colNum;
     }
 
     public int getRowNum() {
         if (rowNum == -1) {
-            logger.warning("rowNum has not been changed since initialization.");
+            errorLogger.warning("rowNum has not been changed since initialization.");
         }
         return rowNum;
     }
