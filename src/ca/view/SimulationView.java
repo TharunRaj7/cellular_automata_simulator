@@ -22,22 +22,33 @@ public class SimulationView {
         readVariablesFromXML();
     }
 
+    private void attemptOpenXML() {
+        try {
+            simulationConfig = new SimulationConfig(getXMLfile(new Stage()));
+//            simulationConfig = new SimulationConfig(new File("data\\Segregation\\Segregation.xml"));
+            simulationConfig.readFile();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            attemptOpenXML();
+        }
+    }
+
     private void readVariablesFromXML() {
 
-        simulationConfig = new SimulationConfig(getXMLfile(new Stage()));
-        //simulationConfig = new SimulationConfig(new File("data\\Segregation\\Segregation1.xml"));
-        simulationConfig.readFile();
+       attemptOpenXML();
+       controller = new Controller();
+       gridPaneHandler = new GridPaneHandler(simulationConfig);
 
-        controller = new Controller();
-        gridPaneHandler = new GridPaneHandler(simulationConfig);
-        try {
-            createSimulationInstance(simulationConfig.getSimulationType(), new Grid(simulationConfig.getRowNum(),
+       try {
+           createSimulationInstance(simulationConfig.getSimulationType(), new Grid(simulationConfig.getRowNum(),
                     simulationConfig.getColNum(),
                     simulationConfig.getCellStates()));
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-        controller.setSimulation(simulation);
+       } catch (NullPointerException e) {
+           System.out.println(e.getMessage());
+           attemptOpenXML();
+       }
+
+       controller.setSimulation(simulation);
     }
 
     private void createSimulationInstance(SimulationType simulationType, Grid grid) throws NullPointerException {

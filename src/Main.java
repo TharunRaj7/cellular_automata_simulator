@@ -30,7 +30,7 @@ public class Main extends Application {
     public static final int FRAMES_PER_SECOND = 60;
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-    public static final String TITLE = "ca.model.Simulation";
+    public static final String TITLE = "Simulation";
 
     public static final int SIZE = 600;
     public static final Paint BACKGROUND = Color.AZURE;
@@ -117,7 +117,7 @@ public class Main extends Application {
         root.getChildren().remove(simulationView.getCurrentGridPane());
         simulationView.getSimulation().runOneStep();
         System.out.println(setNumRows.getValue());
-        simulationView.updateNumRows(setNumRows.getValue());
+        //simulationView.updateNumRows(setNumRows.getValue());
 //        graphHandler.updateGraph(System.currentTimeMillis());
         root.getChildren().addAll(simulationView.getCurrentGridPane());
     }
