@@ -17,8 +17,8 @@ import java.util.logging.Logger;
 /**
  * This class reads in necessary simulation information, including
  * <ul>
- *     <li>ca.model.Simulation Name/Type</li>
- *     <li>ca.model.Grid Size</li>
+ *     <li>Simulation Name/Type</li>
+ *     <li>Grid Size</li>
  *     <li>Initial cell states</li>
  *     <li>Colors corresponding to each state</li>
  * </ul>
@@ -31,16 +31,18 @@ import java.util.logging.Logger;
  * or with {@link #setFile(File)} and call {@link #readFile()} to start
  * reading before getting any parameters.
  *
- * Note, {@link #rowNum} and {@link #colNum} are given based
- * on TXT file input, and hence should be checked whether fulfill
+ * Note, {@link #cellStates} is read as a list, and thus ignores the
+ * validity of dimensions. {@link #rowNum} and {@link #colNum} are given
+ * based on TXT file input, and hence should be checked whether fulfill
  * the game design.
  *
  * @author Cady Zhou
- * @version 1.1
+ * @version 1.2
  * @since 1.1
  */
 public class SimulationConfig {
     private String colorPattern = "#......";
+    private Logger logger;
 
     private int gridWidth = -1;
     private int gridHeight = -1;
@@ -63,6 +65,8 @@ public class SimulationConfig {
         cellStates = new ArrayList<>();
         colors = new ArrayList<>();
         otherParameters = new ArrayList<>();
+        logger = Logger.getLogger(SimulationConfig.class.getName());
+        logger.setLevel(Level.WARNING);
     }
 
     /**
@@ -91,7 +95,6 @@ public class SimulationConfig {
             this.file = null;
             throw new Exception("This is not an XML File!");
         }
-
         this.file = file;
     }
 
@@ -105,7 +108,6 @@ public class SimulationConfig {
         if (file == null) {
             throw new NullPointerException("Set the XML configuration file first!");
         }
-
         readFile(file);
     }
 
@@ -158,7 +160,7 @@ public class SimulationConfig {
     private Element getElementFromNode(String tagName) throws Exception {
         Node node = doc.getElementsByTagName(tagName).item(0);
         if (node == null || node.getNodeType() != Node.ELEMENT_NODE) {
-            throw new Exception("XML file node '" + tagName + "' is not found!");
+            throw new Exception("Warning: XML file node '" + tagName + "' is not found!");
         }
         return (Element) node;
     }
@@ -181,24 +183,27 @@ public class SimulationConfig {
         }
     }
 
-    //TODO: start from here
     private void assignGridStates(Element element) throws Exception {
         // grid size
         String width = getNodeContent(element, "gridWidth");
         String height = getNodeContent(element, "gridHeight");
-        try {
-            gridWidth = Integer.parseInt(width);
-            gridHeight = Integer.parseInt(height);
-        } catch (NumberFormatException | NullPointerException e ) {
-            e.printStackTrace();
-        }
+
+        gridWidth = convertToNumber(width);
+        gridHeight = convertToNumber(height);
 
         // initial states
+        readCellStates(getNodeContent(element, "cellConfig"));
+    }
+
+    private int convertToNumber(String s) {
+        int res = -1;
         try {
-            readCellStates(getNodeContent(element, "cellConfig"));
-        } catch (Exception e) {
-            e.printStackTrace();
+            res = Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            System.out.println("Cannot convert " + s + " to a numerical number: " + e.getMessage());
         }
+
+        return res;
     }
 
 
@@ -211,6 +216,8 @@ public class SimulationConfig {
 
 
     private String fileInput(String filename) {
+        String warningMessage = "IO Exception occurs during TXT file read. " +
+                "Check your folder name and filename.";
         FileInputStream in = null;
         String s = null;
         try {
@@ -221,22 +228,20 @@ public class SimulationConfig {
             s = new String(bt);
             in.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(warningMessage);
         } finally {
             try {
                 assert in != null;
                 in.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println(warningMessage);
             }
         }
         return s;
     }
 
+    //TODO: start from here
     private void readCellStates(String filename) throws Exception {
-        if (folderName == null) {
-            throw new Exception("The configuration file does not contain outer folder name!");
-        }
         filename = "." + File.separatorChar + "data" + File.separatorChar + folderName + File.separatorChar + filename;
         String s = fileInput(filename);
 
@@ -248,7 +253,7 @@ public class SimulationConfig {
                 rowNum++;
                 endOfFirstLine = true;
             } else if (!c.equals(' ') && (int)c != 13) {  // TODO: check whether 10 and 13 are universal
-                throw new IllegalArgumentException("Initial State TXT has non-digit characters: " + (int) c);
+                throw new Exception("Initial State TXT has non-digit characters: " + (int) c);
             }
 
             if (!endOfFirstLine) {
@@ -260,12 +265,12 @@ public class SimulationConfig {
         colNum = (colNum + 1) / 2;  // the last number of a row does not have a space follow it
     }
 
-    private void assignColors(Element element) {
+    private void assignColors(Element element) throws Exception {
         NodeList nodeList = element.getElementsByTagName("*");
         for (int i = 0; i < nodeList.getLength(); i++) {
             String colorCode = nodeList.item(i).getTextContent();
             if (!isValidColor(colorCode)) {
-                throw new IllegalArgumentException("The " + i + "th color is invalid! (" + colorCode + ")");
+                throw new Exception("The " + i + "th color is invalid! (" + colorCode + ")");
             } else {
                 Color c = Color.web(colorCode);
                 colors.add(c);
@@ -285,48 +290,59 @@ public class SimulationConfig {
         return colorCode.matches(colorPattern);
     }
 
-
     public int getGridHeight() {
         if (gridHeight == -1) {
-            errorLogger.warning("gridHeight has not been changed since initialization.");
+            System.out.println("Warning: gridHeight has not been changed since initialization.");
         }
         return gridHeight;
     }
 
     public int getGridWidth() {
         if (gridWidth == -1) {
-            errorLogger.warning("gridWidth has not been changed since initialization.");
+            System.out.println("Warning: gridWidth has not been changed since initialization.");
         }
         return gridWidth;
     }
 
     public List<Color> getColors() {
+        if (colors.size() == 0) {
+            System.out.println("Warning: no valid color exists.");
+        }
         return colors;
     }
 
     public List<Integer> getCellStates() {
+        if (cellStates.size() == 0) {
+            System.out.println("Warning: no initial cell states exist.");
+        }
         return cellStates;
     }
 
     public SimulationType getSimulationType() {
+        if (simulationType == null) {
+            System.out.println("Warning: simulationType has not been set.");
+        }
         return simulationType;
     }
 
     public int getColNum() {
         if (colNum == -1) {
-            errorLogger.warning("colNum has not been changed since initialization.");
+            System.out.println("Warning: column number has not been changed since initialization.");
         }
         return colNum;
     }
 
     public int getRowNum() {
         if (rowNum == -1) {
-            errorLogger.warning("rowNum has not been changed since initialization.");
+            System.out.println("Warning: rowNum has not been changed since initialization.");
         }
         return rowNum;
     }
 
     public List<String> getOtherParameters() {
+        if (otherParameters.size() == 0) {
+            System.out.println("Warning: there are no other parameters");
+        }
         return otherParameters;
     }
 }

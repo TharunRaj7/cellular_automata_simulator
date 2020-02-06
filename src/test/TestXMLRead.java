@@ -14,9 +14,9 @@ public class TestXMLRead {
             simulationConfig.setFile(new File("data\\Test\\MissingNode.xml"));
             simulationConfig.readFile();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
 
-        System.out.println(simulationConfig.getRowNum());
+        System.out.println(simulationConfig.getColors());
     }
 }
