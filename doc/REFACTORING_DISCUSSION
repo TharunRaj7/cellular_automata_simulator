@@ -2,5 +2,28 @@
 ### NetID: hbt3, zz160
 
 ## Issues Found:
+- Better exception handling, throw exceptions instead of e.printStackTrace();
+- In WaTorWorld simulation, magic numbers should be public static final int format
+- In the styler, magic numbers should be public static final int format
+- In Segregation simulation, control flow statements are nested too deeply
 
 ## Priorities:
+- Highest priority issues:
+    - Throwable.printStackTrace() is a high priority because there are many of them and gives a "fail" message
+    - In WaTorWorld simulation, must change the private variables to be public
+    - In GridPaneHandler.java, instance methods should not write "static" field
+        - Removed static, and removed method to lessen duplicate code
+        
+## Refactoring Decisions
+- Exception handling refactored by throwing exception instead of e.printStackTrace() because it is the responsibility 
+of the View to handle it rather than printing out what is wrong
+- For private static variables we chose to make them public in order to increase efficiency within our code
+- The longest method was in Main.java which sets up the scene and adds all the necessary buttons and grids. We did not refactor
+this method as the only reason it is so long is because we are adding so many buttons, however we do not believe that there 
+are any code smells. 
+
+## Abstractions
+- According to the design checkup, we have 15 classes but only one abstract class. With this information we have decided
+to create or consider more abstract classes. 
+    
+
