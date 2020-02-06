@@ -238,7 +238,6 @@ public class SimulationConfig {
         return s;
     }
 
-    //TODO: start from here
     private void readCellStates(String filename) throws FileNotValidException {
         filename = "." + File.separatorChar + "data" + File.separatorChar + folderName + File.separatorChar + filename;
         String s = fileInput(filename);
