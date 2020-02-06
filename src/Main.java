@@ -1,5 +1,5 @@
 import ca.controller.Controller;
-import ca.view.GraphHandler;
+//import ca.view.GraphHandler;
 import ca.view.SimulationView;
 import ca.view.Styler;
 import javafx.animation.KeyFrame;
@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.chart.Chart;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -36,11 +37,12 @@ public class Main extends Application {
     public static final String DEFAULT_RESOURCE_PACKAGE = RESOURCE + ".";
 
     private SimulationView simulationView;
-    private GraphHandler graphHandler;
+   // private GraphHandler graphHandler;
     private Timeline animation;
     private Stage stage;
     private ResourceBundle myResources;
     private Group root;
+    private Slider setNumRows;
 
     /**
      * This method creates a new instance of the file reader as well as the scene creation.
@@ -74,7 +76,7 @@ public class Main extends Application {
 
         GridPane gridPane = simulationView.getCurrentGridPane();
         Controller controller = simulationView.getController();
-        Chart lineChart = graphHandler.createGraph(System.currentTimeMillis());
+        //Chart lineChart = graphHandler.createGraph(System.currentTimeMillis());
 
         int buttonHeight = simulationView.getButtonHeight();
 
@@ -90,8 +92,11 @@ public class Main extends Application {
                 buttonHeight, 3, myResources);
         Button submitButton = styler.createButton("SubmitCommand", event -> controller.setAnimationSpeed(Double.parseDouble(num.getText())),
                 buttonHeight, 5, myResources);
+        setNumRows = styler.createSlider(simulationView.getNumRows(), simulationView.getGridHeight());
 
-        root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton, num, lineChart);
+        //root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton, num, lineChart);
+        root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton, num, setNumRows);
+
         return new Scene(root, SIZE, SIZE, BACKGROUND);
     }
 
@@ -107,10 +112,11 @@ public class Main extends Application {
      * This method is executed every time the step button on the user interface is clicked.
      */
     public void step () {
-        System.out.println(animation.getRate());
+        //System.out.println(animation.getRate());
         root.getChildren().remove(simulationView.getCurrentGridPane());
         simulationView.getSimulation().runOneStep();
-        graphHandler.updateGraph(System.currentTimeMillis());
+        simulationView.updateNumRows(setNumRows.getValue());
+//        graphHandler.updateGraph(System.currentTimeMillis());
         root.getChildren().addAll(simulationView.getCurrentGridPane());
     }
 

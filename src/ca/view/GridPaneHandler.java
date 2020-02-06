@@ -50,7 +50,6 @@ public class GridPaneHandler {
             RowConstraints row = new RowConstraints(cellHeight);
             myGrid.getRowConstraints().add(row);
         }
-        myGrid.setGridLinesVisible(true);
         getCellColors();
         fillGrid(myGrid, c, r, cellWidth, cellHeight, grid);
         return myGrid;
@@ -67,12 +66,19 @@ public class GridPaneHandler {
     private void fillGrid(GridPane myGrid, int c, int r, int cellWidth, int cellHeight, Grid grid){
         for(int i = 0; i< r; i++){
             for(int j = 0; j< c; j++){
-                int cellState = grid.getCellState(i, j);
+                int cellState;
+                try {
+                    cellState = grid.getCellState(i,j);
+                } catch (java.lang.NullPointerException exception){
+                    cellState = 0;
+                }
                 Color cellColor = cellColors.get(cellState);
                 myGrid.add(new Rectangle(cellWidth, cellHeight, cellColor), j, i);
             }
         }
     }
+
+
 
     /**
      * From the SimulationConfig, we grab the list of colors that correspond with the initial states and create

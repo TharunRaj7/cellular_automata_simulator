@@ -266,6 +266,10 @@ public class SimulationConfig {
         return gridWidth;
     }
 
+    public void setRowNum(double newRowNum){
+        rowNum = (int)newRowNum;
+    }
+
     public List<Color> getColors() {
 
         return colors;

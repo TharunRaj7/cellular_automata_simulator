@@ -23,8 +23,8 @@ public class SimulationView {
     }
 
     private void readVariablesFromXML() {
-//        simulationConfig = new SimulationConfig(getXMLfile(new Stage()));
-        simulationConfig = new SimulationConfig(new File("data\\Segregation\\Segregation1.xml"));
+        simulationConfig = new SimulationConfig(getXMLfile(new Stage()));
+//        simulationConfig = new SimulationConfig(new File("data\\Segregation\\Segregation1.xml"));
         simulationConfig.readFile();
 
         controller = new Controller();
@@ -65,6 +65,10 @@ public class SimulationView {
                 simulation.getGrid());
     }
 
+    public void updateNumRows(double newRowNum){
+        simulationConfig.setRowNum(newRowNum);
+    }
+
     public Controller getController() {
         return controller;
     }
@@ -72,6 +76,10 @@ public class SimulationView {
     public int getButtonHeight() {
         return simulationConfig.getGridHeight();
     }
+
+    public int getGridHeight() {return simulationConfig.getGridHeight();}
+
+    public int getNumRows() {return simulationConfig.getRowNum();}
 
     public Simulation getSimulation() {
         return simulation;

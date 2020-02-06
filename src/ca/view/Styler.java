@@ -3,6 +3,7 @@ package ca.view;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 
 import java.util.ResourceBundle;
@@ -19,6 +20,9 @@ public class Styler {
     private static int TEXTFIELD_WIDTH = 85;
     private static int TEXTFIELD_HEIGHT = 10;
     private static int TEXTFIELD_LOCATION = 4;
+    private static int SLIDER_WIDTH = 200;
+    private static int SLIDER_HEIGHT = 10;
+    private static int SLIDER_OFFSET = 30;
 
     public Button createButton(String name, EventHandler<ActionEvent> handler, int gridHeight, int numButton, ResourceBundle myResources){
         Button button = new Button();
@@ -38,5 +42,13 @@ public class Styler {
         return num;
     }
 
+    public Slider createSlider(int numRows, int gridHeight){
+        Slider slider = new Slider(4, 30, numRows);
+        slider.valueProperty().addListener((obs, oldval, newVal) ->
+                slider.setValue(newVal.intValue()));
+        slider.setPrefSize(SLIDER_WIDTH, SLIDER_HEIGHT);
+        slider.setLayoutY(gridHeight + BUTTON_HEIGHT + SLIDER_OFFSET);
+        return slider;
+    }
 
 }
