@@ -51,7 +51,8 @@ public class GridPaneHandler {
             myGrid.getRowConstraints().add(row);
         }
         getCellColors();
-        fillGrid(myGrid, c, r, cellWidth, cellHeight, grid);
+        myGrid.setGridLinesVisible(true);
+        //fillGrid(myGrid, c, r, cellWidth, cellHeight, grid);
         return myGrid;
     }
 
@@ -77,8 +78,6 @@ public class GridPaneHandler {
             }
         }
     }
-
-
 
     /**
      * From the SimulationConfig, we grab the list of colors that correspond with the initial states and create
