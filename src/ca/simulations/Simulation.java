@@ -93,6 +93,16 @@ public abstract class Simulation {
         grid = additionalActions(gridNextGen);
     }
 
+    public int cellStateTotal(int state) {
+        int total = 0;
+        for (int r = 0; r < grid.getNumOfRows(); r++) {
+            for (int c = 0; c < grid.getNumOfColumns(); c++) {
+                total += grid.getCellState(r, c) == state ? 1 : 0;
+            }
+        }
+        return total;
+    }
+
     protected Grid additionalActions(Grid gridNextGen){
         return gridNextGen;
     };
