@@ -42,12 +42,16 @@ public class Styler {
         return num;
     }
 
-    public Slider createSlider(int numRows, int gridHeight){
-        Slider slider = new Slider(4, 30, numRows);
+    public Slider createDiffSlider(int newNum, int gridHeight, int slideNum){
+        return createSlider(newNum, gridHeight, slideNum);
+    }
+
+    private Slider createSlider(int presetVal, int gridHeight, int slideNum){
+        Slider slider = new Slider(4, 30, presetVal);
         slider.valueProperty().addListener((obs, oldval, newVal) ->
                 slider.setValue(newVal.intValue()));
         slider.setPrefSize(SLIDER_WIDTH, SLIDER_HEIGHT);
-        slider.setLayoutY(gridHeight + BUTTON_HEIGHT + SLIDER_OFFSET);
+        slider.setLayoutY(gridHeight + BUTTON_HEIGHT + SLIDER_OFFSET * slideNum);
         return slider;
     }
 

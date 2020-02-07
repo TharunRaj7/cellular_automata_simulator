@@ -83,8 +83,7 @@ public class SimulationView {
     }
 
     public Chart getCurrentLineChart(){
-        return graphHandler.createGraph(simulation.getStep(),
-                simulationConfig.getColNum(),
+        return graphHandler.createGraph(simulationConfig.getColNum(),
                 simulationConfig.getRowNum(),
                 simulation.getGrid());
     }
@@ -105,6 +104,8 @@ public class SimulationView {
     public int getGridHeight() {return simulationConfig.getGridHeight();}
 
     public int getNumRows() {return simulationConfig.getRowNum();}
+
+    public int getNumCols() {return simulationConfig.getColNum();}
 
     public Simulation getSimulation() {
         return simulation;

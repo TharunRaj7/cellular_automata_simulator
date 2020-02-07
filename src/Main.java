@@ -42,7 +42,6 @@ public class Main extends Application {
     private Stage stage;
     private ResourceBundle myResources;
     private Group root;
-    private Slider setNumRows;
 
     /**
      * This method creates a new instance of the file reader as well as the scene creation.
@@ -92,7 +91,8 @@ public class Main extends Application {
                 buttonHeight, 3, myResources);
         Button submitButton = styler.createButton("SubmitCommand", event -> controller.setAnimationSpeed(Double.parseDouble(num.getText())),
                 buttonHeight, 5, myResources);
-        setNumRows = styler.createSlider(simulationView.getNumRows(), simulationView.getGridHeight());
+        Slider setNumRows = styler.createDiffSlider(simulationView.getNumRows(), simulationView.getGridHeight(), 1);
+        Slider setNumCols = styler.createDiffSlider(simulationView.getNumCols(), simulationView.getGridHeight(), 2);
 
         root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton, num, lineChart);
         //root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton, num, setNumRows);
