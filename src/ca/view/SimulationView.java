@@ -23,8 +23,8 @@ public class SimulationView {
     }
 
     private void readVariablesFromXML() {
-        //simulationConfig = new SimulationConfig(getXMLfile(new Stage()));
-        simulationConfig = new SimulationConfig(new File("data\\WaTorWorld\\WaTorWorld1.xml"));
+        simulationConfig = new SimulationConfig(getXMLfile(new Stage()));
+        //simulationConfig = new SimulationConfig(new File("data\\WaTorWorld\\WaTorWorld1.xml"));
         //simulationConfig = new SimulationConfig(new File("data\\Segregation\\Segregation1.xml"));
         simulationConfig.readFile();
 
