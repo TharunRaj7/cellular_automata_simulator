@@ -28,7 +28,6 @@ public class SimulationView {
         try {
             simulationConfig = new SimulationConfig(getXMLfile(new Stage()));
 //            simulationConfig = new SimulationConfig(new File("data\\Segregation\\Segregation.xml"));
-            simulationConfig.readFile();
         } catch (Exception e) {
             System.out.println(e.getMessage());
             attemptOpenXML();
@@ -49,8 +48,10 @@ public class SimulationView {
            System.out.println(e.getMessage());
            attemptOpenXML();
        }
+        graphHandler = new GraphHandler(simulation);
 
-       controller.setSimulation(simulation);
+
+        controller.setSimulation(simulation);
     }
 
     private void createSimulationInstance(SimulationType simulationType, Grid grid) throws NullPointerException {
@@ -84,8 +85,7 @@ public class SimulationView {
 
     public Chart getCurrentLineChart(){
         return graphHandler.createGraph(simulationConfig.getColNum(),
-                simulationConfig.getRowNum(),
-                simulation.getGrid());
+                simulationConfig.getRowNum());
     }
 
     //pass in row number and col number
