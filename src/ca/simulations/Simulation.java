@@ -1,5 +1,6 @@
 package ca.simulations;
 
+import ca.helpers.NeighborsHandler;
 import ca.model.Cell;
 import ca.model.Grid;
 import ca.model.Pair;
@@ -11,6 +12,7 @@ import java.util.List;
 public abstract class Simulation {
     Grid grid;
     String mode;
+    NeighborsHandler neighborsHandler;
 
     public Simulation (){
         mode = "EIGHT";

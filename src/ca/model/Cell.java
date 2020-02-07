@@ -2,10 +2,15 @@ package ca.model;
 
 public class Cell {
     private int state;
-    //Node node;
+    private CellShape shape;
 
     public Cell(int state){
+        this(state, CellShape.SQUARE);
+    }
+
+    public Cell(int state, CellShape shape) {
         this.state = state;
+        this.shape = shape;
     }
 
     public int getState() {
@@ -16,9 +21,9 @@ public class Cell {
         this.state = state;
     }
 
-  /*  public void setNode (Node node){
-        this.node = node;
-    }*/
+    public CellShape getShape() {
+        return shape;
+    }
 }
 
 

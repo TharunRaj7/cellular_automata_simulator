@@ -8,6 +8,8 @@ public class Grid {
     private int numOfColumns;
     private int numOfRows;
     private Map<Pair, Cell> gridMap;
+
+
     /**
      * Constructs the grid data structure.
      * @param numOfRows
@@ -156,31 +158,4 @@ public class Grid {
     public void setCellState(int r, int c, int state) {
         gridMap.get(new Pair(r, c)).setState(state);
     }
-
-
-//    public static void main(String[] args) {
-//        //testing for Grid Class
-//        List<Integer> temp = new ArrayList<>();
-//        for(int i = 0; i < 9; i++) {
-//            temp.add(i);
-//        }
-//        Grid test = new Grid(3,3, temp);
-//        test.setCellState(1,2, 454);
-//
-//        for (Pair pair : test.gridMap.keySet()){
-//            System.out.println(pair);
-//            System.out.println("State = " + test.gridMap.get(pair).getState());
-//        }
-//
-//        ArrayList<Cell> tester = test.getAllNeighbors(2,2);
-//        for (Cell cell : tester){
-//            System.out.println(cell.getState());
-//        }
-//
-//        Pair pairTest = test.getPairGivenCell(test.getCell(1,2));
-//        System.out.println(pairTest);
-//        System.out.println(test.getCellState(pairTest.getRow(), pairTest.getCol()));
-//
-//
-//    }
 }
