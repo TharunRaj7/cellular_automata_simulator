@@ -6,6 +6,7 @@ import ca.controller.SimulationType;
 import ca.model.Grid;
 import ca.simulations.*;
 import javafx.scene.Group;
+import javafx.scene.chart.Chart;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -15,6 +16,7 @@ public class SimulationView {
 
     private SimulationConfig simulationConfig;
     private GridPaneHandler gridPaneHandler;
+    private GraphHandler graphHandler;
     private Controller controller;
     private Simulation simulation;
 
@@ -79,6 +81,14 @@ public class SimulationView {
                 simulationConfig.getGridHeight(),
                 simulation.getGrid());
     }
+
+    public Chart getCurrentLineChart(){
+        return graphHandler.createGraph(simulation.getStep(),
+                simulationConfig.getColNum(),
+                simulationConfig.getRowNum(),
+                simulation.getGrid());
+    }
+
     //pass in row number and col number
 //    public void updateNumRows(double newRowNum){
 //        simulation.setGridSize(newRowNum);

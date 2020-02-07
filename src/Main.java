@@ -1,5 +1,5 @@
 import ca.controller.Controller;
-//import ca.view.GraphHandler;
+import ca.view.GraphHandler;
 import ca.model.Grid;
 import ca.view.SimulationView;
 import ca.view.Styler;
@@ -38,7 +38,6 @@ public class Main extends Application {
     public static final String DEFAULT_RESOURCE_PACKAGE = RESOURCE + ".";
 
     private SimulationView simulationView;
-   // private GraphHandler graphHandler;
     private Timeline animation;
     private Stage stage;
     private ResourceBundle myResources;
@@ -77,7 +76,7 @@ public class Main extends Application {
 
         GridPane gridPane = simulationView.getCurrentGridPane();
         Controller controller = simulationView.getController();
-        //Chart lineChart = graphHandler.createGraph(System.currentTimeMillis());
+        Chart lineChart = simulationView.getCurrentLineChart();
 
         int buttonHeight = simulationView.getButtonHeight();
 
@@ -95,8 +94,8 @@ public class Main extends Application {
                 buttonHeight, 5, myResources);
         setNumRows = styler.createSlider(simulationView.getNumRows(), simulationView.getGridHeight());
 
-        //root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton, num, lineChart);
-        root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton, num, setNumRows);
+        root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton, num, lineChart);
+        //root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton, num, setNumRows);
 
         return new Scene(root, SIZE, SIZE, BACKGROUND);
     }
@@ -114,12 +113,10 @@ public class Main extends Application {
      */
     public void step () {
         //System.out.println(animation.getRate());
-        root.getChildren().remove(simulationView.getCurrentGridPane());
+        root.getChildren().removeAll(simulationView.getCurrentGridPane(), simulationView.getCurrentLineChart());
         simulationView.getSimulation().runOneStep();
-        System.out.println(setNumRows.getValue());
         //simulationView.updateNumRows(setNumRows.getValue());
-//        graphHandler.updateGraph(System.currentTimeMillis());
-        root.getChildren().addAll(simulationView.getCurrentGridPane());
+        root.getChildren().addAll(simulationView.getCurrentGridPane(), simulationView.getCurrentLineChart());
     }
 
     public void startAnimation() {
