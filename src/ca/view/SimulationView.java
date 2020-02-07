@@ -85,7 +85,8 @@ public class SimulationView {
 
     public Chart getCurrentLineChart(){
         return graphHandler.createGraph(simulationConfig.getColNum(),
-                simulationConfig.getRowNum());
+                simulationConfig.getRowNum(),
+                simulationConfig.getGridWidth());
     }
 
     //pass in row number and col number

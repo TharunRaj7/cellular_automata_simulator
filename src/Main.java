@@ -1,6 +1,4 @@
 import ca.controller.Controller;
-import ca.view.GraphHandler;
-import ca.model.Grid;
 import ca.view.SimulationView;
 import ca.view.Styler;
 import javafx.animation.KeyFrame;
@@ -32,7 +30,8 @@ public class Main extends Application {
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     public static final String TITLE = "Simulation";
 
-    public static final int SIZE = 600;
+    public static final int SIZE_WIDTH = 800;
+    public static final int SIZE_HEIGHT = 600;
     public static final Paint BACKGROUND = Color.AZURE;
     public static final String RESOURCE = "ca/resources";
     public static final String DEFAULT_RESOURCE_PACKAGE = RESOURCE + ".";
@@ -97,7 +96,7 @@ public class Main extends Application {
         root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton, num, lineChart);
         //root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton, num, setNumRows);
 
-        return new Scene(root, SIZE, SIZE, BACKGROUND);
+        return new Scene(root, SIZE_WIDTH, SIZE_HEIGHT, BACKGROUND);
     }
 
     private void reloadFile() {
