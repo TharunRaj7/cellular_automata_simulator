@@ -24,9 +24,8 @@ public class SimulationView {
 
     private void attemptOpenXML() {
         try {
-            simulationConfig = new SimulationConfig(getXMLfile(new Stage()));
-//            simulationConfig = new SimulationConfig(new File("data\\Segregation\\Segregation.xml"));
-            simulationConfig.readFile();
+//            simulationConfig = new SimulationConfig(getXMLfile(new Stage()));
+            simulationConfig = new SimulationConfig(new File("data\\GameOfLife\\GameOfLife1.xml"));
         } catch (Exception e) {
             System.out.println(e.getMessage());
             attemptOpenXML();
