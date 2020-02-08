@@ -14,14 +14,22 @@ public abstract class GridBase {
         this.shape = gridBase.shape;
     }
 
-    public GridBase(List<Integer> initialStates, CellShape shape) {
+    /**
+     * Be cautions that this constructor does not call
+     * {@link #createGridModel(List)} as {@code numOfRow}
+     * and {@code numOfCol} have not been set as the stage.
+     * For all inheritance, {@link #createGridModel(List)}
+     * needs to be explicitly called in the constructor.
+     *
+     * @param shape
+     */
+    public GridBase(CellShape shape) {
         this.gridMap = new HashMap<>();
         this.shape = shape;
-        createGridModel(initialStates);
     }
 
     public List<Cell> getNeighborsByIndex(int r, int c, List<Integer> rowIndices, List<Integer> colIndices) throws RuntimeException{
-        if (rowIndices != colIndices) {
+        if (rowIndices.size() != colIndices.size()) {
             throw new RuntimeException("row and col sizes are not aligned for getNeighbors!");
         }
 

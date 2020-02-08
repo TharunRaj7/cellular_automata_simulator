@@ -33,7 +33,6 @@ public class SimulationView {
     }
 
     private void readVariablesFromXML() {
-
        attemptOpenXML();
        controller = new Controller();
        gridPaneHandler = new GridPaneHandler(simulationConfig);

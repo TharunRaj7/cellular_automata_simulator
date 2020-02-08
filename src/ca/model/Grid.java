@@ -33,9 +33,10 @@ public class Grid extends GridBase{
     }
 
     public Grid(int numOfRows, int numOfColumns,  List<Integer> initialStates, CellShape shape) {
-        super(initialStates, shape);
+        super(shape);
         this.numOfRows = numOfRows;
         this.numOfColumns = numOfColumns;
+        createGridModel(initialStates);
     }
 
     @Override
