@@ -33,7 +33,6 @@ public class SimulationView {
     }
 
     private void readVariablesFromXML() {
-
        attemptOpenXML();
        controller = new Controller();
        gridPaneHandler = new GridPaneHandler(simulationConfig);
@@ -61,9 +60,9 @@ public class SimulationView {
             case Percolation:
                 simulation = new Percolation(grid);
                 break;
-            case WaTorWorld:
-                simulation = new WaTorWorld(grid, simulationConfig.getOtherParameters());
-                break;
+//            case WaTorWorld:
+//                simulation = new WaTorWorld(grid, simulationConfig.getOtherParameters());
+//                break;
             default:
                 simulation = null;
                 throw new NullPointerException("This simulation type does not exist!");

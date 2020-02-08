@@ -1,8 +1,10 @@
 package ca.simulations;
 
+import ca.helpers.NeighboringType;
+import ca.helpers.NeighborsHelper;
 import ca.model.Cell;
+import ca.model.CellShape;
 import ca.model.Grid;
-import ca.model.Pair;
 //import javafx.scene.Scene;
 
 import java.util.ArrayList;
@@ -10,15 +12,20 @@ import java.util.List;
 
 public abstract class Simulation {
     Grid grid;
-    String mode;
+    NeighborsHelper neighborsHelper;
+    NeighboringType type;
 
-    public Simulation (){
-        mode = "EIGHT";
+    //TODO: change the cocnstructor usage to separate view and model
+    public Simulation(Grid grid) {
+        this.grid = grid;
+        neighborsHelper = new NeighborsHelper();
+        this.type = NeighboringType.ALL;
     }
 
-    public Simulation(Grid grid) {
-        this();
-        this.grid = grid;
+    public Simulation(int rowNum, int colNum, List<Integer> initialStates, CellShape shape) {
+        this.grid = new Grid(rowNum, colNum, initialStates, shape);
+        neighborsHelper = new NeighborsHelper(shape);
+        this.type = NeighboringType.ALL;
     }
 
     /**
@@ -27,60 +34,61 @@ public abstract class Simulation {
      * only NSWE neighbors by passing in different {@code mode}.
      * @param r         an int of the row position of this cell
      * @param c         an int of the col position of this cell
-     * @param mode      the number of neighbors chosen, ("EIGHT"/"NSWE")
+     * @param type      the number of neighbors chosen, ("EIGHT"/"NSWE")
      * @param state     an int representing the state to find
      * @return          the number of neighbors have {@code state}
      */
-    public int getNeighborStateNumber(int r, int c, String mode, int state) {
-        List<Cell> neighbors;
-        switch (mode) {
-            case "EIGHT":
-                neighbors = grid.getAllNeighbors(r, c);
-                break;
-            case "NSEW":
-                neighbors = grid.getNSEWNeighbors(r, c);
-                break;
-            default:
-                neighbors = new ArrayList<>();
-        }
-
+    //TODO: change method headings
+    public int getNeighborStateNumber(int r, int c, NeighboringType type, int state) {
+       List<Cell> neighbors = getNeighboringCellsOfState(r, c, type);
         int num = 0;
         for (Cell cell: neighbors) {
             if (cell.getState() == state) {
                 num++;
             }
         }
-
         return num;
     }
 
-    public List<Cell> getCellOfState(int state) {
-        List<Cell> cells = new ArrayList<>();
-        for (int r = 0; r < grid.getNumOfRows(); r++) {
-            for (int c = 0; c < grid.getNumOfColumns(); c++) {
-                if (grid.getCellState(r, c) == state) {
-                    cells.add(grid.getCell(r, c));
-                }
+    // TODO: change method heads in other classes
+    private List<Cell> getNeighboringCellsOfState(int r, int c, NeighboringType type) {
+        List<Cell> neighbors;
+        try {
+            switch (type) {
+                case ALL:
+                    neighbors = grid.getNeighborsByIndex(r, c, neighborsHelper.getAllRow(),
+                            neighborsHelper.getAllCol());
+                    break;
+                case NSEW:
+                    neighbors = grid.getNeighborsByIndex(r, c, neighborsHelper.getNSEWRow(),
+                            neighborsHelper.getNSEWCol());
+                    break;
+                default:
+                    neighbors = new ArrayList<>();
             }
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
 
-        return cells;
+        return neighbors;
     }
 
-    public List<Cell> getNeighboringCellsOfState(int r, int c, int state) {
+    // TODO: check to see why need cell access
+    public List<Cell> getCellOfState(int state) {
+        List<Cell> cells = grid.getAllCells();
         List<Cell> ret = new ArrayList<>();
-        List<Cell> temp = grid.getNSEWNeighbors(r,c);
-        for (Cell cell : temp){
-            if (cell.getState() == state){
+
+        for (Cell cell: cells) {
+            if (cell.getState() == state) {
                 ret.add(cell);
             }
         }
-
         return ret;
     }
 
-    public Grid getGrid() {
-        return grid;
+    public int cellStateTotal(int state) {
+        List<Cell> allCells = getCellOfState(state);
+        return allCells.size();
     }
 
     public void runOneStep() {
@@ -93,18 +101,13 @@ public abstract class Simulation {
         grid = additionalActions(gridNextGen);
     }
 
-    public int cellStateTotal(int state) {
-        int total = 0;
-        for (int r = 0; r < grid.getNumOfRows(); r++) {
-            for (int c = 0; c < grid.getNumOfColumns(); c++) {
-                total += grid.getCellState(r, c) == state ? 1 : 0;
-            }
-        }
-        return total;
+    // TODO: delete this and check for dependency
+    public Grid getGrid() {
+        return grid;
     }
 
     protected Grid additionalActions(Grid gridNextGen){
         return gridNextGen;
-    };
+    }
     protected abstract int determineCellState(int r, int c);
 }

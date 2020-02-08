@@ -1,6 +1,5 @@
 package ca.simulations;
 
-import ca.model.Cell;
 import ca.model.Grid;
 
 import java.util.*;
@@ -79,8 +78,8 @@ public class Segregation extends Simulation {
                 return PLACE_HOLDER;
             }
 
-            int satisfiedAgent = getNeighborStateNumber(r, c, mode, currentState);
-            int nonVacantAgent = getNeighborStateNumber(r, c, mode, AGENT_1) + getNeighborStateNumber(r, c, mode, AGENT_2);
+            int satisfiedAgent = getNeighborStateNumber(r, c, type, currentState);
+            int nonVacantAgent = getNeighborStateNumber(r, c, type, AGENT_1) + getNeighborStateNumber(r, c, type, AGENT_2);
             if ((double) satisfiedAgent / nonVacantAgent < percent && needRelocation.size() < vacantNumber) {
                 needRelocation.add(currentState);
                 return VACANT_CELL;
