@@ -20,14 +20,15 @@ public abstract class GridBase {
         createGridModel(initialStates);
     }
 
-    public List<Cell> getNeighborsByIndex(List<Integer> rowIndices, List<Integer> colIndices, List<Cell> ret) throws RuntimeException{
+    public List<Cell> getNeighborsByIndex(int r, int c, List<Integer> rowIndices, List<Integer> colIndices) throws RuntimeException{
         if (rowIndices != colIndices) {
             throw new RuntimeException("row and col sizes are not aligned for getNeighbors!");
         }
 
+        List<Cell> ret = new ArrayList<>();
         for (int i = 0; i < rowIndices.size(); i++) {
-            if (inBound(rowIndices.get(i), colIndices.get(i))) {
-                ret.add(gridMap.get(new Pair(rowIndices.get(i), colIndices.get(i))));
+            if (inBound(rowIndices.get(i) + r, colIndices.get(i) + c)) {
+                ret.add(gridMap.get(new Pair(rowIndices.get(i) + r, colIndices.get(i) + c)));
             }
         }
         return ret;

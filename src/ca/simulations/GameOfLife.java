@@ -28,9 +28,9 @@ public class GameOfLife extends Simulation {
     @Override
     protected int determineCellState(int r, int c) {
         if (grid.getCellState(r, c) == LIVE_CELL) {
-            int liveNeighbors = getNeighborStateNumber(r, c, mode, LIVE_CELL);
+            int liveNeighbors = getNeighborStateNumber(r, c, type, LIVE_CELL);
             return (liveNeighbors == 2 || liveNeighbors == 3) ? LIVE_CELL : DEAD_CELL;
-        } else if (getNeighborStateNumber(r, c, mode, LIVE_CELL) == 3) {
+        } else if (getNeighborStateNumber(r, c, type, LIVE_CELL) == 3) {
             return LIVE_CELL;
         }
 
