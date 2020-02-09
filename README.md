@@ -26,7 +26,8 @@ Hours Spent: 14+ each
 
  * Cady Zhou
       - Implement ```ca.controller.Controller.java```, ```ca.controller.SimulationType.java```, ```ca.controller.InitialStateHandler.java```,
-       ```ca.controller.GridStatus.java```, ```ca.view.SimulationView.java```, ```ca.simulation.Simulations.java``` and ```ca.controller.SimulationConfig.java```
+       ```ca.controller.GridStatus.java```, ```ca.view.SimulationView.java```, ```ca.simulation.Simulations.java```,
+       ```ca.helpers.NeighboringType.java```,  ```ca.helpers.NeighboringHelper.java``` and ```ca.controller.SimulationConfig.java```
      - Implement Game of Life and Segregation ca.model.Simulation classes
 
 
@@ -41,12 +42,15 @@ Hours Spent: 14+ each
 Main class:
 
 - Sets stage
-- Reads in XML file from file chooser
+- Interacts with SimulationView to read in XML file from file chooser, create simulation instances, create the grid and 
+graph, and return other important values from simulation config
 - Sets scene
 - Calls Grid class to create a grid
 - Creates a GridPane and fills it will colors
-- Creates/adds all necessary buttons 
-- Calls step function which updates the grid from Grid class then removes the gridpane and creates a new one
+- Creates a linechart / graph and displays it
+- Creates/adds all necessary buttons as well as sliders
+- Calls step function which updates the grid from Grid class then removes the gridpane and creates a new one, does the
+same for the graph with the line chart
 
 Data files needed: 
 
@@ -82,7 +86,6 @@ Data files needed:
     - list_wtw.txt
     - rand_wtw.txt
     
-
 Features implemented:
 
 - File chooser to select XML file at the beginning of the simulation
@@ -92,6 +95,14 @@ Features implemented:
 - Reload File button to select a new XML file 
 - Step button to perform only one step of the simulation
 - Textfile and submit button to speed up the step of the simulation
+- Graph with line chart where every line represents a different state and quantity of that state at a given step
+- Ability for the user to interact and choose the size of the grid (number of rows and columns) after the simulation has
+already begun
+- Ability for the user to run multiple simulations at once
+- Error checking for incorrect data file 
+- Ability to allow simulations to be set by a specific grid, a list, or randomly
+- Started implementing different arrangement of neighbors and the different location shapes, but only completed for square
+and no UI to go with it
 
 ### Notes/Assumptions
 
@@ -102,6 +113,7 @@ Assumptions or Simplifications:
 - The grid size will never exceed that of the scene size 
 - For the segregation simulation, the percent that makes an agent satisfied will be hardcoded into the simulation. This
 way, the user cannot change the number nor update it. 
+- The only shapes that the grid will be are triangles, hexagons, and squares.
 
 Interesting data files:
 
@@ -124,4 +136,6 @@ go back and make smaller changes you have to be careful of merge conflicts. Othe
 different code which can lead to even more issues. 
 - Once one simulation is up and running, it is easy to debug and create other simulations. By following a similar format
 and just changing the rules for how a state is determined, the rest is already all figured out. 
+- Adding new features requires the entire team to work together as some parts cross over into other sections. In this way, 
+communication is more important than ever!
 
