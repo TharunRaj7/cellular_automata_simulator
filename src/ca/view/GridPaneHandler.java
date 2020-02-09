@@ -20,7 +20,7 @@ import java.util.List;
 
 public class GridPaneHandler {
 
-    private static List<Color> cellColors = new ArrayList<Color>();
+    private static List<Color> cellColors = new ArrayList<>();
     private int cellWidth;
     private int cellHeight;
     private SimulationConfig simulationConfig;

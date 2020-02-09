@@ -34,8 +34,8 @@ public class GraphHandler {
     }
 
     /**
-     * Here, we create a linechart and take a list of the states and their quantities. We use this to create several
-     * series for a linechart which are then stored so that we can update them later.
+     * Here, we create a linechart and take a list of the states and their quantities. The chart lines are recreated at
+     * every step since we have the information stored.
      *
      * @param  - takes in the rows and columns and grid
      * @return LineChart, the most recent linechart

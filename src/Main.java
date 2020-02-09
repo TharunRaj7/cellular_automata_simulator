@@ -1,12 +1,16 @@
 import ca.controller.Controller;
+import ca.model.Grid;
 import ca.view.SimulationView;
 import ca.view.Styler;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
 import javafx.scene.chart.Chart;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -16,6 +20,7 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.util.Duration;
 
+import java.awt.*;
 import java.util.ResourceBundle;
 
 /**
@@ -41,6 +46,8 @@ public class Main extends Application {
     private Stage stage;
     private ResourceBundle myResources;
     private Group root;
+    private Slider numRows;
+    private Slider numCols;
 
     /**
      * This method creates a new instance of the file reader as well as the scene creation.
@@ -90,12 +97,12 @@ public class Main extends Application {
                 buttonHeight, 3, myResources);
         Button submitButton = styler.createButton("SubmitCommand", event -> controller.setAnimationSpeed(Double.parseDouble(num.getText())),
                 buttonHeight, 5, myResources);
-        Slider setNumRows = styler.createDiffSlider(simulationView.getNumRows(), simulationView.getGridHeight(), 1);
-        Slider setNumCols = styler.createDiffSlider(simulationView.getNumCols(), simulationView.getGridHeight(), 2);
-
-        root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton, num, lineChart);
-        //root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton, num, setNumRows);
-
+        GridPane setNumRows = styler.createSlider(simulationView.getNumRows(), simulationView.getGridHeight(), 1, myResources, "RowLabel");
+        GridPane setNumCols = styler.createSlider(simulationView.getNumCols(), simulationView.getGridHeight(), 2, myResources, "ColLabel");
+        numRows = styler.getRowSlider();
+        numCols = styler.getColSlider();
+        root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton,
+                num, lineChart, setNumRows, setNumCols);
         return new Scene(root, SIZE_WIDTH, SIZE_HEIGHT, BACKGROUND);
     }
 
@@ -114,9 +121,10 @@ public class Main extends Application {
         //System.out.println(animation.getRate());
         root.getChildren().removeAll(simulationView.getCurrentGridPane(), simulationView.getCurrentLineChart());
         simulationView.getSimulation().runOneStep();
-        //simulationView.updateNumRows(setNumRows.getValue());
+        simulationView.updateGridSize(numRows.getValue(), numCols.getValue());
         root.getChildren().addAll(simulationView.getCurrentGridPane(), simulationView.getCurrentLineChart());
     }
+
 
     public void startAnimation() {
         KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), event -> step());

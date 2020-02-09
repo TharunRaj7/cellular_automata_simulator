@@ -89,10 +89,9 @@ public class SimulationView {
                 simulationConfig.getGridWidth());
     }
 
-    //pass in row number and col number
-//    public void updateNumRows(double newRowNum){
-//        simulation.setGridSize(newRowNum);
-//    }
+    public void updateGridSize(double newRowNum, double newColNum){
+
+    }
 
     public Controller getController() {
         return controller;
