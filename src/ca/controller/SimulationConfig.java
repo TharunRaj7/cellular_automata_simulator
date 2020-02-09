@@ -286,7 +286,6 @@ public class SimulationConfig {
         }
     }
 
-
     private boolean isValidColor(String colorCode) {
         String colorPattern = "#......";
         return colorCode.matches(colorPattern);
