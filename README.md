@@ -9,23 +9,25 @@ Names: Hannah Taubenfeld, Tharun Mani Raj, Cady Zhou
 
 Start Date: 1/26/20
 
-Finish Date: 2/2/20
+Finish Date: 2/9/20
 
-Hours Spent: 7+ each
+Hours Spent: 14+ each
 
 ### Primary Roles
 
  * Hannah Taubenfeld
-     - Implement ```ca.view.Main.java```, ```ca.view.GridPaneHandler.java```, ```ca.view.Styler.java```, ```ca.view.XMLReader.java```
+     - Implement ```ca.view.Main.java```, ```ca.view.GridPaneHandler.java```, ```ca.view.Styler.java```, ```ca.view.XMLReader.java```, 
+     ```ca.view.GraphHandler.java```, ```ca.view.SimulationView.java```
      - Implement Segregation and Percolation ca.model.Simulation classes
 
  * Tharun Mani Raj
-     - Implement ```ca.model.Cell.java```, ```ca.model.Grid.java```, and ```ca.model.Pair.java```
-     - Implement WaTorWorld and Fire ca.model.Simulation classes
+     - Implement ```ca.model.Cell.java```, ```ca.model.Grid.java```,```ca.model.GridBase.java```, and ```ca.model.Pair.java```
+     - Implement WaTorWorld ca.model.Simulation classes
 
  * Cady Zhou
-      - Implement ```ca.controller.Controller.java```, ```ca.controller.SimulationType.java``` and ```ca.controller.SimulationConfig.java```
-     - Implement Game of Life ca.model.Simulation classes
+      - Implement ```ca.controller.Controller.java```, ```ca.controller.SimulationType.java```, ```ca.controller.InitialStateHandler.java```,
+       ```ca.controller.GridStatus.java```, ```ca.view.SimulationView.java```, ```ca.simulation.Simulations.java``` and ```ca.controller.SimulationConfig.java```
+     - Implement Game of Life and Segregation ca.model.Simulation classes
 
 
 ### Resources Used
@@ -50,23 +52,36 @@ Data files needed:
 
 * GameOfLife
     - GameOfLife1.xml
-    - gol1.txt
-
-* Segregation
-    - Segregation1.xml
-    - seg1.txt
-
+    - grid_gol.txt
+    - grid_gol1.txt
+    - grid_gol2.txt
+    - list_gol.txt
+    - rand_gol.txt
+    
 * Percolation
     - Percolation1.xml
-    - perc1.txt
-
-* WaTorWorld
-    - WaTorWorld1.xml
-    - wtw1.txt
+    - grid_perc.txt
+    - list_perc.txt
+    - rand_perc.txt
+    
+* Segregation
+    - Segregation1.xml
+    - grid_seg.txt
+    - list_seg.txt
+    - rand_seg.txt
     
 * Spreading Of Fire
     - SpreadingOfFire.xml
-    - sof1.txt
+    - grid_sof.txt
+    - list_sof.txt
+    - rand_sof.txt
+
+* WaTorWorld
+    - WaTorWorld1.xml
+    - grid_wtw.txt
+    - list_wtw.txt
+    - rand_wtw.txt
+    
 
 Features implemented:
 

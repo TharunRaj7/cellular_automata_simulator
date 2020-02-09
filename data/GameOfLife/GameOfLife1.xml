@@ -8,9 +8,9 @@
     </general>
 
     <initialStates>
-        <gridWidth>400</gridWidth>
-        <gridHeight>400</gridHeight>
-        <cellConfig>gol1.txt</cellConfig>
+        <gridWidth>500</gridWidth>
+        <gridHeight>500</gridHeight>
+        <cellConfig>grid_gol2.txt</cellConfig>
     </initialStates>
 
     <colors>

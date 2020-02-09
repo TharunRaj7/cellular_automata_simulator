@@ -28,7 +28,10 @@ public class SimulationView {
         try {
             simulationConfig = new SimulationConfig(getXMLfile(new Stage()));
 //            simulationConfig = new SimulationConfig(getXMLfile(new Stage()));
+
 //            simulationConfig = new SimulationConfig(new File("data\\GameOfLife\\GameOfLife1.xml"));
+
+//            simulationConfig = new SimulationConfig(new File("data\\GameOfLife\\GameOfLife1.xml"), 1, 1);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             attemptOpenXML();
