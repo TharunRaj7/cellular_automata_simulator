@@ -102,7 +102,7 @@ public class Main extends Application {
      * This method is executed every time the step button on the user interface is clicked.
      */
     public void step () {
-        System.out.println(animation.getRate());
+//        System.out.println(animation.getRate());
         root.getChildren().remove(simulationView.getCurrentGridPane());
         simulationView.getSimulation().runOneStep();
         root.getChildren().addAll(simulationView.getCurrentGridPane());
