@@ -53,6 +53,8 @@ public class SimulationConfig {
 
     private int gridWidth = -1;
     private int gridHeight = -1;
+    private int stateLowerBound = -1;
+    private int stateUpperBound = -1;
 
     private File file;
     private SimulationType simulationType;
@@ -84,12 +86,18 @@ public class SimulationConfig {
         readFile();
     }
 
+    public SimulationConfig(File file, int stateLowerBound, int stateUpperBound) throws Exception {
+        this(file);
+        this.stateLowerBound = stateLowerBound;
+        this.stateUpperBound = stateUpperBound;
+    }
+
     /**
      * Pass in simulation configuration file
      * @param file          configuration XML file
      * @throws Exception    when the input is not a XML file
      */
-    public void setFile(File file) throws FileNotValidException {
+    private void setFile(File file) throws FileNotValidException {
         String fileName = file.getName();
         String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1, file.getName().length());
         if (!fileExtension.equals("xml")) {
@@ -105,7 +113,7 @@ public class SimulationConfig {
      *                      or does not fulfill requirement
      * @see #readFile(File)
      */
-    public void readFile() throws Exception {
+    private void readFile() throws Exception {
         if (file == null) {
             throw new FileNotValidException("Set the XML configuration file first!");
         }
@@ -120,8 +128,7 @@ public class SimulationConfig {
      * @see #setFile(File)
      * @see #getElementFromNode(String)
      */
-    public void readFile(File file) throws RuntimeException, FileNotValidException,
-            IOException, SAXException, ParserConfigurationException {
+    public void readFile(File file) throws Exception {
         setFile(file);
 
         doc = generateDocument();
@@ -136,10 +143,10 @@ public class SimulationConfig {
         Element elementGeneral = getElementFromNode(GENERAL_INFO_TAG);
         initialStateHandler.setFolderName(getNodeContent(elementGeneral, FOLDER_TAG));
         assignSimulationType(elementGeneral);
-        Element elementInitialStates = getElementFromNode(INITIAL_STATES_FILE_TAG);
-        assignGridStates(elementInitialStates);
         Element elementColors = getElementFromNode(COLORS_TAG);
         assignColors(elementColors);
+        Element elementInitialStates = getElementFromNode(INITIAL_STATES_FILE_TAG);
+        assignGridStates(elementInitialStates);
     }
 
     private Document generateDocument() throws ParserConfigurationException, IOException, SAXException, FileNotValidException {
@@ -188,7 +195,7 @@ public class SimulationConfig {
         }
     }
 
-    private void assignGridStates(Element element) throws FileNotValidException, RuntimeException {
+    private void assignGridStates(Element element) throws Exception {
         // grid size
         String width = getNodeContent(element, GRID_WIDTH_TAG);
         String height = getNodeContent(element, GRID_HEIGHT_TAG);
@@ -198,10 +205,12 @@ public class SimulationConfig {
 
         // initial states
         try {
-            initialStateHandler.readCellStates(getNodeContent(element, CELL_CONFIG_TAG));
+            initialStateHandler.readCellStates(getNodeContent(element, CELL_CONFIG_TAG), stateUpperBound, stateLowerBound);
         } catch (RuntimeException e) {
             initialStateHandler.setFolderName("");
-            initialStateHandler.readCellStates(getNodeContent(element, CELL_CONFIG_TAG));
+            initialStateHandler.readCellStates(getNodeContent(element, CELL_CONFIG_TAG), stateUpperBound, stateLowerBound);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
         }
     }
 
@@ -219,6 +228,9 @@ public class SimulationConfig {
 
     private String getNodeContent(Element element, String tagName) throws FileNotValidException {
         if (element.getElementsByTagName(tagName).item(0) == null) {
+            if (tagName == FOLDER_TAG) {
+                return "";
+            }
             throw new FileNotValidException(tagName + " does not exist underneath " + element.getNodeName());
         }
         return element.getElementsByTagName(tagName).item(0).getTextContent();

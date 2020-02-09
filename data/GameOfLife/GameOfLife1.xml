@@ -10,7 +10,7 @@
     <initialStates>
         <gridWidth>400</gridWidth>
         <gridHeight>400</gridHeight>
-        <cellConfig>gol1.txt</cellConfig>
+        <cellConfig>list_gol.txt</cellConfig>
     </initialStates>
 
     <colors>

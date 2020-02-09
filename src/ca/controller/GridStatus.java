@@ -18,6 +18,11 @@ public class GridStatus {
         this.initialState = initialState;
     }
 
+    public void initializeEmptyStates() {
+        for (int i = 0; i < numOfCol * numOfRow; i++) {
+            initialState.add(0);
+        }
+    }
     public int getNumOfCol() {
         return numOfCol;
     }
