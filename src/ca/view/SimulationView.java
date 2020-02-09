@@ -3,9 +3,10 @@ package ca.view;
 import ca.controller.Controller;
 import ca.controller.SimulationConfig;
 import ca.controller.SimulationType;
+import ca.helpers.GraphHandler;
+import ca.helpers.GridPaneHandler;
 import ca.model.Grid;
 import ca.simulations.*;
-import javafx.scene.Group;
 import javafx.scene.chart.Chart;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
@@ -48,8 +49,6 @@ public class SimulationView {
            attemptOpenXML();
        }
         graphHandler = new GraphHandler(simulation);
-
-
         controller.setSimulation(simulation);
     }
 

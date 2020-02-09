@@ -106,6 +106,14 @@ public abstract class Simulation {
         return grid;
     }
 
+    public int getNumOfRow() {
+        return grid.getNumOfRows();
+    }
+
+    public int getNumOfCol() {
+        return grid.getNumOfColumns();
+    }
+
     protected Grid additionalActions(Grid gridNextGen){
         return gridNextGen;
     }

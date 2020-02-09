@@ -1,4 +1,4 @@
-package ca.view;
+package ca.helpers;
 
 
 import ca.controller.SimulationConfig;
@@ -52,7 +52,7 @@ public class GridPaneHandler {
         }
         getCellColors();
         myGrid.setGridLinesVisible(true);
-        //fillGrid(myGrid, c, r, cellWidth, cellHeight, grid);
+        fillGrid(myGrid, c, r, cellWidth, cellHeight, grid);
         return myGrid;
     }
 

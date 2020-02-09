@@ -1,4 +1,4 @@
-package ca.view;
+package ca.helpers;
 
 import ca.controller.SimulationConfig;
 import ca.model.Grid;

@@ -16,7 +16,7 @@ Hours Spent: 7+ each
 ### Primary Roles
 
  * Hannah Taubenfeld
-     - Implement ```ca.view.Main.java```, ```ca.view.GridPaneHandler.java```, ```ca.view.Styler.java```, ```ca.view.XMLReader.java```
+     - Implement ```ca.view.Main.java```, ```ca.helpers.GridPaneHandler.java```, ```ca.view.Styler.java```, ```ca.view.XMLReader.java```
      - Implement Segregation and Percolation ca.model.Simulation classes
 
  * Tharun Mani Raj
