@@ -53,8 +53,8 @@ public class SimulationConfig {
 
     private int gridWidth = -1;
     private int gridHeight = -1;
-    private int stateLowerBound = -1;
-    private int stateUpperBound = -1;
+    private int stateLowerBound = 0;
+    private int stateUpperBound = 0;
 
     private File file;
     private SimulationType simulationType;
@@ -70,6 +70,7 @@ public class SimulationConfig {
         colors = new ArrayList<>();
         otherParameters = new ArrayList<>();
         initialStateHandler = new InitialStateHandler();
+        setStateBounds(0, 0);
     }
 
     /**
@@ -86,10 +87,11 @@ public class SimulationConfig {
         readFile();
     }
 
-    public SimulationConfig(File file, int stateLowerBound, int stateUpperBound) throws Exception {
-        this(file);
-        this.stateLowerBound = stateLowerBound;
-        this.stateUpperBound = stateUpperBound;
+    public SimulationConfig(File file, int stateUpperBound , int stateLowerBound) throws Exception {
+        this();
+        setFile(file);
+        setStateBounds(stateUpperBound, stateLowerBound);
+        readFile();
     }
 
     /**
@@ -205,10 +207,10 @@ public class SimulationConfig {
 
         // initial states
         try {
-            initialStateHandler.readCellStates(getNodeContent(element, CELL_CONFIG_TAG), stateUpperBound, stateLowerBound);
+            initialStateHandler.readCellStates(getNodeContent(element, CELL_CONFIG_TAG), stateLowerBound, stateUpperBound);
         } catch (RuntimeException e) {
             initialStateHandler.setFolderName("");
-            initialStateHandler.readCellStates(getNodeContent(element, CELL_CONFIG_TAG), stateUpperBound, stateLowerBound);
+            initialStateHandler.readCellStates(getNodeContent(element, CELL_CONFIG_TAG), stateLowerBound, stateUpperBound);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -317,5 +319,10 @@ public class SimulationConfig {
             System.out.println("Warning: there are no other parameters");
         }
         return otherParameters;
+    }
+
+    public void setStateBounds(int stateLowerBound, int stateUpperBound) {
+        this.stateLowerBound = stateLowerBound;
+        this.stateUpperBound = stateUpperBound;
     }
 }

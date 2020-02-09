@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class InitialStateHandler {
@@ -15,7 +16,7 @@ public class InitialStateHandler {
 
     public static final String GRID_PREFIX = "grid";
     public static final String LIST_OF_LOCATIONS_PREFIX = "list";
-    public static final String RANDOM_PREFIX = "random";
+    public static final String RANDOM_PREFIX = "rand";
 
 
     public InitialStateHandler() {
@@ -27,7 +28,7 @@ public class InitialStateHandler {
         this.folderName = folderName;
     }
 
-    public void readCellStates(String nodeName, int stateUpperBound, int stateLowerBound) throws Exception {
+    public void readCellStates(String nodeName, int stateLowerBound, int stateUpperBound) throws Exception {
         String type = nodeName.split("_")[0];
         switch (type) {
             case GRID_PREFIX:
@@ -37,30 +38,34 @@ public class InitialStateHandler {
                 readFromListFormat(nodeName);
                 break;
             case RANDOM_PREFIX:
-                createRandomStates(stateUpperBound, stateLowerBound);
+                createRandomStates(nodeName, stateLowerBound, stateUpperBound);
                 break;
             default:
                 throw new Exception("Cannot initialize states due to the invalid '" + SimulationConfig.INITIAL_STATES_FILE_TAG + "' tag");
         }
     }
 
-    private void createRandomStates(int stateLowerBound, int stateLowerBound1) {
+    private void createRandomStates(String filename, int stateLowerBound, int stateUpperBound) {
+        Scanner scanner = initializeGridStatus(filename);
+        Random random = new Random();
+
+        if (stateUpperBound == 0 && stateLowerBound == 0) {
+            System.out.println("Warning: all cell states are 0 because stateBound has not been set. ");
+        }
+
+        while (scanner.hasNext()) {
+            int row = Integer.parseInt(scanner.next().substring(1));
+            String colString = scanner.next();
+            int col = Integer.parseInt(colString.substring(0, colString.length() - 1));
+            int state = random.nextInt(stateUpperBound - stateLowerBound + 1) + stateLowerBound;
+
+            gridStatus.getInitialState().set(row * gridStatus.getNumOfCol() + col, state);
+        }
+
     }
 
-    /**
-     * Format of Input file:
-     * The first two line contains two Integer, number of row and col of this gird
-     * Starting from the second line, each line contains three number: the row, the col and the state
-     * @param filename
-     */
     private void readFromListFormat(String filename) {
-        String s = fileInput(filename);
-        Scanner scanner = new Scanner(s);
-
-        gridStatus.setNumOfRow(scanner.nextInt());
-        gridStatus.setNumOfCol(scanner.nextInt());
-
-        gridStatus.initializeEmptyStates();
+        Scanner scanner = initializeGridStatus(filename);
 
         while (scanner.hasNext()) {
             int row = Integer.parseInt(scanner.next().substring(1));
@@ -70,6 +75,17 @@ public class InitialStateHandler {
 
             gridStatus.getInitialState().set(row * gridStatus.getNumOfCol() + col, state);
         }
+    }
+
+    private Scanner initializeGridStatus(String filename) {
+        String s = fileInput(filename);
+        Scanner scanner = new Scanner(s);
+
+        gridStatus.setNumOfRow(scanner.nextInt());
+        gridStatus.setNumOfCol(scanner.nextInt());
+        gridStatus.initializeEmptyStates();
+
+        return scanner;
     }
 
     private void readFromGridFormat(String filename) throws FileNotValidException, RuntimeException {
@@ -112,7 +128,6 @@ public class InitialStateHandler {
                 "Check your folder name and filename.";
 
         filename = "." + File.separatorChar + "data" + File.separatorChar + folderName + File.separatorChar + filename;
-//        System.out.println(filename);
         FileInputStream in = null;
         String s = null;
         try {
