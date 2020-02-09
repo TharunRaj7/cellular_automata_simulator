@@ -4,6 +4,7 @@ import ca.view.Styler;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -85,8 +86,10 @@ public class Main extends Application {
                 buttonHeight, 3, myResources);
         Button submitButton = styler.createButton("SubmitCommand", event -> controller.setAnimationSpeed(Double.parseDouble(num.getText())),
                 buttonHeight, 5, myResources);
+        Button newSimulButton = styler.createButton("NewSimulation", event -> startNewSimulation(),
+                buttonHeight, 2, myResources); newSimulButton.setLayoutY(newSimulButton.getLayoutY() + 50); newSimulButton.setPrefWidth(150);
 
-        root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton, num);
+        root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton, num, newSimulButton);
         return new Scene(root, SIZE, SIZE, BACKGROUND);
     }
 
@@ -95,6 +98,17 @@ public class Main extends Application {
         Scene scene = setupSimulation();
         stage.setScene(scene);
         simulationView.getController().setTimeline(animation);
+    }
+
+    private void startNewSimulation(){
+        Stage newStage = new Stage();
+        Thread thread = new Thread(() -> {
+            Platform.runLater(() -> {
+                Main newSimul = new Main();
+                newSimul.start(newStage);
+            });
+        });
+        thread.start();
     }
 
     /**
