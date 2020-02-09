@@ -29,7 +29,7 @@ public class Percolation extends Simulation {
        if (grid.getCellState(r, c) == PERCOLATED) {
             return PERCOLATED;
        } else if(grid.getCellState(r, c) == OPEN){
-            int percolatedNeighbors = getNeighborStateNumber(r, c, mode, PERCOLATED);
+            int percolatedNeighbors = getNeighborStateNumber(r, c, type, PERCOLATED);
             return (percolatedNeighbors >= 1) ? PERCOLATED : OPEN;
        }
        return BLOCKED;
