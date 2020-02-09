@@ -13,6 +13,11 @@ public class Cell {
         this.shape = shape;
     }
 
+    public Cell(Cell cell) {
+        this.state = cell.state;
+        this.shape = cell.shape;
+    }
+
     public int getState() {
         return state;
     }

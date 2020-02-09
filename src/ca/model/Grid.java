@@ -75,6 +75,8 @@ public class Grid extends GridBase{
         int rowLooper = 0;
         int colLooper = 0;
 
+        System.out.println(numOfColumns);
+        System.out.println(numOfRows);
         for (int i = 0; i < numOfColumns*numOfRows; i++) {
             Pair temp = new Pair(rowLooper, colLooper);
             Cell tempCell = new Cell(initialStates.get(i));

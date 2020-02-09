@@ -10,7 +10,10 @@ public abstract class GridBase {
     protected CellShape shape;
 
     public GridBase(GridBase gridBase) {
-        this.gridMap = gridBase.gridMap;
+        this.gridMap = new HashMap<>(gridBase.gridMap);
+        for (Pair p: gridMap.keySet()) {
+            gridMap.put(p, new Cell(gridMap.get(p)));
+        }
         this.shape = gridBase.shape;
     }
 

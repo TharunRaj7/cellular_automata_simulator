@@ -9,12 +9,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * This class reads in necessary simulation information, including
@@ -43,27 +40,37 @@ import java.util.logging.Logger;
  * @since 1.1
  */
 public class SimulationConfig {
+    public static final String CELL_CONFIG_TAG = "cellConfig";
+    public static final String GRID_WIDTH_TAG = "gridWidth";
+    public static final String GRID_HEIGHT_TAG = "gridHeight";
+    public static final String SIMULATION_TYPE_TAG = "type";
+    public static final String OTHER_PARAMETERS_TAG = "parameters";
+    public static final String GENERAL_INFO_TAG = "general";
+    public static final String FOLDER_TAG = "inFolder";
+    public static final String INITIAL_STATES_FILE_TAG = "initialStates";
+    public static final String COLORS_TAG = "colors";
+    public static final String MAIN_TAG = "simulation";
+
     private int gridWidth = -1;
     private int gridHeight = -1;
-
-    private int rowNum = -1;
-    private int colNum = -1;
+    private int stateLowerBound = 0;
+    private int stateUpperBound = 0;
 
     private File file;
     private SimulationType simulationType;
     private Document doc;
-    private List<Integer> cellStates;
     private List<Color> colors;
-    private String folderName;
     private List<String> otherParameters;
+    private InitialStateHandler initialStateHandler;
 
     /**
      * Create a new instance without configuration file
      */
     public SimulationConfig() {
-        cellStates = new ArrayList<>();
         colors = new ArrayList<>();
         otherParameters = new ArrayList<>();
+        initialStateHandler = new InitialStateHandler();
+        setStateBounds(0, 0);
     }
 
     /**
@@ -80,12 +87,19 @@ public class SimulationConfig {
         readFile();
     }
 
+    public SimulationConfig(File file, int stateUpperBound , int stateLowerBound) throws Exception {
+        this();
+        setFile(file);
+        setStateBounds(stateUpperBound, stateLowerBound);
+        readFile();
+    }
+
     /**
      * Pass in simulation configuration file
      * @param file          configuration XML file
      * @throws Exception    when the input is not a XML file
      */
-    public void setFile(File file) throws FileNotValidException {
+    private void setFile(File file) throws FileNotValidException {
         String fileName = file.getName();
         String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1, file.getName().length());
         if (!fileExtension.equals("xml")) {
@@ -101,7 +115,7 @@ public class SimulationConfig {
      *                      or does not fulfill requirement
      * @see #readFile(File)
      */
-    public void readFile() throws Exception {
+    private void readFile() throws Exception {
         if (file == null) {
             throw new FileNotValidException("Set the XML configuration file first!");
         }
@@ -116,26 +130,25 @@ public class SimulationConfig {
      * @see #setFile(File)
      * @see #getElementFromNode(String)
      */
-    public void readFile(File file) throws RuntimeException, FileNotValidException,
-            IOException, SAXException, ParserConfigurationException {
+    public void readFile(File file) throws Exception {
         setFile(file);
 
         doc = generateDocument();
 
         try {
-            Element elementOthers = getElementFromNode("parameters");
+            Element elementOthers = getElementFromNode(OTHER_PARAMETERS_TAG);
             readOtherParameters(elementOthers);
         } catch (FileNotValidException e) {
             System.out.println("Warning: " + e.getMessage());
         }
 
-        Element elementGeneral = getElementFromNode("general");
-        folderName = getNodeContent(elementGeneral, "inFolder");
+        Element elementGeneral = getElementFromNode(GENERAL_INFO_TAG);
+        initialStateHandler.setFolderName(getNodeContent(elementGeneral, FOLDER_TAG));
         assignSimulationType(elementGeneral);
-        Element elementInitialStates = getElementFromNode("initialStates");
-        assignGridStates(elementInitialStates);
-        Element elementColors = getElementFromNode("colors");
+        Element elementColors = getElementFromNode(COLORS_TAG);
         assignColors(elementColors);
+        Element elementInitialStates = getElementFromNode(INITIAL_STATES_FILE_TAG);
+        assignGridStates(elementInitialStates);
     }
 
     private Document generateDocument() throws ParserConfigurationException, IOException, SAXException, FileNotValidException {
@@ -152,7 +165,7 @@ public class SimulationConfig {
     }
 
     private boolean checkFileValidity(Document doc) {
-        return doc.getDocumentElement().getNodeName().equals("simulation");
+        return doc.getDocumentElement().getNodeName().equals(MAIN_TAG);
     }
 
     private Element getElementFromNode(String tagName) throws FileNotValidException {
@@ -164,7 +177,7 @@ public class SimulationConfig {
     }
 
     private void assignSimulationType(Element element) throws RuntimeException, FileNotValidException {
-        String type = getNodeContent(element, "type");
+        String type = getNodeContent(element, SIMULATION_TYPE_TAG);
 
         switch (type) {
             case "GameOfLife":
@@ -184,16 +197,23 @@ public class SimulationConfig {
         }
     }
 
-    private void assignGridStates(Element element) throws FileNotValidException {
+    private void assignGridStates(Element element) throws Exception {
         // grid size
-        String width = getNodeContent(element, "gridWidth");
-        String height = getNodeContent(element, "gridHeight");
+        String width = getNodeContent(element, GRID_WIDTH_TAG);
+        String height = getNodeContent(element, GRID_HEIGHT_TAG);
 
         gridWidth = convertToNumber(width);
         gridHeight = convertToNumber(height);
 
         // initial states
-        readCellStates(getNodeContent(element, "cellConfig"));
+        try {
+            initialStateHandler.readCellStates(getNodeContent(element, CELL_CONFIG_TAG), stateLowerBound, stateUpperBound);
+        } catch (RuntimeException e) {
+            initialStateHandler.setFolderName("");
+            initialStateHandler.readCellStates(getNodeContent(element, CELL_CONFIG_TAG), stateLowerBound, stateUpperBound);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
     }
 
     private int convertToNumber(String s) {
@@ -210,60 +230,14 @@ public class SimulationConfig {
 
     private String getNodeContent(Element element, String tagName) throws FileNotValidException {
         if (element.getElementsByTagName(tagName).item(0) == null) {
+            if (tagName == FOLDER_TAG) {
+                return "";
+            }
             throw new FileNotValidException(tagName + " does not exist underneath " + element.getNodeName());
         }
         return element.getElementsByTagName(tagName).item(0).getTextContent();
     }
 
-
-    private String fileInput(String filename) {
-        String warningMessage = "IO Exception occurs during TXT file read. " +
-                "Check your folder name and filename.";
-        FileInputStream in = null;
-        String s = null;
-        try {
-            File inputFile = new File(filename);
-            in = new FileInputStream(inputFile);
-            byte[] bt = new byte[(int) inputFile.length()];
-            in.read(bt);
-            s = new String(bt);
-            in.close();
-        } catch (IOException e) {
-            System.out.println(warningMessage);
-        } finally {
-            try {
-                assert in != null;
-                in.close();
-            } catch (IOException e) {
-                System.out.println(warningMessage);
-            }
-        }
-        return s;
-    }
-
-    private void readCellStates(String filename) throws FileNotValidException {
-        filename = "." + File.separatorChar + "data" + File.separatorChar + folderName + File.separatorChar + filename;
-        String s = fileInput(filename);
-
-        boolean endOfFirstLine = false;
-        for (Character c: s.toCharArray()) {
-            if (Character.isDigit(c)) {
-                cellStates.add(Character.getNumericValue(c));
-            } else if ((int)c == 10) {  // line
-                rowNum++;
-                endOfFirstLine = true;
-            } else if (!c.equals(' ') && (int)c != 13) {  // TODO: check whether 10 and 13 are universal
-                throw new FileNotValidException("Initial State TXT has non-digit characters: " + (int) c);
-            }
-
-            if (!endOfFirstLine) {
-                colNum ++;
-            }
-        }
-
-        rowNum += 2; // because it starts at -1, and the last line does not have line feed
-        colNum = (colNum + 1) / 2;  // the last number of a row does not have a space follow it
-    }
 
     private void assignColors(Element element) throws RuntimeException {
         NodeList nodeList = element.getElementsByTagName("*");
@@ -313,10 +287,10 @@ public class SimulationConfig {
     }
 
     public List<Integer> getCellStates() {
-        if (cellStates.size() == 0) {
+        if (initialStateHandler.getInitialState().size() == 0) {
             System.out.println("Warning: no initial cell states exist.");
         }
-        return cellStates;
+        return initialStateHandler.getInitialState();
     }
 
     public SimulationType getSimulationType() {
@@ -327,17 +301,17 @@ public class SimulationConfig {
     }
 
     public int getColNum() {
-        if (colNum == -1) {
+        if (initialStateHandler.getNumOfCol() == -1) {
             System.out.println("Warning: column number has not been changed since initialization.");
         }
-        return colNum;
+        return initialStateHandler.getNumOfCol();
     }
 
     public int getRowNum() {
-        if (rowNum == -1) {
+        if (initialStateHandler.getNumOfRow() == -1) {
             System.out.println("Warning: rowNum has not been changed since initialization.");
         }
-        return rowNum;
+        return initialStateHandler.getNumOfRow();
     }
 
     public List<String> getOtherParameters() {
@@ -345,5 +319,10 @@ public class SimulationConfig {
             System.out.println("Warning: there are no other parameters");
         }
         return otherParameters;
+    }
+
+    public void setStateBounds(int stateLowerBound, int stateUpperBound) {
+        this.stateLowerBound = stateLowerBound;
+        this.stateUpperBound = stateUpperBound;
     }
 }
