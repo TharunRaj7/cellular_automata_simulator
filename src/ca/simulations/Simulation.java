@@ -4,22 +4,23 @@ import ca.helpers.NeighboringType;
 import ca.helpers.NeighborsHelper;
 import ca.model.Cell;
 import ca.model.CellShape;
-import ca.model.Grid;
+import ca.model.Grids.Grid;
+import ca.model.Grids.GridBase;
 //import javafx.scene.Scene;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Simulation {
-    Grid grid;
+    GridBase grid;
     NeighborsHelper neighborsHelper;
     NeighboringType type;
 
     //TODO: change the cocnstructor usage to separate view and model
-    public Simulation(Grid grid) {
-        this.grid = grid;
+    public Simulation(GridBase grid) {
         neighborsHelper = new NeighborsHelper();
         this.type = NeighboringType.ALL;
+        this.grid = grid;
     }
 
     public Simulation(int rowNum, int colNum, List<Integer> initialStates, CellShape shape) {
@@ -110,7 +111,15 @@ public abstract class Simulation {
     }
 
     public void runOneStep() {
-        Grid gridNextGen = new Grid(grid);
+        for (int r = 0; r < getNumOfRows(); r++) {
+            for (int c = 0; c < getNumOfCols(); c++) {
+                if (grid.getCell(r, c) == null) {
+                    grid.setDefaultCell(r, c);
+                }
+            }
+        }
+
+        Grid gridNextGen = new Grid((Grid) grid);
         for (int r = 0; r < grid.getNumOfRows(); r++) {
             for (int c = 0; c < grid.getNumOfColumns(); c++) {
                 gridNextGen.setCellState(r, c, determineCellState(r, c));
@@ -120,8 +129,24 @@ public abstract class Simulation {
     }
 
     // TODO: delete this and check for dependency
-    public Grid getGrid() {
+    public GridBase getGrid() {
         return grid;
+    }
+
+    public int getNumOfRows() {
+        return grid.getNumOfRows();
+    }
+
+    public int getNumOfCols() {
+        return grid.getNumOfColumns();
+    }
+
+    public void setNumOfRows(int numOfRow) {
+        grid.setNumOfRows(numOfRow);
+    }
+
+    public void setNumOfCols(int numOfCol) {
+        grid.setNumOfColumns(numOfCol);
     }
 
     protected Grid additionalActions(Grid gridNextGen){

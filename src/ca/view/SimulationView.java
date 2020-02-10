@@ -3,9 +3,11 @@ package ca.view;
 import ca.controller.Controller;
 import ca.controller.SimulationConfig;
 import ca.controller.SimulationType;
-import ca.model.Grid;
+import ca.helpers.GraphHandler;
+import ca.helpers.GridPaneHandler;
+import ca.model.Grids.Grid;
 import ca.simulations.*;
-import javafx.scene.Group;
+import javafx.scene.chart.Chart;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -15,6 +17,7 @@ public class SimulationView {
 
     private SimulationConfig simulationConfig;
     private GridPaneHandler gridPaneHandler;
+    private GraphHandler graphHandler;
     private Controller controller;
     private Simulation simulation;
 
@@ -24,9 +27,8 @@ public class SimulationView {
 
     private void attemptOpenXML() {
         try {
-            simulationConfig = new SimulationConfig(getXMLfile(new Stage()));
-//            simulationConfig = new SimulationConfig(new File("data\\GameOfLife\\GameOfLife1.xml"));
-
+//            simulationConfig = new SimulationConfig(getXMLfile(new Stage()));
+            simulationConfig = new SimulationConfig(new File("data\\Percolation\\Percolation1.xml"), 1, 1);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             attemptOpenXML();
@@ -46,8 +48,8 @@ public class SimulationView {
            System.out.println(e.getMessage());
            attemptOpenXML();
        }
-
-       controller.setSimulation(simulation);
+        graphHandler = new GraphHandler(simulation);
+        controller.setSimulation(simulation);
     }
 
     private void createSimulationInstance(SimulationType simulationType, Grid grid) throws NullPointerException {
@@ -60,6 +62,9 @@ public class SimulationView {
                 break;
             case Percolation:
                 simulation = new Percolation(grid);
+                break;
+            case Fire:
+                simulation = new SpreadingOfFire(grid, simulationConfig.getOtherParameters());
                 break;
             case WaTorWorld:
                 simulation = new WaTorWorld(grid, simulationConfig.getOtherParameters());
@@ -75,11 +80,22 @@ public class SimulationView {
     }
 
     public GridPane getCurrentGridPane() {
-        return gridPaneHandler.createGrid(simulationConfig.getColNum(),
-                simulationConfig.getRowNum(),
+        return gridPaneHandler.createGrid(simulation.getNumOfCols(),
+                simulation.getNumOfRows(),
                 simulationConfig.getGridWidth(),
                 simulationConfig.getGridHeight(),
                 simulation.getGrid());
+    }
+
+    public Chart getCurrentLineChart(){
+        return graphHandler.createGraph(simulationConfig.getColNum(),
+                simulationConfig.getRowNum(),
+                simulationConfig.getGridWidth());
+    }
+
+    public void updateGridSize(int newRowNum, int newColNum){
+        simulation.setNumOfCols(newColNum);
+        simulation.setNumOfRows(newRowNum);
     }
 
     public Controller getController() {
@@ -89,6 +105,12 @@ public class SimulationView {
     public int getButtonHeight() {
         return simulationConfig.getGridHeight();
     }
+
+    public int getGridHeight() {return simulationConfig.getGridHeight();}
+
+    public int getNumRows() {return simulationConfig.getRowNum();}
+
+    public int getNumCols() {return simulationConfig.getColNum();}
 
     public Simulation getSimulation() {
         return simulation;

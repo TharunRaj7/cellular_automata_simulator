@@ -1,10 +1,9 @@
-package ca.view;
+package ca.helpers;
 
 
 import ca.controller.SimulationConfig;
-import ca.model.Grid;
-import javafx.event.EventHandler;
-import javafx.scene.input.MouseEvent;
+import ca.model.Grids.Grid;
+import ca.model.Grids.GridBase;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -23,7 +22,7 @@ import java.util.List;
 
 public class GridPaneHandler {
 
-    private static List<Color> cellColors = new ArrayList<Color>();
+    private static List<Color> cellColors = new ArrayList<>();
     private int cellWidth;
     private int cellHeight;
     private SimulationConfig simulationConfig;
@@ -41,7 +40,7 @@ public class GridPaneHandler {
      * @param height - full grid height
      * @return GridPane - returns the Gridpane to the scene
      */
-    public GridPane createGrid(int c, int r, int width, int height, Grid grid){
+    public GridPane createGrid(int c, int r, int width, int height, GridBase grid){
         cellWidth = width / c;
         cellHeight = height / r;
         GridPane myGrid = new GridPane();
@@ -53,8 +52,8 @@ public class GridPaneHandler {
             RowConstraints row = new RowConstraints(cellHeight);
             myGrid.getRowConstraints().add(row);
         }
-        myGrid.setGridLinesVisible(true);
         getCellColors();
+        myGrid.setGridLinesVisible(true);
         fillGrid(myGrid, c, r, cellWidth, cellHeight, grid);
         return myGrid;
     }
@@ -67,16 +66,21 @@ public class GridPaneHandler {
      * @param cellWidth
      * @param cellHeight
      */
-    private void fillGrid(GridPane myGrid, int c, int r, int cellWidth, int cellHeight, Grid grid){
+    private void fillGrid(GridPane myGrid, int c, int r, int cellWidth, int cellHeight, GridBase grid){
         for(int i = 0; i< r; i++){
             for(int j = 0; j< c; j++){
+                int cellState;
+                try {
+                    cellState = grid.getCellState(i,j);
+                } catch (java.lang.NullPointerException exception){
+                    cellState = 0;
+                }
                 int finalI = i;
                 int finalJ = j;
-                int cellState = grid.getCellState(i, j);
-                //System.out.println(cellState);
+
                 Color cellColor = cellColors.get(cellState);
                 Rectangle rect = new Rectangle(cellWidth, cellHeight, cellColor);
-                rect.setOnMouseClicked(event -> {handleClick(rect, grid, finalI, finalJ);});
+                rect.setOnMouseClicked(event -> {handleClick(rect, (Grid) grid, finalI, finalJ);});
                 myGrid.add(rect, j, i);
             }
         }

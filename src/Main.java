@@ -1,4 +1,5 @@
 import ca.controller.Controller;
+import ca.simulations.Simulation;
 import ca.view.SimulationView;
 import ca.view.Styler;
 import javafx.animation.KeyFrame;
@@ -6,7 +7,9 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Group;
+import javafx.scene.chart.Chart;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -29,16 +32,20 @@ public class Main extends Application {
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     public static final String TITLE = "Simulation";
 
-    public static final int SIZE = 600;
+    public static final int SIZE_WIDTH = 1000;
+    public static final int SIZE_HEIGHT = 800;
     public static final Paint BACKGROUND = Color.AZURE;
     public static final String RESOURCE = "ca/resources";
     public static final String DEFAULT_RESOURCE_PACKAGE = RESOURCE + ".";
+    public static final int NEW_SIM_BUTTON_OFFESET = 150;
 
     private SimulationView simulationView;
     private Timeline animation;
     private Stage stage;
     private ResourceBundle myResources;
     private Group root;
+    private Slider numRows;
+    private Slider numCols;
 
     /**
      * This method creates a new instance of the file reader as well as the scene creation.
@@ -51,7 +58,7 @@ public class Main extends Application {
         simulationView= new SimulationView();
         this.stage = stage;
 
-        Scene scene = setupSimulation();
+        Scene scene = setupSimulation(simulationView.getSimulation());
         stage.setScene(scene);
         stage.setTitle(TITLE);
         stage.show();
@@ -64,7 +71,7 @@ public class Main extends Application {
      * in the model to create the grid.
      * @return Scene
      */
-    private Scene setupSimulation() {
+    private Scene setupSimulation(Simulation simulation) {
         root = new Group();
         TextField num = new TextField();
         Styler styler = new Styler();
@@ -72,6 +79,8 @@ public class Main extends Application {
 
         GridPane gridPane = simulationView.getCurrentGridPane();
         Controller controller = simulationView.getController();
+        Chart lineChart = simulationView.getCurrentLineChart();
+
         int buttonHeight = simulationView.getButtonHeight();
 
         styler.styleTextField("FillerCommand", num,
@@ -86,16 +95,24 @@ public class Main extends Application {
                 buttonHeight, 3, myResources);
         Button submitButton = styler.createButton("SubmitCommand", event -> controller.setAnimationSpeed(Double.parseDouble(num.getText())),
                 buttonHeight, 5, myResources);
-        Button newSimulButton = styler.createButton("NewSimulation", event -> startNewSimulation(),
-                buttonHeight, 2, myResources); newSimulButton.setLayoutY(newSimulButton.getLayoutY() + 50); newSimulButton.setPrefWidth(150);
+        GridPane setNumRows = styler.createSlider(simulationView.getNumRows(), simulationView.getGridHeight(), 1, myResources, "RowLabel");
+        GridPane setNumCols = styler.createSlider(simulationView.getNumCols(), simulationView.getGridHeight(), 2, myResources, "ColLabel");
+        numRows = styler.getRowSlider();
+        numCols = styler.getColSlider();
 
-        root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton, num, newSimulButton);
-        return new Scene(root, SIZE, SIZE, BACKGROUND);
+        numRows.setValue(simulation.getNumOfRows());
+        numCols.setValue(simulation.getNumOfCols());
+
+        Button newSimulButton = styler.createButton("NewSimulation", event -> startNewSimulation(),
+                buttonHeight, 2, myResources); newSimulButton.setLayoutY(newSimulButton.getLayoutY() + NEW_SIM_BUTTON_OFFESET); newSimulButton.setPrefWidth(150);
+        root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton, num, lineChart,
+                newSimulButton, setNumCols, setNumRows);
+        return new Scene(root, SIZE_WIDTH, SIZE_HEIGHT, BACKGROUND);
     }
 
     private void reloadFile() {
         simulationView = new SimulationView();
-        Scene scene = setupSimulation();
+        Scene scene = setupSimulation(simulationView.getSimulation());
         stage.setScene(scene);
         simulationView.getController().setTimeline(animation);
     }
@@ -116,11 +133,13 @@ public class Main extends Application {
      * This method is executed every time the step button on the user interface is clicked.
      */
     public void step () {
-//        System.out.println(animation.getRate());
-        root.getChildren().remove(simulationView.getCurrentGridPane());
+        //System.out.println(animation.getRate());
+        root.getChildren().removeAll(simulationView.getCurrentGridPane(), simulationView.getCurrentLineChart());
+        simulationView.updateGridSize((int) numRows.getValue(), (int) numCols.getValue());
         simulationView.getSimulation().runOneStep();
-        root.getChildren().addAll(simulationView.getCurrentGridPane());
+        root.getChildren().addAll(simulationView.getCurrentGridPane(), simulationView.getCurrentLineChart());
     }
+
 
     public void startAnimation() {
         KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), event -> step());

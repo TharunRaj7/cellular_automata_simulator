@@ -1,4 +1,8 @@
-package ca.model;
+package ca.model.Grids;
+
+import ca.model.Cell;
+import ca.model.CellShape;
+import ca.model.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +12,7 @@ import java.util.Map;
 public abstract class GridBase {
     protected Map<Pair, Cell> gridMap;
     protected CellShape shape;
+    public static final int DEFAULT_STATE = 0;
 
     public GridBase(GridBase gridBase) {
         this.gridMap = new HashMap<>(gridBase.gridMap);
@@ -66,6 +71,9 @@ public abstract class GridBase {
     public int getCellState(int r, int c) {
         return getCell(r, c).getState();
     }
+    public void setDefaultCell(int r, int c) {
+        gridMap.put(new Pair(r, c), new Cell(DEFAULT_STATE));
+    }
 
     public void setCellState(int r, int c, int state) {
         gridMap.get(new Pair(r, c)).setState(state);
@@ -75,7 +83,12 @@ public abstract class GridBase {
         return shape;
     }
 
-
     protected abstract boolean inBound(int r, int c);
     protected abstract void createGridModel(List<Integer> initialStates);
+
+    public abstract List<Cell> getAllCells();
+    public abstract int getNumOfRows();
+    public abstract int getNumOfColumns();
+    public abstract void setNumOfRows(int numOfRows);
+    public abstract void setNumOfColumns(int numOfColumns);
 }

@@ -1,7 +1,7 @@
 package ca.simulations;
 
 import ca.helpers.NeighboringType;
-import ca.model.Grid;
+import ca.model.Grids.GridBase;
 
 /**
  * This class is the implementation of LangtonLoop. The rules
@@ -20,7 +20,7 @@ public class LangtonLoop extends Simulation{
     private final int DEAD = 0;
     private final int ALIVE = 1;
 
-    public LangtonLoop(Grid grid) {
+    public LangtonLoop(GridBase grid) {
         super(grid);
     }
 

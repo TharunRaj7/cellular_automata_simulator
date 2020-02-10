@@ -14,7 +14,7 @@ We reviewed one game code and discussed how we can refractor it.
 - ca.model.Simulation details: BFS with one queue 
 - Relationship between a cell and simulation: ca.model.Simulation gets the state of the cell, and updates states of cells around it 
 - What is the grid: a class that contains cells
-- ca.model.Grid behavior: setup initial states of cells, change state of cells, read the rule
+- ca.model.Grids.Grid behavior: setup initial states of cells, change state of cells, read the rule
 - Who needs to know about it: only the main class who runs the game 
 - Info about simulation in the configuration file: rule, type of simulation, steps, size of grid, initial states
 - How is UI updated: change color of specific cells that are changed 

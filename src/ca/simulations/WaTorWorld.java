@@ -3,7 +3,7 @@ package ca.simulations;
 
 import ca.helpers.NeighboringType;
 import ca.model.Cell;
-import ca.model.Grid;
+import ca.model.Grids.GridBase;
 import ca.model.Pair;
 
 import java.util.*;
@@ -38,7 +38,7 @@ public class WaTorWorld extends Simulation {
     private int numOfTurnsFish;
     private int numOfTurnsShark;
 
-    public WaTorWorld (Grid grid, List<String>parameters){
+    public WaTorWorld (GridBase grid, List<String>parameters){
         super(grid);
         this.numOfTurnsFish = Integer.parseInt(parameters.get(0));
         this.numOfTurnsShark = Integer.parseInt(parameters.get(1));
