@@ -11,23 +11,18 @@ public class Pair {
         this.col = col;
     }
 
+
     /**
      * Checks whether the given parameters match the attributes of the pair this method is being invoked on.
-     * @param row
-     * @param col
-     * @return true or false
+     * @param obj
+     * @return
      */
-
     @Override
     public boolean equals(Object obj) {
        if (obj instanceof Pair) {
            return (((Pair) obj).getRow() == row) && (((Pair) obj).getCol() == col);
        }
        return false;
-    }
-
-    public boolean equals(int r, int c) {
-        return (row == r) && (col == c);
     }
 
     public int getRow() {

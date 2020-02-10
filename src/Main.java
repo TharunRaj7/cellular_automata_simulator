@@ -4,6 +4,7 @@ import ca.view.Styler;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.chart.Chart;
 import javafx.scene.control.Button;
@@ -96,8 +97,11 @@ public class Main extends Application {
         GridPane setNumCols = styler.createSlider(simulationView.getNumCols(), simulationView.getGridHeight(), 2, myResources, "ColLabel");
         numRows = styler.getRowSlider();
         numCols = styler.getColSlider();
-        root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton,
-                num, lineChart, setNumRows, setNumCols);
+
+        Button newSimulButton = styler.createButton("NewSimulation", event -> startNewSimulation(),
+                buttonHeight, 2, myResources); newSimulButton.setLayoutY(newSimulButton.getLayoutY() + 50); newSimulButton.setPrefWidth(150);
+        root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton, num, lineChart,
+                newSimulButton, setNumCols, setNumRows);
         return new Scene(root, SIZE_WIDTH, SIZE_HEIGHT, BACKGROUND);
     }
 
@@ -108,11 +112,23 @@ public class Main extends Application {
         simulationView.getController().setTimeline(animation);
     }
 
+    private void startNewSimulation(){
+        Stage newStage = new Stage();
+        Thread thread = new Thread(() -> {
+            Platform.runLater(() -> {
+                Main newSimul = new Main();
+                newSimul.start(newStage);
+            });
+        });
+        thread.start();
+    }
+
     /**
      * In this method, we will need to call the updateCells method in the other part of the code.
      * This method is executed every time the step button on the user interface is clicked.
      */
     public void step () {
+
         //System.out.println(animation.getRate());
         root.getChildren().removeAll(simulationView.getCurrentGridPane(), simulationView.getCurrentLineChart());
 //        System.out.println(animation.getRate());

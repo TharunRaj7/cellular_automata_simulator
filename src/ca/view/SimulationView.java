@@ -27,11 +27,7 @@ public class SimulationView {
     private void attemptOpenXML() {
         try {
             simulationConfig = new SimulationConfig(getXMLfile(new Stage()));
-//            simulationConfig = new SimulationConfig(getXMLfile(new Stage()));
 
-//            simulationConfig = new SimulationConfig(new File("data\\GameOfLife\\GameOfLife1.xml"));
-
-//            simulationConfig = new SimulationConfig(new File("data\\GameOfLife\\GameOfLife1.xml"), 1, 1);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             attemptOpenXML();
@@ -72,9 +68,9 @@ public class SimulationView {
             case Fire:
                 simulation = new SpreadingOfFire(grid, simulationConfig.getOtherParameters());
                 break;
-//            case WaTorWorld:
-//                simulation = new WaTorWorld(grid, simulationConfig.getOtherParameters());
-//                break;
+            case WaTorWorld:
+                simulation = new WaTorWorld(grid, simulationConfig.getOtherParameters());
+                break;
             default:
                 simulation = null;
                 throw new NullPointerException("This simulation type does not exist!");

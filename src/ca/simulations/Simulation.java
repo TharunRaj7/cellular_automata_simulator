@@ -73,6 +73,24 @@ public abstract class Simulation {
         return neighbors;
     }
 
+    /**
+     * Returns all the neighbours with a specified state
+     * @param r
+     * @param c
+     * @param state
+     * @return
+     */
+    public List<Cell> getNeighboringCellsWithState(int r, int c, int state){
+        List<Cell> ret = new ArrayList<>();
+        List<Cell> neighbors = grid.getNeighborsByIndex(r, c, neighborsHelper.getNSEWRow(), neighborsHelper.getNSEWCol());
+        for (Cell item : neighbors){
+            if (item.getState() == state) {
+                ret.add(item);
+            }
+        }
+        return ret;
+    }
+
     // TODO: check to see why need cell access
     public List<Cell> getCellOfState(int state) {
         List<Cell> cells = grid.getAllCells();

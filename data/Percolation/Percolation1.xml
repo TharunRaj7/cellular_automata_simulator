@@ -10,7 +10,11 @@
     <initialStates>
         <gridWidth>400</gridWidth>
         <gridHeight>400</gridHeight>
+<<<<<<< HEAD
         <cellConfig>grid_perc.txt</cellConfig>
+=======
+        <cellConfig>grid_perc1.txt</cellConfig>
+>>>>>>> 36e93de7b305e17e22be0dc65ad3cfdc3b9cdf1d
     </initialStates>
 
     <colors>
