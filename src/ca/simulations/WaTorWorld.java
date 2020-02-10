@@ -34,7 +34,6 @@ public class WaTorWorld extends Simulation {
     private final int FISH = 1;
     private final int SHARK = 2;
     private Map<Cell, Pair> turnsMade;
-    private List<Pair> visited;
 
     private int numOfTurnsFish;
     private int numOfTurnsShark;
@@ -44,7 +43,6 @@ public class WaTorWorld extends Simulation {
         this.numOfTurnsFish = Integer.parseInt(parameters.get(0));
         this.numOfTurnsShark = Integer.parseInt(parameters.get(1));
         turnsMade = new HashMap<>();
-        visited = new ArrayList<>();
         populateTurnsMade();    //Sets up the data structure required to keep track of the number of turns
     }
 
@@ -78,7 +76,6 @@ public class WaTorWorld extends Simulation {
     public void runOneStep() {
         for (int r = 0; r < grid.getNumOfRows(); r++) {
             for (int c = 0; c < grid.getNumOfColumns(); c++) {
-                for (Pair item : visited){ System.out.println(item);}
                 if (grid.getCellState(r,c) == FISH){
                     runFishHandler(r,c);
                 }

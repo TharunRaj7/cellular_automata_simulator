@@ -10,7 +10,7 @@
     <initialStates>
         <gridWidth>400</gridWidth>
         <gridHeight>400</gridHeight>
-        <cellConfig>wat1.txt</cellConfig>
+        <cellConfig>grid_wat1.txt</cellConfig>
     </initialStates>
 
     <colors>
@@ -20,7 +20,7 @@
     </colors>
 
     <parameters>
-        <value>3</value>
+        <value>10</value>
         <value>3</value>
     </parameters>
 </simulation>
