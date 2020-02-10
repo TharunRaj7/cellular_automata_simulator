@@ -1,4 +1,5 @@
 import ca.controller.Controller;
+import ca.simulations.Simulation;
 import ca.view.SimulationView;
 import ca.view.Styler;
 import javafx.animation.KeyFrame;
@@ -31,8 +32,8 @@ public class Main extends Application {
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     public static final String TITLE = "Simulation";
 
-    public static final int SIZE_WIDTH = 800;
-    public static final int SIZE_HEIGHT = 600;
+    public static final int SIZE_WIDTH = 1000;
+    public static final int SIZE_HEIGHT = 800;
     public static final Paint BACKGROUND = Color.AZURE;
     public static final String RESOURCE = "ca/resources";
     public static final String DEFAULT_RESOURCE_PACKAGE = RESOURCE + ".";
@@ -56,7 +57,7 @@ public class Main extends Application {
         simulationView= new SimulationView();
         this.stage = stage;
 
-        Scene scene = setupSimulation();
+        Scene scene = setupSimulation(simulationView.getSimulation());
         stage.setScene(scene);
         stage.setTitle(TITLE);
         stage.show();
@@ -69,7 +70,7 @@ public class Main extends Application {
      * in the model to create the grid.
      * @return Scene
      */
-    private Scene setupSimulation() {
+    private Scene setupSimulation(Simulation simulation) {
         root = new Group();
         TextField num = new TextField();
         Styler styler = new Styler();
@@ -98,6 +99,9 @@ public class Main extends Application {
         numRows = styler.getRowSlider();
         numCols = styler.getColSlider();
 
+        numRows.setValue(simulation.getNumOfRows());
+        numCols.setValue(simulation.getNumOfCols());
+
         Button newSimulButton = styler.createButton("NewSimulation", event -> startNewSimulation(),
                 buttonHeight, 2, myResources); newSimulButton.setLayoutY(newSimulButton.getLayoutY() + 50); newSimulButton.setPrefWidth(150);
         root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton, num, lineChart,
@@ -107,7 +111,7 @@ public class Main extends Application {
 
     private void reloadFile() {
         simulationView = new SimulationView();
-        Scene scene = setupSimulation();
+        Scene scene = setupSimulation(simulationView.getSimulation());
         stage.setScene(scene);
         simulationView.getController().setTimeline(animation);
     }
@@ -130,8 +134,8 @@ public class Main extends Application {
     public void step () {
         //System.out.println(animation.getRate());
         root.getChildren().removeAll(simulationView.getCurrentGridPane(), simulationView.getCurrentLineChart());
-        simulationView.getSimulation().runOneStep();
         simulationView.updateGridSize((int) numRows.getValue(), (int) numCols.getValue());
+        simulationView.getSimulation().runOneStep();
         root.getChildren().addAll(simulationView.getCurrentGridPane(), simulationView.getCurrentLineChart());
     }
 

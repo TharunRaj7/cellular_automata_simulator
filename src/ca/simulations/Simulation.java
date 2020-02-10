@@ -111,6 +111,14 @@ public abstract class Simulation {
     }
 
     public void runOneStep() {
+        for (int r = 0; r < getNumOfRows(); r++) {
+            for (int c = 0; c < getNumOfCols(); c++) {
+                if (grid.getCell(r, c) == null) {
+                    grid.setDefaultCell(r, c);
+                }
+            }
+        }
+
         Grid gridNextGen = new Grid((Grid) grid);
         for (int r = 0; r < grid.getNumOfRows(); r++) {
             for (int c = 0; c < grid.getNumOfColumns(); c++) {

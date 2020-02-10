@@ -29,7 +29,7 @@ public class Styler {
     public final static int SLIDER_HEIGHT = 10;
     public final static int SLIDER_OFFSET = 30;
     public final static int SLIDER_MIN = 4;
-    public final static int SLIDER_MAX = 30;
+    public final static int SLIDER_MAX = 50;
 
     public Slider rowSlider;
     public Slider colSlider;

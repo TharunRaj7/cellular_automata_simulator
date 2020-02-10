@@ -12,6 +12,7 @@ import java.util.Map;
 public abstract class GridBase {
     protected Map<Pair, Cell> gridMap;
     protected CellShape shape;
+    public static final int DEFAULT_STATE = 0;
 
     public GridBase(GridBase gridBase) {
         this.gridMap = new HashMap<>(gridBase.gridMap);
@@ -69,6 +70,9 @@ public abstract class GridBase {
     }
     public int getCellState(int r, int c) {
         return getCell(r, c).getState();
+    }
+    public void setDefaultCell(int r, int c) {
+        gridMap.put(new Pair(r, c), new Cell(DEFAULT_STATE));
     }
 
     public void setCellState(int r, int c, int state) {
