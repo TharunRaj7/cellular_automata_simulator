@@ -16,22 +16,13 @@ Hours Spent: 14+ each
 ### Primary Roles
 
  * Hannah Taubenfeld
-<<<<<<< HEAD
-     - Implement ```ca.view.Main.java```, ```ca.helpers.GridPaneHandler.java```, ```ca.view.Styler.java```, ```ca.view.XMLReader.java```
-     - Implement Segregation and Percolation ca.model.Simulation classes
-
- * Tharun Mani Raj
-     - Implement ```ca.model.Cell.java```, ```ca.model.Grids.Grid.java```, and ```ca.model.Pair.java```
-     - Implement WaTorWorld and Fire ca.model.Simulation classes
-=======
      - Implement ```ca.view.Main.java```, ```ca.view.GridPaneHandler.java```, ```ca.view.Styler.java```, ```ca.view.XMLReader.java```, 
      ```ca.view.GraphHandler.java```, ```ca.view.SimulationView.java```
-     - Implement Segregation and Percolation ca.model.Simulation classes
+     - Implement Segregation and Percolation and Spreading of Fire ca.model.Simulation classes
 
  * Tharun Mani Raj
      - Implement ```ca.model.Cell.java```, ```ca.model.Grid.java```,```ca.model.GridBase.java```, and ```ca.model.Pair.java```
-     - Implement WaTorWorld ca.model.Simulation classes
->>>>>>> master
+     - Implement WaTorWorld and LangtonLoop ca.model.Simulation classes
 
  * Cady Zhou
       - Implement ```ca.controller.Controller.java```, ```ca.controller.SimulationType.java```, ```ca.controller.InitialStateHandler.java```,
@@ -132,6 +123,7 @@ Known Bugs:
 
 - A bug appears when you run the simulation and the file chooser appears, however, the simulation still 
 runs and uses the XML file chosen
+- When the step speed gets too high, there is a lag
 
 Extra credit:
 
