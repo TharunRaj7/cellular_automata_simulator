@@ -1,6 +1,5 @@
 package ca.helpers;
 
-import ca.model.Grids.Grid;
 import ca.model.Grids.GridBase;
 import ca.simulations.Simulation;
 import javafx.scene.chart.LineChart;
@@ -40,7 +39,7 @@ public class GraphHandler {
      * @return LineChart, the most recent linechart
      */
     public LineChart<Number, Number> createGraph(int c, int r, int gridWidth) {
-        createList(simulation.getGridBase(), c, r, stepCounter);
+        createList(simulation.getGrid(), c, r, stepCounter);
         LineChart<Number, Number> lineChart = new LineChart<>(xAxis, yAxis);
         for (int i = 0; i < stateQuantity.size(); i++) {
             XYChart.Series series = new XYChart.Series();

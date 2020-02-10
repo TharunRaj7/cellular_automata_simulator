@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<simulation>
+    <general>
+        <type>SpreadingOfFire</type>
+        <title>Spreading Of Fire</title>
+        <author>Shiflet</author>
+        <inFolder>SpreadingOfFire</inFolder>
+    </general>
+
+    <initialStates>
+        <gridWidth>400</gridWidth>
+        <gridHeight>400</gridHeight>
+        <cellConfig>grid_sof.txt</cellConfig>
+    </initialStates>
+
+    <colors>
+        <color0>#fff406</color0>
+        <color1>#17ab17</color1>
+        <color2>#f05d0e</color2>
+    </colors>
+    <parameters>
+        <percentage>0.15</percentage>
+    </parameters>
+</simulation>

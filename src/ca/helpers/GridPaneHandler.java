@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -74,12 +75,28 @@ public class GridPaneHandler {
                 } catch (java.lang.NullPointerException exception){
                     cellState = 0;
                 }
+                int finalI = i;
+                int finalJ = j;
+
                 Color cellColor = cellColors.get(cellState);
-                myGrid.add(new Rectangle(cellWidth, cellHeight, cellColor), j, i);
+                Rectangle rect = new Rectangle(cellWidth, cellHeight, cellColor);
+                rect.setOnMouseClicked(event -> {handleClick(rect, (Grid) grid, finalI, finalJ);});
+                myGrid.add(rect, j, i);
             }
         }
     }
 
+    private void handleClick(Rectangle rect, Grid grid, int i, int j){
+        int oldState = grid.getCellState(i,j);
+        int newState;
+        if (grid.getCellState(i,j) < Collections.max(simulationConfig.getCellStates())){
+            newState = ++oldState;
+        }else{
+            newState = 0;
+        }
+        grid.setCellState(i,j,newState);
+        rect.setFill(cellColors.get(newState));
+    }
     /**
      * From the SimulationConfig, we grab the list of colors that correspond with the initial states and create
      * an array where the index is the state, and the item in the list is the corresponding color.

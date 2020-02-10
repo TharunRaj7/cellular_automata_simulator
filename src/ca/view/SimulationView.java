@@ -28,7 +28,8 @@ public class SimulationView {
     private void attemptOpenXML() {
         try {
 //            simulationConfig = new SimulationConfig(getXMLfile(new Stage()));
-            simulationConfig = new SimulationConfig(new File("data\\Percolation\\Percolation1.xml"), 1, 1);
+            simulationConfig = new SimulationConfig(new File("data\\SpreadingOfFire\\SpreadingOfFire1.xml"), 1, 1);
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
             attemptOpenXML();
@@ -63,9 +64,12 @@ public class SimulationView {
             case Percolation:
                 simulation = new Percolation(grid);
                 break;
-//            case WaTorWorld:
-//                simulation = new WaTorWorld(grid, simulationConfig.getOtherParameters());
-//                break;
+            case Fire:
+                simulation = new SpreadingOfFire(grid, simulationConfig.getOtherParameters());
+                break;
+            case WaTorWorld:
+                simulation = new WaTorWorld(grid, simulationConfig.getOtherParameters());
+                break;
             default:
                 simulation = null;
                 throw new NullPointerException("This simulation type does not exist!");
@@ -78,7 +82,7 @@ public class SimulationView {
                 simulation.getNumOfRows(),
                 simulationConfig.getGridWidth(),
                 simulationConfig.getGridHeight(),
-                simulation.getGridBase());
+                simulation.getGrid());
     }
 
     public Chart getCurrentLineChart(){

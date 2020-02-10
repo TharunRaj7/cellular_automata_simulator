@@ -12,19 +12,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Simulation {
-    GridBase gridBase;
+    GridBase grid;
     NeighborsHelper neighborsHelper;
     NeighboringType type;
 
     //TODO: change the cocnstructor usage to separate view and model
-    public Simulation(GridBase gridBase) {
+    public Simulation(GridBase grid) {
         neighborsHelper = new NeighborsHelper();
         this.type = NeighboringType.ALL;
-        this.gridBase = gridBase;
+        this.grid = grid;
     }
 
     public Simulation(int rowNum, int colNum, List<Integer> initialStates, CellShape shape) {
-        this.gridBase = new Grid(rowNum, colNum, initialStates, shape);
+        this.grid = new Grid(rowNum, colNum, initialStates, shape);
         neighborsHelper = new NeighborsHelper(shape);
         this.type = NeighboringType.ALL;
     }
@@ -57,11 +57,11 @@ public abstract class Simulation {
         try {
             switch (type) {
                 case ALL:
-                    neighbors = gridBase.getNeighborsByIndex(r, c, neighborsHelper.getAllRow(),
+                    neighbors = grid.getNeighborsByIndex(r, c, neighborsHelper.getAllRow(),
                             neighborsHelper.getAllCol());
                     break;
                 case NSEW:
-                    neighbors = gridBase.getNeighborsByIndex(r, c, neighborsHelper.getNSEWRow(),
+                    neighbors = grid.getNeighborsByIndex(r, c, neighborsHelper.getNSEWRow(),
                             neighborsHelper.getNSEWCol());
                     break;
                 default:
@@ -74,9 +74,27 @@ public abstract class Simulation {
         return neighbors;
     }
 
+    /**
+     * Returns all the neighbours with a specified state
+     * @param r
+     * @param c
+     * @param state
+     * @return
+     */
+    public List<Cell> getNeighboringCellsWithState(int r, int c, int state){
+        List<Cell> ret = new ArrayList<>();
+        List<Cell> neighbors = grid.getNeighborsByIndex(r, c, neighborsHelper.getNSEWRow(), neighborsHelper.getNSEWCol());
+        for (Cell item : neighbors){
+            if (item.getState() == state) {
+                ret.add(item);
+            }
+        }
+        return ret;
+    }
+
     // TODO: check to see why need cell access
     public List<Cell> getCellOfState(int state) {
-        List<Cell> cells = gridBase.getAllCells();
+        List<Cell> cells = grid.getAllCells();
         List<Cell> ret = new ArrayList<>();
 
         for (Cell cell: cells) {
@@ -93,34 +111,34 @@ public abstract class Simulation {
     }
 
     public void runOneStep() {
-        Grid gridNextGen = new Grid((Grid) gridBase);
-        for (int r = 0; r < gridBase.getNumOfRows(); r++) {
-            for (int c = 0; c < gridBase.getNumOfColumns(); c++) {
+        Grid gridNextGen = new Grid((Grid) grid);
+        for (int r = 0; r < grid.getNumOfRows(); r++) {
+            for (int c = 0; c < grid.getNumOfColumns(); c++) {
                 gridNextGen.setCellState(r, c, determineCellState(r, c));
             }
         }
-        gridBase = additionalActions(gridNextGen);
+        grid = additionalActions(gridNextGen);
     }
 
     // TODO: delete this and check for dependency
-    public GridBase getGridBase() {
-        return gridBase;
+    public GridBase getGrid() {
+        return grid;
     }
 
     public int getNumOfRows() {
-        return gridBase.getNumOfRows();
+        return grid.getNumOfRows();
     }
 
     public int getNumOfCols() {
-        return gridBase.getNumOfColumns();
+        return grid.getNumOfColumns();
     }
 
     public void setNumOfRows(int numOfRow) {
-        gridBase.setNumOfRows(numOfRow);
+        grid.setNumOfRows(numOfRow);
     }
 
     public void setNumOfCols(int numOfCol) {
-        gridBase.setNumOfColumns(numOfCol);
+        grid.setNumOfColumns(numOfCol);
     }
 
     protected Grid additionalActions(Grid gridNextGen){
