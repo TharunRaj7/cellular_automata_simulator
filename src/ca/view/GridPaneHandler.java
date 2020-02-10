@@ -23,7 +23,7 @@ import java.util.List;
 
 public class GridPaneHandler {
 
-    private static List<Color> cellColors = new ArrayList<Color>();
+    private static List<Color> cellColors = new ArrayList<>();
     private int cellWidth;
     private int cellHeight;
     private SimulationConfig simulationConfig;
@@ -53,8 +53,8 @@ public class GridPaneHandler {
             RowConstraints row = new RowConstraints(cellHeight);
             myGrid.getRowConstraints().add(row);
         }
-        myGrid.setGridLinesVisible(true);
         getCellColors();
+        myGrid.setGridLinesVisible(true);
         fillGrid(myGrid, c, r, cellWidth, cellHeight, grid);
         return myGrid;
     }
@@ -70,9 +70,15 @@ public class GridPaneHandler {
     private void fillGrid(GridPane myGrid, int c, int r, int cellWidth, int cellHeight, Grid grid){
         for(int i = 0; i< r; i++){
             for(int j = 0; j< c; j++){
+                int cellState;
+                try {
+                    cellState = grid.getCellState(i,j);
+                } catch (java.lang.NullPointerException exception){
+                    cellState = 0;
+                }
                 int finalI = i;
                 int finalJ = j;
-                int cellState = grid.getCellState(i, j);
+
                 Color cellColor = cellColors.get(cellState);
                 Rectangle rect = new Rectangle(cellWidth, cellHeight, cellColor);
                 rect.setOnMouseClicked(event -> {handleClick(rect, grid, finalI, finalJ);});

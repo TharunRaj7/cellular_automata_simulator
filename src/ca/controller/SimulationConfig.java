@@ -192,6 +192,9 @@ public class SimulationConfig {
             case "WaTorWorld":
                 simulationType = SimulationType.WaTorWorld;
                 break;
+            case "SpreadingOfFire":
+                simulationType = SimulationType.Fire;
+                break;
             default:
                 throw new RuntimeException("Simulation Type not defined!");
         }
