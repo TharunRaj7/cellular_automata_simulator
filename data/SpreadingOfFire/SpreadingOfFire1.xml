@@ -19,5 +19,6 @@
         <color2>#f05d0e</color2>
     </colors>
     <parameters>
+        <percentage>0.15</percentage>
     </parameters>
 </simulation>

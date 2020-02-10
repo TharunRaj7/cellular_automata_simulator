@@ -69,6 +69,9 @@ public class SimulationView {
             case Percolation:
                 simulation = new Percolation(grid);
                 break;
+            case Fire:
+                simulation = new SpreadingOfFire(grid, simulationConfig.getOtherParameters());
+                break;
 //            case WaTorWorld:
 //                simulation = new WaTorWorld(grid, simulationConfig.getOtherParameters());
 //                break;
