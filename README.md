@@ -81,6 +81,8 @@ Features implemented:
 - Reload File button to select a new XML file 
 - Step button to perform only one step of the simulation
 - Textfile and submit button to speed up the step of the simulation
+- A Run Another Simulation button which enables the user to load another simulation and run it simultaneously.
+- The feature to click on cells to change the cell states in realtime.
 
 ### Notes/Assumptions
 
