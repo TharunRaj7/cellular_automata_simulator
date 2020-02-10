@@ -99,7 +99,7 @@ public class SimulationConfig {
      * @param file          configuration XML file
      * @throws Exception    when the input is not a XML file
      */
-    private void setFile(File file) throws FileNotValidException {
+    public void setFile(File file) throws FileNotValidException {
         String fileName = file.getName();
         String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1, file.getName().length());
         if (!fileExtension.equals("xml")) {
@@ -115,7 +115,7 @@ public class SimulationConfig {
      *                      or does not fulfill requirement
      * @see #readFile(File)
      */
-    private void readFile() throws Exception {
+    public void readFile() throws Exception {
         if (file == null) {
             throw new FileNotValidException("Set the XML configuration file first!");
         }

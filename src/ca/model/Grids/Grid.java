@@ -1,14 +1,18 @@
-package ca.model;
+package ca.model.Grids;
 
 /**
  * Despite the {@code CellShape}, it is always important to define
  * system of coordinate for that shape.
  */
 
+import ca.model.Cell;
+import ca.model.CellShape;
+import ca.model.Pair;
+
 import java.util.*;
 import java.util.List;
 
-public class Grid extends GridBase{
+public class Grid extends GridBase {
     private int numOfColumns;
     private int numOfRows;
 
@@ -55,6 +59,7 @@ public class Grid extends GridBase{
      * Returns all the cells on the grid in order.
      * @return
      */
+    @Override
     public List<Cell> getAllCells() {
         List<Cell> ret = new ArrayList<>();
         for (int r = 0; r < numOfRows; r++) {
@@ -95,6 +100,7 @@ public class Grid extends GridBase{
      * getter method for the number of columns
      * @return numOfColumns
      */
+    @Override
     public int getNumOfColumns() {
         return numOfColumns;
     }
@@ -103,8 +109,19 @@ public class Grid extends GridBase{
      * getter method for the number of rows
      * @return numOfRows
      */
+    @Override
     public int getNumOfRows() {
         return numOfRows;
+    }
+
+    @Override
+    public void setNumOfColumns(int numOfColumns) {
+        this.numOfColumns = numOfColumns;
+    }
+
+    @Override
+    public void setNumOfRows(int numOfRows) {
+        this.numOfRows = numOfRows;
     }
 
 }

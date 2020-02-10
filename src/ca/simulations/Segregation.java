@@ -1,6 +1,6 @@
 package ca.simulations;
 
-import ca.model.Grid;
+import ca.model.Grids.Grid;
 
 import java.util.*;
 

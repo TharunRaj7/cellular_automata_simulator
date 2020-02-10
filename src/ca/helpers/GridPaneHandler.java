@@ -1,10 +1,9 @@
-package ca.view;
+package ca.helpers;
 
 
 import ca.controller.SimulationConfig;
-import ca.model.Grid;
-import javafx.event.EventHandler;
-import javafx.scene.input.MouseEvent;
+import ca.model.Grids.Grid;
+import ca.model.Grids.GridBase;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -41,7 +40,7 @@ public class GridPaneHandler {
      * @param height - full grid height
      * @return GridPane - returns the Gridpane to the scene
      */
-    public GridPane createGrid(int c, int r, int width, int height, Grid grid){
+    public GridPane createGrid(int c, int r, int width, int height, GridBase grid){
         cellWidth = width / c;
         cellHeight = height / r;
         GridPane myGrid = new GridPane();
@@ -67,7 +66,7 @@ public class GridPaneHandler {
      * @param cellWidth
      * @param cellHeight
      */
-    private void fillGrid(GridPane myGrid, int c, int r, int cellWidth, int cellHeight, Grid grid){
+    private void fillGrid(GridPane myGrid, int c, int r, int cellWidth, int cellHeight, GridBase grid){
         for(int i = 0; i< r; i++){
             for(int j = 0; j< c; j++){
                 int cellState;
@@ -81,7 +80,7 @@ public class GridPaneHandler {
 
                 Color cellColor = cellColors.get(cellState);
                 Rectangle rect = new Rectangle(cellWidth, cellHeight, cellColor);
-                rect.setOnMouseClicked(event -> {handleClick(rect, grid, finalI, finalJ);});
+                rect.setOnMouseClicked(event -> {handleClick(rect, (Grid) grid, finalI, finalJ);});
                 myGrid.add(rect, j, i);
             }
         }

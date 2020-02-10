@@ -3,9 +3,10 @@ package ca.view;
 import ca.controller.Controller;
 import ca.controller.SimulationConfig;
 import ca.controller.SimulationType;
-import ca.model.Grid;
+import ca.helpers.GraphHandler;
+import ca.helpers.GridPaneHandler;
+import ca.model.Grids.Grid;
 import ca.simulations.*;
-import javafx.scene.Group;
 import javafx.scene.chart.Chart;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
@@ -26,8 +27,8 @@ public class SimulationView {
 
     private void attemptOpenXML() {
         try {
-            simulationConfig = new SimulationConfig(getXMLfile(new Stage()));
-
+//            simulationConfig = new SimulationConfig(getXMLfile(new Stage()));
+            simulationConfig = new SimulationConfig(new File("data\\Percolation\\Percolation1.xml"), 1, 1);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             attemptOpenXML();
@@ -35,7 +36,6 @@ public class SimulationView {
     }
 
     private void readVariablesFromXML() {
-
        attemptOpenXML();
        controller = new Controller();
        gridPaneHandler = new GridPaneHandler(simulationConfig);
@@ -49,8 +49,6 @@ public class SimulationView {
            attemptOpenXML();
        }
         graphHandler = new GraphHandler(simulation);
-
-
         controller.setSimulation(simulation);
     }
 
@@ -79,8 +77,8 @@ public class SimulationView {
     }
 
     public GridPane getCurrentGridPane() {
-        return gridPaneHandler.createGrid(simulationConfig.getColNum(),
-                simulationConfig.getRowNum(),
+        return gridPaneHandler.createGrid(simulation.getNumOfCols(),
+                simulation.getNumOfRows(),
                 simulationConfig.getGridWidth(),
                 simulationConfig.getGridHeight(),
                 simulation.getGrid());
@@ -92,8 +90,9 @@ public class SimulationView {
                 simulationConfig.getGridWidth());
     }
 
-    public void updateGridSize(double newRowNum, double newColNum){
-
+    public void updateGridSize(int newRowNum, int newColNum){
+        simulation.setNumOfCols(newColNum);
+        simulation.setNumOfRows(newRowNum);
     }
 
     public Controller getController() {

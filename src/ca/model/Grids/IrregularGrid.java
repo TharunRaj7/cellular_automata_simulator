@@ -1,4 +1,4 @@
-package ca.model;
+package ca.model.Grids;
 
 /**
  * IrregularGrid has different number of columns on their

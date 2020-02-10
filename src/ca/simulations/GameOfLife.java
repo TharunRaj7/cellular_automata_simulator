@@ -1,6 +1,6 @@
 package ca.simulations;
 
-import ca.model.Grid;
+import ca.model.Grids.Grid;
 
 /**
  * This class is the implementation of Game of Life. The rules

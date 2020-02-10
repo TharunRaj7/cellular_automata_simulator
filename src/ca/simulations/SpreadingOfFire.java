@@ -1,8 +1,6 @@
 package ca.simulations;
 
-import ca.model.Grid;
-
-import java.util.ArrayList;
+import ca.model.Grids.GridBase;
 import java.util.List;
 import java.util.Random;
 
@@ -30,7 +28,7 @@ public class SpreadingOfFire extends Simulation{
     private double percent;
 
 
-    public SpreadingOfFire(Grid grid, List<String> additionalParameters) {
+    public SpreadingOfFire(GridBase grid, List<String> additionalParameters) {
         super(grid);
         try {
             percent = Double.parseDouble(additionalParameters.get(0));
