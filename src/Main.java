@@ -37,6 +37,7 @@ public class Main extends Application {
     public static final Paint BACKGROUND = Color.AZURE;
     public static final String RESOURCE = "ca/resources";
     public static final String DEFAULT_RESOURCE_PACKAGE = RESOURCE + ".";
+    public static final int NEW_SIM_BUTTON_OFFESET = 150;
 
     private SimulationView simulationView;
     private Timeline animation;
@@ -103,7 +104,7 @@ public class Main extends Application {
         numCols.setValue(simulation.getNumOfCols());
 
         Button newSimulButton = styler.createButton("NewSimulation", event -> startNewSimulation(),
-                buttonHeight, 2, myResources); newSimulButton.setLayoutY(newSimulButton.getLayoutY() + 50); newSimulButton.setPrefWidth(150);
+                buttonHeight, 2, myResources); newSimulButton.setLayoutY(newSimulButton.getLayoutY() + NEW_SIM_BUTTON_OFFESET); newSimulButton.setPrefWidth(150);
         root.getChildren().addAll(gridPane, startButton, stopButton, reloadFileButton, stepButton, submitButton, num, lineChart,
                 newSimulButton, setNumCols, setNumRows);
         return new Scene(root, SIZE_WIDTH, SIZE_HEIGHT, BACKGROUND);

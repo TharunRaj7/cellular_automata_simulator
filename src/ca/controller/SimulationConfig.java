@@ -192,6 +192,9 @@ public class SimulationConfig {
             case "WaTorWorld":
                 simulationType = SimulationType.WaTorWorld;
                 break;
+            case "LangtonLoop":
+                simulationType = SimulationType.LangtonLoop;
+                break;
             case "SpreadingOfFire":
                 simulationType = SimulationType.Fire;
                 break;

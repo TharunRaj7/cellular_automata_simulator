@@ -79,7 +79,11 @@ Data files needed:
     - grid_sof.txt
     - list_sof.txt
     - rand_sof.txt
-
+    
+* LangtonLoop
+    - LangtonLoop1.xml
+    - grid_ll1.txt
+    
 * WaTorWorld
     - WaTorWorld1.xml
     - grid_wtw.txt
@@ -95,6 +99,10 @@ Features implemented:
 - Reload File button to select a new XML file 
 - Step button to perform only one step of the simulation
 - Textfile and submit button to speed up the step of the simulation
+<<<<<<< HEAD
+- A Run Another Simulation button which enables the user to load another simulation and run it simultaneously.
+- The feature to click on cells to change the cell states in realtime.
+=======
 - Graph with line chart where every line represents a different state and quantity of that state at a given step
 - Ability for the user to interact and choose the size of the grid (number of rows and columns) after the simulation has
 already begun
@@ -103,6 +111,7 @@ already begun
 - Ability to allow simulations to be set by a specific grid, a list, or randomly
 - Started implementing different arrangement of neighbors and the different location shapes, but only completed for square
 and no UI to go with it
+>>>>>>> master
 
 ### Notes/Assumptions
 

@@ -27,8 +27,8 @@ public class SimulationView {
 
     private void attemptOpenXML() {
         try {
-//            simulationConfig = new SimulationConfig(getXMLfile(new Stage()));
-            simulationConfig = new SimulationConfig(new File("data\\Percolation\\Percolation1.xml"), 1, 1);
+            simulationConfig = new SimulationConfig(getXMLfile(new Stage()));
+//            simulationConfig = new SimulationConfig(new File("data\\GameOfLife\\GameOfLife1.xml"), 1, 1);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             attemptOpenXML();
@@ -68,6 +68,9 @@ public class SimulationView {
                 break;
             case WaTorWorld:
                 simulation = new WaTorWorld(grid, simulationConfig.getOtherParameters());
+                break;
+            case LangtonLoop:
+                simulation = new LangtonLoop(grid);
                 break;
             default:
                 simulation = null;
