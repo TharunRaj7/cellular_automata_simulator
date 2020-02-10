@@ -64,6 +64,9 @@ public class SimulationView {
             case WaTorWorld:
                 simulation = new WaTorWorld(grid, simulationConfig.getOtherParameters());
                 break;
+            case LangtonLoop:
+                simulation = new LangtonLoop(grid);
+                break;
             default:
                 simulation = null;
                 throw new NullPointerException("This simulation type does not exist!");

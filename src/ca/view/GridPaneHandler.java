@@ -73,6 +73,7 @@ public class GridPaneHandler {
                 int finalI = i;
                 int finalJ = j;
                 int cellState = grid.getCellState(i, j);
+                //System.out.println(cellState);
                 Color cellColor = cellColors.get(cellState);
                 Rectangle rect = new Rectangle(cellWidth, cellHeight, cellColor);
                 rect.setOnMouseClicked(event -> {handleClick(rect, grid, finalI, finalJ);});

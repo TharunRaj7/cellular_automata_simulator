@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<simulation>
+    <general>
+        <type>LangtonLoop</type>
+        <title>LangtonLoop</title>
+        <author>Unknown</author>
+        <inFolder>LangtonLoop</inFolder>
+    </general>
+
+    <initialStates>
+        <gridWidth>500</gridWidth>
+        <gridHeight>500</gridHeight>
+        <cellConfig>grid_ll1.txt</cellConfig>
+    </initialStates>
+
+    <colors>
+        <color1>#000000</color1>
+        <color2>#ffffff</color2>
+    </colors>
+</simulation>

@@ -5,5 +5,6 @@ public enum SimulationType {
     Segregation,
     Percolation,
     WaTorWorld,
-    Fire
+    Fire,
+    LangtonLoop
 }

@@ -67,6 +67,10 @@ Data files needed:
 * Spreading Of Fire
     - SpreadingOfFire.xml
     - sof1.txt
+    
+* LangtonLoop
+    - LangtonLoop1.xml
+    - grid_ll1.txt
 
 Features implemented:
 
