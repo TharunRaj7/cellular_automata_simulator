@@ -43,7 +43,7 @@ public class GraphHandler {
     public LineChart<Number, Number> createGraph(int c, int r, int gridWidth) {
         createList(simulation.getGrid(), c, r, stepCounter);
         LineChart<Number, Number> lineChart = new LineChart<>(xAxis, yAxis);
-        for (int i = 0; i < stateQuantity.size(); i++) {
+        for (int i = 0; i < stateQuantity.size()-1; i++) {
             XYChart.Series series = new XYChart.Series();
             series.setName("State:" + stateQuantity.keySet().toArray()[i]);
             for(int j = 0; j< stepCounter; j++){
