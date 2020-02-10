@@ -28,7 +28,7 @@ The user interface should contain
 - Abstract ca.model.Simulation
     - Description: This component creates the grid of the specified size as well as takes the output of each step. In the step, the states of each cell are changes and the visuals are updated.
     - Justification: This is an abstract open class. You can have multiple simulation games extended from this class. This was created to be more general and thus we are able to create many simulations. 
-- ca.model.Grid
+- ca.model.Grids.Grid
     - Description: This components creates a grid and stores the initial states in a map with their indices in the grid. Additionally, this grid is able to get the neighbors' initial state. 
     - Justification: This is created in another class as a means to create different grids in each step and alternate grids depending on the simulation that is running. This will be an open principle. In the future, we can make the grid interactive by changing the size. 
 - ca.model.Cell
@@ -46,19 +46,19 @@ The user interface should contain
 #### Asumptions and decisions discussed in length:
 * XML file format: We have decided as a team, that the XML files will take the form of: grid size given as integers, states given as a list of integers, rules given as strings, and colors given as strings too. These assumptions and standards are important because it will affect how the XML file is read in. Additionally, the format of each of these aspects of the simulation, must be the right structure in order to be handled properly throughout the classes in the project. 
 
-* ca.model.Grid format: We have decided as a team, that the UI will be a grid and use different colors to represent the states of each cell. This grid format will make it easier to iterate through each cell and check the neighbors. The visuals as well as the model are dependent on this format. 
+* ca.model.Grids.Grid format: We have decided as a team, that the UI will be a grid and use different colors to represent the states of each cell. This grid format will make it easier to iterate through each cell and check the neighbors. The visuals as well as the model are dependent on this format. 
 
 #### Alternative Design 
-Our team had a long discussion about the data structure to store cells in ```ca.model.Grid.java```. Currently our team decide to use an hashMap and create another ```ca.model.Pair``` class to store the position of cells. An alternative design our team came up previously was to store cell states with an arrayList or 2D array. For the alternative design,
+Our team had a long discussion about the data structure to store cells in ```ca.model.Grids.Grid.java```. Currently our team decide to use an hashMap and create another ```ca.model.Pair``` class to store the position of cells. An alternative design our team came up previously was to store cell states with an arrayList or 2D array. For the alternative design,
 - *pros:* easier to implement
 - *cons:* has a slower access time and needs more complicated logic to retain neighbors
 
 
 #### Use Cases
 - *Apply the rules to a middle cell:* 
-    - ca.model.Simulation.java calls ca.model.Grid.getAllNeighbours, checks for the states of the neighbouring cells, and sets the new state of the cell based on the simulation rules located in SimulationConfig.java
+    - ca.model.Simulation.java calls ca.model.Grids.Grid.getAllNeighbours, checks for the states of the neighbouring cells, and sets the new state of the cell based on the simulation rules located in SimulationConfig.java
 - *Apply the rules to an edge cell:*
-    - ca.model.Simulation.java calls ca.model.Grid.getNSWENeighbours, checks for the states of the neighbouring cells, and sets the new state of the cell based on the simulation rules located in SimulationConfig.java
+    - ca.model.Simulation.java calls ca.model.Grids.Grid.getNSWENeighbours, checks for the states of the neighbouring cells, and sets the new state of the cell based on the simulation rules located in SimulationConfig.java
 - *Move to next generation:*
     - ca.model.Simulation.java sets the new state of a cell and updates its neighbors according to rules. This will be done in ca.model.Simulation.runOneStep recursively with a queue. View calls .update and refresh the entire gird. 
     
@@ -66,7 +66,7 @@ Our team had a long discussion about the data structure to store cells in ```ca.
     - The readFile function is called (in the SimulationConfig.java class) which will read the XML file passed into values into instance variables. By using getters and setters, ca.model.Simulation can get these values. 
     
 - *Switch Simulations:*
-    - When the user clicks on the "Run a new simulation" button on the window, a new window pops up and the user selects a new XML file to load. The ca.model.Simulation class creates a new instance of the Wator.java according to values from SimulationConfig.java. A new ca.model.Grid is initialized in the Wator.java class by making an instance of the ca.model.Grid.java class and stores the grid as one of its attributes. The View class displays the new scene based on this new simulation instance.
+    - When the user clicks on the "Run a new simulation" button on the window, a new window pops up and the user selects a new XML file to load. The ca.model.Simulation class creates a new instance of the Wator.java according to values from SimulationConfig.java. A new ca.model.Grids.Grid is initialized in the Wator.java class by making an instance of the ca.model.Grids.Grid.java class and stores the grid as one of its attributes. The View class displays the new scene based on this new simulation instance.
     
 ## Team Responsibilities
 
@@ -75,7 +75,7 @@ Our team had a long discussion about the data structure to store cells in ```ca.
      - Implement 1-2 non-abstract ca.model.Simulation classes
 
  * Tharun Mani Raj
-     - Implement ```ca.model.Cell.java```, ```ca.model.Grid.java```, and ```ca.model.Simulation.java```
+     - Implement ```ca.model.Cell.java```, ```ca.model.Grids.Grid.java```, and ```ca.model.Simulation.java```
      - Implement 1-2 non-abstract ca.model.Simulation classes
 
  * Cady Zhou

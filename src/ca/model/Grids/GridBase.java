@@ -1,4 +1,8 @@
-package ca.model;
+package ca.model.Grids;
+
+import ca.model.Cell;
+import ca.model.CellShape;
+import ca.model.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,7 +79,12 @@ public abstract class GridBase {
         return shape;
     }
 
-
     protected abstract boolean inBound(int r, int c);
     protected abstract void createGridModel(List<Integer> initialStates);
+
+    public abstract List<Cell> getAllCells();
+    public abstract int getNumOfRows();
+    public abstract int getNumOfColumns();
+    public abstract void setNumOfRows(int numOfRows);
+    public abstract void setNumOfColumns(int numOfColumns);
 }

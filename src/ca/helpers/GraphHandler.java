@@ -1,7 +1,7 @@
 package ca.helpers;
 
-import ca.controller.SimulationConfig;
-import ca.model.Grid;
+import ca.model.Grids.Grid;
+import ca.model.Grids.GridBase;
 import ca.simulations.Simulation;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -9,7 +9,6 @@ import javafx.scene.chart.XYChart;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,7 +40,7 @@ public class GraphHandler {
      * @return LineChart, the most recent linechart
      */
     public LineChart<Number, Number> createGraph(int c, int r, int gridWidth) {
-        createList(simulation.getGrid(), c, r, stepCounter);
+        createList(simulation.getGridBase(), c, r, stepCounter);
         LineChart<Number, Number> lineChart = new LineChart<>(xAxis, yAxis);
         for (int i = 0; i < stateQuantity.size(); i++) {
             XYChart.Series series = new XYChart.Series();
@@ -66,7 +65,7 @@ public class GraphHandler {
      * @param r
      * @param step
      */
-    private void createList(Grid grid, int c, int r, int step) {
+    private void createList(GridBase grid, int c, int r, int step) {
         for (int i = 0; i < r; i++) {
             for (int j = 0; j < c; j++) {
                 int cellState = grid.getCellState(i, j);

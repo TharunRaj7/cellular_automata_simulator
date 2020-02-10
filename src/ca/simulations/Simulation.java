@@ -4,26 +4,27 @@ import ca.helpers.NeighboringType;
 import ca.helpers.NeighborsHelper;
 import ca.model.Cell;
 import ca.model.CellShape;
-import ca.model.Grid;
+import ca.model.Grids.Grid;
+import ca.model.Grids.GridBase;
 //import javafx.scene.Scene;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Simulation {
-    Grid grid;
+    GridBase gridBase;
     NeighborsHelper neighborsHelper;
     NeighboringType type;
 
     //TODO: change the cocnstructor usage to separate view and model
-    public Simulation(Grid grid) {
-        this.grid = grid;
+    public Simulation(GridBase gridBase) {
         neighborsHelper = new NeighborsHelper();
         this.type = NeighboringType.ALL;
+        this.gridBase = gridBase;
     }
 
     public Simulation(int rowNum, int colNum, List<Integer> initialStates, CellShape shape) {
-        this.grid = new Grid(rowNum, colNum, initialStates, shape);
+        this.gridBase = new Grid(rowNum, colNum, initialStates, shape);
         neighborsHelper = new NeighborsHelper(shape);
         this.type = NeighboringType.ALL;
     }
@@ -56,11 +57,11 @@ public abstract class Simulation {
         try {
             switch (type) {
                 case ALL:
-                    neighbors = grid.getNeighborsByIndex(r, c, neighborsHelper.getAllRow(),
+                    neighbors = gridBase.getNeighborsByIndex(r, c, neighborsHelper.getAllRow(),
                             neighborsHelper.getAllCol());
                     break;
                 case NSEW:
-                    neighbors = grid.getNeighborsByIndex(r, c, neighborsHelper.getNSEWRow(),
+                    neighbors = gridBase.getNeighborsByIndex(r, c, neighborsHelper.getNSEWRow(),
                             neighborsHelper.getNSEWCol());
                     break;
                 default:
@@ -75,7 +76,7 @@ public abstract class Simulation {
 
     // TODO: check to see why need cell access
     public List<Cell> getCellOfState(int state) {
-        List<Cell> cells = grid.getAllCells();
+        List<Cell> cells = gridBase.getAllCells();
         List<Cell> ret = new ArrayList<>();
 
         for (Cell cell: cells) {
@@ -92,26 +93,34 @@ public abstract class Simulation {
     }
 
     public void runOneStep() {
-        Grid gridNextGen = new Grid(grid);
-        for (int r = 0; r < grid.getNumOfRows(); r++) {
-            for (int c = 0; c < grid.getNumOfColumns(); c++) {
+        Grid gridNextGen = new Grid((Grid) gridBase);
+        for (int r = 0; r < gridBase.getNumOfRows(); r++) {
+            for (int c = 0; c < gridBase.getNumOfColumns(); c++) {
                 gridNextGen.setCellState(r, c, determineCellState(r, c));
             }
         }
-        grid = additionalActions(gridNextGen);
+        gridBase = additionalActions(gridNextGen);
     }
 
     // TODO: delete this and check for dependency
-    public Grid getGrid() {
-        return grid;
+    public GridBase getGridBase() {
+        return gridBase;
     }
 
-    public int getNumOfRow() {
-        return grid.getNumOfRows();
+    public int getNumOfRows() {
+        return gridBase.getNumOfRows();
     }
 
-    public int getNumOfCol() {
-        return grid.getNumOfColumns();
+    public int getNumOfCols() {
+        return gridBase.getNumOfColumns();
+    }
+
+    public void setNumOfRows(int numOfRow) {
+        gridBase.setNumOfRows(numOfRow);
+    }
+
+    public void setNumOfCols(int numOfCol) {
+        gridBase.setNumOfColumns(numOfCol);
     }
 
     protected Grid additionalActions(Grid gridNextGen){

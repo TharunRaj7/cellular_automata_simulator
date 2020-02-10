@@ -116,7 +116,7 @@ public class Main extends Application {
         //System.out.println(animation.getRate());
         root.getChildren().removeAll(simulationView.getCurrentGridPane(), simulationView.getCurrentLineChart());
         simulationView.getSimulation().runOneStep();
-        simulationView.updateGridSize(numRows.getValue(), numCols.getValue());
+        simulationView.updateGridSize((int) numRows.getValue(), (int) numCols.getValue());
         root.getChildren().addAll(simulationView.getCurrentGridPane(), simulationView.getCurrentLineChart());
     }
 

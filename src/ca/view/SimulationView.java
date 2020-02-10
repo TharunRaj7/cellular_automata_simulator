@@ -5,7 +5,7 @@ import ca.controller.SimulationConfig;
 import ca.controller.SimulationType;
 import ca.helpers.GraphHandler;
 import ca.helpers.GridPaneHandler;
-import ca.model.Grid;
+import ca.model.Grids.Grid;
 import ca.simulations.*;
 import javafx.scene.chart.Chart;
 import javafx.scene.layout.GridPane;
@@ -28,7 +28,7 @@ public class SimulationView {
     private void attemptOpenXML() {
         try {
 //            simulationConfig = new SimulationConfig(getXMLfile(new Stage()));
-            simulationConfig = new SimulationConfig(new File("data\\GameOfLife\\GameOfLife1.xml"), 1, 1);
+            simulationConfig = new SimulationConfig(new File("data\\Percolation\\Percolation1.xml"), 1, 1);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             attemptOpenXML();
@@ -74,11 +74,11 @@ public class SimulationView {
     }
 
     public GridPane getCurrentGridPane() {
-        return gridPaneHandler.createGrid(simulationConfig.getColNum(),
-                simulationConfig.getRowNum(),
+        return gridPaneHandler.createGrid(simulation.getNumOfCols(),
+                simulation.getNumOfRows(),
                 simulationConfig.getGridWidth(),
                 simulationConfig.getGridHeight(),
-                simulation.getGrid());
+                simulation.getGridBase());
     }
 
     public Chart getCurrentLineChart(){
@@ -87,8 +87,9 @@ public class SimulationView {
                 simulationConfig.getGridWidth());
     }
 
-    public void updateGridSize(double newRowNum, double newColNum){
-
+    public void updateGridSize(int newRowNum, int newColNum){
+        simulation.setNumOfCols(newColNum);
+        simulation.setNumOfRows(newRowNum);
     }
 
     public Controller getController() {

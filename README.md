@@ -20,7 +20,7 @@ Hours Spent: 7+ each
      - Implement Segregation and Percolation ca.model.Simulation classes
 
  * Tharun Mani Raj
-     - Implement ```ca.model.Cell.java```, ```ca.model.Grid.java```, and ```ca.model.Pair.java```
+     - Implement ```ca.model.Cell.java```, ```ca.model.Grids.Grid.java```, and ```ca.model.Pair.java```
      - Implement WaTorWorld and Fire ca.model.Simulation classes
 
  * Cady Zhou

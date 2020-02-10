@@ -1,6 +1,6 @@
 package ca.simulations;
 
-import ca.model.Grid;
+import ca.model.Grids.Grid;
 
 /**
  * This class is the implementation of Percolation. The rules
@@ -26,9 +26,9 @@ public class Percolation extends Simulation {
 
     @Override
     protected int determineCellState(int r, int c) {
-       if (grid.getCellState(r, c) == PERCOLATED) {
+       if (gridBase.getCellState(r, c) == PERCOLATED) {
             return PERCOLATED;
-       } else if(grid.getCellState(r, c) == OPEN){
+       } else if(gridBase.getCellState(r, c) == OPEN){
             int percolatedNeighbors = getNeighborStateNumber(r, c, type, PERCOLATED);
             return (percolatedNeighbors >= 1) ? PERCOLATED : OPEN;
        }

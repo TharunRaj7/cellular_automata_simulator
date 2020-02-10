@@ -2,7 +2,7 @@
 //
 //
 //import ca.model.Cell;
-//import ca.model.Grid;
+//import ca.model.Grids.Grid;
 //import ca.model.Pair;
 //
 //import java.sql.Time;

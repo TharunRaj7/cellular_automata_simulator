@@ -1,6 +1,6 @@
 package ca.simulations;
 
-import ca.model.Grid;
+import ca.model.Grids.Grid;
 
 import java.util.*;
 
@@ -42,9 +42,9 @@ public class Segregation extends Simulation {
     }
 
     private int calcVacantNumber() {
-        for (int i = 0; i < grid.getNumOfRows(); i++) {
-            for (int j = 0; j < grid.getNumOfColumns(); j++) {
-                if (grid.getCellState(i, j) == VACANT_CELL) {
+        for (int i = 0; i < gridBase.getNumOfRows(); i++) {
+            for (int j = 0; j < gridBase.getNumOfColumns(); j++) {
+                if (gridBase.getCellState(i, j) == VACANT_CELL) {
                     vacantNumber ++;
                 }
             }
@@ -72,7 +72,7 @@ public class Segregation extends Simulation {
 
     @Override
     protected int determineCellState(int r, int c) {
-        int currentState = grid.getCellState(r, c);
+        int currentState = gridBase.getCellState(r, c);
         {
             if (currentState == VACANT_CELL) {
                 return PLACE_HOLDER;
