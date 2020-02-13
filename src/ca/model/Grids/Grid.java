@@ -36,6 +36,13 @@ public class Grid extends GridBase {
         this(numOfRows, numOfColumns, initialStates, CellShape.SQUARE);
     }
 
+    /**
+     * Initializes the grid for the case of an irregular grid
+     * @param numOfRows
+     * @param numOfColumns
+     * @param initialStates
+     * @param shape
+     */
     public Grid(int numOfRows, int numOfColumns,  List<Integer> initialStates, CellShape shape) {
         super(shape);
         this.numOfRows = numOfRows;
@@ -43,21 +50,21 @@ public class Grid extends GridBase {
         createGridModel(initialStates);
     }
 
+    /**
+     * Checks whether a given pair of coordinates are within the bounds of the grid.
+     * @param r
+     * @param c
+     * @return a boolean
+     */
     @Override
     protected boolean inBound(int r, int c) {
         return (0 <= r) && (r < numOfRows) && (0 <= c) && (c < numOfColumns);
     }
 
-    /**
-     * Returns the state of cell specified by r and c. Returns 0 by default if the given r and/or c are not valid
-     * @param r
-     * @param c
-     * @return the state of a cell.
-     */
 
     /**
      * Returns all the cells on the grid in order.
-     * @return
+     * @return a list of cells
      */
     @Override
     public List<Cell> getAllCells() {
@@ -114,11 +121,19 @@ public class Grid extends GridBase {
         return numOfRows;
     }
 
+    /**
+     * Setter method for the number of columns
+     * @param numOfColumns
+     */
     @Override
     public void setNumOfColumns(int numOfColumns) {
         this.numOfColumns = numOfColumns;
     }
 
+    /**
+     * Setter method for the number of rows
+     * @param numOfRows
+     */
     @Override
     public void setNumOfRows(int numOfRows) {
         this.numOfRows = numOfRows;
