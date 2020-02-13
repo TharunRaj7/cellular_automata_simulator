@@ -16,13 +16,23 @@ public abstract class Simulation {
     NeighborsHelper neighborsHelper;
     NeighboringType type;
 
-    //TODO: change the cocnstructor usage to separate view and model
+    /**
+     * constructor to copy the grid of a previously initialized simulation
+     * @param grid
+     */
     public Simulation(GridBase grid) {
         neighborsHelper = new NeighborsHelper();
         this.type = NeighboringType.ALL;
         this.grid = grid;
     }
 
+    /**
+     * default constructor to create a Simulation object
+     * @param rowNum
+     * @param colNum
+     * @param initialStates
+     * @param shape
+     */
     public Simulation(int rowNum, int colNum, List<Integer> initialStates, CellShape shape) {
         this.grid = new Grid(rowNum, colNum, initialStates, shape);
         neighborsHelper = new NeighborsHelper(shape);
@@ -39,7 +49,6 @@ public abstract class Simulation {
      * @param state     an int representing the state to find
      * @return          the number of neighbors have {@code state}
      */
-    //TODO: change method headings
     public int getNeighborStateNumber(int r, int c, NeighboringType type, int state) {
        List<Cell> neighbors = getNeighboringCellsOfState(r, c, type);
         int num = 0;
@@ -51,7 +60,6 @@ public abstract class Simulation {
         return num;
     }
 
-    // TODO: change method heads in other classes
     private List<Cell> getNeighboringCellsOfState(int r, int c, NeighboringType type) {
         List<Cell> neighbors;
         try {
@@ -92,7 +100,11 @@ public abstract class Simulation {
         return ret;
     }
 
-    // TODO: check to see why need cell access
+    /**
+     * gets all the cells on the grid with a specific state
+     * @param state
+     * @return a list of cells
+     */
     public List<Cell> getCellOfState(int state) {
         List<Cell> cells = grid.getAllCells();
         List<Cell> ret = new ArrayList<>();
@@ -105,11 +117,19 @@ public abstract class Simulation {
         return ret;
     }
 
+    /**
+     * returns the number of cells with a specific state
+     * @param state
+     * @return
+     */
     public int cellStateTotal(int state) {
         List<Cell> allCells = getCellOfState(state);
         return allCells.size();
     }
 
+    /**
+     * Method that is invoked on each step of the
+     */
     public void runOneStep() {
         for (int r = 0; r < getNumOfRows(); r++) {
             for (int c = 0; c < getNumOfCols(); c++) {
@@ -128,29 +148,59 @@ public abstract class Simulation {
         grid = additionalActions(gridNextGen);
     }
 
-    // TODO: delete this and check for dependency
+    /**
+     * getter method for the GridBase object
+     * @return a GridBase object
+     */
     public GridBase getGrid() {
         return grid;
     }
 
+    /**
+     * @return number of rows
+     */
     public int getNumOfRows() {
         return grid.getNumOfRows();
     }
 
+    /**
+     * @return number of columns
+     */
     public int getNumOfCols() {
         return grid.getNumOfColumns();
     }
 
+    /**
+     * set the number of rows
+     * @param numOfRow
+     */
     public void setNumOfRows(int numOfRow) {
         grid.setNumOfRows(numOfRow);
     }
 
+    /**
+     * set the number of columns
+     * @param numOfCol
+     */
     public void setNumOfCols(int numOfCol) {
         grid.setNumOfColumns(numOfCol);
     }
 
+    /**
+     * function to work on a grid before returning it (for additional features)
+     * @param gridNextGen
+     * @return a Grid
+     */
     protected Grid additionalActions(Grid gridNextGen){
         return gridNextGen;
     }
+
+    /**
+     * abstract method that implements the logic to update the cells on each step. Each concrete simulation implementation
+     * would override this function with its own update logic.
+     * @param r
+     * @param c
+     * @return
+     */
     protected abstract int determineCellState(int r, int c);
 }

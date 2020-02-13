@@ -16,10 +16,17 @@ import ca.model.Grids.GridBase;
  * To run the simulation, call {@link #runOneStep()} inside the
  * animation loop.
  */
+
+
+
 public class LangtonLoop extends Simulation{
     private final int DEAD = 0;
     private final int ALIVE = 1;
 
+    /**
+     * Constructor to create an object of this simulation
+     * @param grid
+     */
     public LangtonLoop(GridBase grid) {
         super(grid);
     }
@@ -36,8 +43,3 @@ public class LangtonLoop extends Simulation{
         }
     }
 }
-
-/*if fewer than two elements in the neighborhood are alive, the next state is dead (death by starvation);
-if more than three elements in the neighborhood are alive, the next state is dead (death by overcrowding);
-if exactly three elements in the neighborhood are alive, then the next state is alive (birth);
-otherwise (i.e., if exactly two of the elements in the neighborhood are alive) the next state is equal to the current state (survival).*/
