@@ -20,6 +20,10 @@ public class Percolation extends Simulation {
     int BLOCKED = 1;
     int PERCOLATED = 2;
 
+    /**
+     * Creates an instance of grid that can be updated.
+     * @param grid
+     */
     public Percolation(Grid grid) {
         super(grid);
     }

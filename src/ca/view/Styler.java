@@ -34,6 +34,15 @@ public class Styler {
     public Slider rowSlider;
     public Slider colSlider;
 
+    /**
+     * Creates a UI button that is shown on the scene and when is clicked, executes an action.
+     * @param name - the label on the button
+     * @param handler - the method or action that is called once the button is clicked
+     * @param gridHeight - used for button placement
+     * @param numButton - used for button placement
+     * @param myResources - used to convert the text that is stored in the resources folder to be displayed
+     * @return - a button
+     */
     public Button createButton(String name, EventHandler<ActionEvent> handler, int gridHeight, int numButton, ResourceBundle myResources){
         Button button = new Button();
         button.setText(myResources.getString(name));
@@ -44,6 +53,14 @@ public class Styler {
         return button;
     }
 
+    /**
+     * Creates a text field that i shown in the scene and takes in an input to change a parameter
+     * @param fillerText - the placeholder text in the textfield
+     * @param num - used for textfield placement
+     * @param gridHeight - used for textfield placement
+     * @param myResources a slider that relates to the number of rows in a grid so that it can be added to the root of a scene
+     * @return - a textfield
+     */
     public TextField styleTextField(String fillerText, TextField num, int gridHeight, ResourceBundle myResources){
         num.setPromptText(myResources.getString(fillerText));
         num.setPrefSize(TEXTFIELD_WIDTH, TEXTFIELD_HEIGHT);
@@ -52,6 +69,15 @@ public class Styler {
         return num;
     }
 
+    /**
+     * Creates a slider that when adjusted, updates the number or rows or columns in the grid.
+     * @param presetVal - the number of rows or columns that are already on the grid
+     * @param gridHeight - used for slider placement
+     * @param slideNum - used for slider placement
+     * @param myResources a slider that relates to the number of rows in a grid so that it can be added to the root of a scene
+     * @param label - slider label
+     * @return
+     */
     public GridPane createSlider(int presetVal, int gridHeight, int slideNum, ResourceBundle myResources, String label){
         Slider slider = new Slider(SLIDER_MIN, SLIDER_MAX, presetVal);
         if( slideNum == 1){
@@ -88,10 +114,18 @@ public class Styler {
         return grid;
     }
 
+    /**
+     *
+     * @return a slider that relates to the number of rows in a grid so that it can be added to the root of a scene
+     */
     public Slider getRowSlider(){
         return rowSlider;
     }
 
+    /**
+     *
+     * @return a slider that relates to the number of columns in a grid so that it can be added to the root of a scene
+     */
     public Slider getColSlider(){
         return colSlider;
     }

@@ -29,6 +29,12 @@ public class Segregation extends Simulation {
     private int vacantNumber;
     private List<Integer> needRelocation;
 
+    /**
+     * Calculates the number of vacant cells and initializes a an arraylist of current agents that need to be relocated.
+     * Reads in the percent value from the XML file.
+     * @param grid
+     * @param additionalParameters
+     */
     public Segregation(Grid grid, List<String> additionalParameters) {
         super(grid);
         vacantNumber = calcVacantNumber();

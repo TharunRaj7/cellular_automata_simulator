@@ -27,7 +27,11 @@ public class SpreadingOfFire extends Simulation{
 
     private double percent;
 
-
+    /**
+     * Creates an instance of grid and reads in the percent specified in the XML file.
+     * @param grid - the grid specified in the XML file
+     * @param additionalParameters - the percent
+     */
     public SpreadingOfFire(GridBase grid, List<String> additionalParameters) {
         super(grid);
         try {

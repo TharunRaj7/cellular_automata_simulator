@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 /**
  * This class extends Application and is the Main class of the simulation.
  * The stage is created and the scene is called to be made.
- * The step function updates the cells every time the step button is clicked.
+ * The step function updates the cells every step and updates the graph as well.
  */
 
 public class Main extends Application {
@@ -140,7 +140,9 @@ public class Main extends Application {
         root.getChildren().addAll(simulationView.getCurrentGridPane(), simulationView.getCurrentLineChart());
     }
 
-
+    /**
+     * Here, the animation is begun, and the delay between each step is established.
+     */
     public void startAnimation() {
         KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), event -> step());
         animation = new Timeline();

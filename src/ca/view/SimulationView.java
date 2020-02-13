@@ -21,6 +21,9 @@ public class SimulationView {
     private Controller controller;
     private Simulation simulation;
 
+    /**
+     * Calls the simulation to read the XML to obtain all necessary information
+     */
     public SimulationView() {
         readVariablesFromXML();
     }
@@ -76,9 +79,13 @@ public class SimulationView {
                 simulation = null;
                 throw new NullPointerException("This simulation type does not exist!");
         }
-        // TODO: add other two simulations
     }
 
+    /**
+     * Calls on the helper class ```ca.helpers.GridPaneHandler.java``` to create a new gridpane, which effectively gets
+     * the current gridpane. This call requires several calls to both Simulation and SimulationConfig.
+     * @return Gridpane that will be displayed and added to the scene
+     */
     public GridPane getCurrentGridPane() {
         return gridPaneHandler.createGrid(simulation.getNumOfCols(),
                 simulation.getNumOfRows(),
@@ -87,31 +94,65 @@ public class SimulationView {
                 simulation.getGrid());
     }
 
+    /**
+     * Calls on the helper class ```ca.helpers.GraphHandler.java``` to create a new chart, which effectively gets the current
+     * chart. This call requires several calls to simulationConfig.
+     * @return Chart that will be displayed and added to the scene
+     */
     public Chart getCurrentLineChart(){
         return graphHandler.createGraph(simulationConfig.getColNum(),
                 simulationConfig.getRowNum(),
                 simulationConfig.getGridWidth());
     }
 
+    /**
+     * Using values from the slideers in the UI, this method updates the number of rows and columns in the grid.
+     * @param newRowNum - read in from the row slider
+     * @param newColNum - read in from the column slider
+     */
     public void updateGridSize(int newRowNum, int newColNum){
         simulation.setNumOfCols(newColNum);
         simulation.setNumOfRows(newRowNum);
     }
 
+    /**
+     * Gets controller so that it can be used in Main.java
+     * @return the Controller
+     */
     public Controller getController() {
         return controller;
     }
 
+    /**
+     * Gets the grid height from the XML file
+     * @return an integer value for the Grid height
+     */
     public int getButtonHeight() {
         return simulationConfig.getGridHeight();
     }
 
+    /**
+     * Gets the grid height from the XML file
+     * @return an integer value for the Grid height
+     */
     public int getGridHeight() {return simulationConfig.getGridHeight();}
 
+    /**
+     * Gets the number of rows from the XML file
+     * @return an integer value for the number of rows
+     */
     public int getNumRows() {return simulationConfig.getRowNum();}
 
+    /**
+     * Gets the number of columns from the XML file
+     * @return an integer value for the number of columns
+     */
     public int getNumCols() {return simulationConfig.getColNum();}
 
+    /**
+     * creates an instance of simulation that can be used in Main.java
+     * @return the Simulation
+     */
     public Simulation getSimulation() {
         return simulation;
     }

@@ -27,6 +27,10 @@ public class GridPaneHandler {
     private int cellHeight;
     private SimulationConfig simulationConfig;
 
+    /**
+     * Creates an instance of ```ca.controller.SimulationConfig.java``` so that its methods can be referenced
+     * @param simulationConfig
+     */
     public GridPaneHandler(SimulationConfig simulationConfig) {
         this.simulationConfig = simulationConfig;
     }
