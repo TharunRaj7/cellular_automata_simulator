@@ -2,9 +2,11 @@ package ca.controller;
 
 import ca.exceptions.FileNotValidException;
 import javafx.scene.paint.Color;
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -25,10 +27,14 @@ import java.util.List;
  * {@code data.SimulationTemplate.xml}.
  *
  * To use this class, a {@link File} needs to be passed in. If this
- * {@@code File} is not specified in the constructor, it is required
+ * {@code File} is not specified in the constructor, it is required
  * to manually set this {@code File} by calling {@link #readFile(File),
  * or with {@link #setFile(File)} and call {@link #readFile()} to start
  * reading before getting any parameters.
+ *
+ * The easiest way to create an new instance of this class and read
+ * in the xml file is:
+ * SimulationConfig sc = new SimulationConfig("fileName.xml");
  *
  * Note, {@link #cellStates} is read as a list, and thus ignores the
  * validity of dimensions. {@link #rowNum} and {@link #colNum} are given
@@ -36,8 +42,10 @@ import java.util.List;
  * the game design.
  *
  * @author Cady Zhou
- * @version 1.2
+ * @version 1.1
  * @since 1.1
+ * @see InitialStateHandler
+ * @see SimulationType
  */
 public class SimulationConfig {
     public static final String CELL_CONFIG_TAG = "cellConfig";
@@ -64,7 +72,9 @@ public class SimulationConfig {
     private InitialStateHandler initialStateHandler;
 
     /**
-     * Create a new instance without configuration file
+     * Creates a new instance without configuration file
+     * @see #setFile(File)
+     * @see #readFile
      */
     public SimulationConfig() {
         colors = new ArrayList<>();
@@ -74,7 +84,7 @@ public class SimulationConfig {
     }
 
     /**
-     * Create a new instance with known configuration file
+     * Creates a new instance with known configuration file
      * @param file          configuration XML file
      * @throws Exception    when the input file does not fulfill
      *                      the requirement
@@ -87,6 +97,15 @@ public class SimulationConfig {
         readFile();
     }
 
+    /**
+     * Creates a new instance with known configuration file and
+     * set the upper and lower bound of state
+     * @param file                  configuration XML file
+     * @param stateUpperBound       an int of the upper limit of state
+     * @param stateLowerBound       an int of the lower limit of state
+     * @throws Exception            when the input file does not fulfill
+     *                              the requirement
+     */
     public SimulationConfig(File file, int stateUpperBound , int stateLowerBound) throws Exception {
         this();
         setFile(file);
@@ -95,7 +114,7 @@ public class SimulationConfig {
     }
 
     /**
-     * Pass in simulation configuration file
+     * Passes in simulation configuration file
      * @param file          configuration XML file
      * @throws Exception    when the input is not a XML file
      */
@@ -110,7 +129,7 @@ public class SimulationConfig {
     }
 
     /**
-     * Read with pre-assigned XML information
+     * Reads with pre-assigned XML information
      * @throws Exception    when the input file is not set
      *                      or does not fulfill requirement
      * @see #readFile(File)
@@ -123,7 +142,7 @@ public class SimulationConfig {
     }
 
     /**
-     * Read all required information for simulations
+     * Reads all required information for simulations
      * @param file          the XML configuration file
      * @throws Exception    When the input XML file does not fulfill
      *                      the required format
@@ -271,6 +290,10 @@ public class SimulationConfig {
         return colorCode.matches(colorPattern);
     }
 
+    /**
+     * Gets the height of this grid instance
+     * @return  an int as the height of the grid
+     */
     public int getGridHeight() {
         if (gridHeight == -1) {
             System.out.println("Warning: gridHeight has not been changed since initialization.");
@@ -278,6 +301,10 @@ public class SimulationConfig {
         return gridHeight;
     }
 
+    /**
+     * Gets the width of this grid instance
+     * @return  an int as the height of the grid
+     */
     public int getGridWidth() {
         if (gridWidth == -1) {
             System.out.println("Warning: gridWidth has not been changed since initialization.");
@@ -285,6 +312,10 @@ public class SimulationConfig {
         return gridWidth;
     }
 
+    /**
+     * Gets the colors for different states
+     * @return  a list of all colors read in
+     */
     public List<Color> getColors() {
         if (colors.size() == 0) {
             System.out.println("Warning: no valid color exists.");
@@ -292,6 +323,10 @@ public class SimulationConfig {
         return colors;
     }
 
+    /**
+     * Gets the initial states of cells
+     * @return  a list of int that represents the initial states
+     */
     public List<Integer> getCellStates() {
         if (initialStateHandler.getInitialState().size() == 0) {
             System.out.println("Warning: no initial cell states exist.");
@@ -299,6 +334,10 @@ public class SimulationConfig {
         return initialStateHandler.getInitialState();
     }
 
+    /**
+     * Gets the {@link SimulationType} of this simulation
+     * @return  a {@link SimulationType}
+     */
     public SimulationType getSimulationType() {
         if (simulationType == null) {
             System.out.println("Warning: simulationType has not been set.");
@@ -306,6 +345,10 @@ public class SimulationConfig {
         return simulationType;
     }
 
+    /**
+     * Gets the number of columns of the grid
+     * @return  an int as the number of columns of the grid
+     */
     public int getColNum() {
         if (initialStateHandler.getNumOfCol() == -1) {
             System.out.println("Warning: column number has not been changed since initialization.");
@@ -313,6 +356,10 @@ public class SimulationConfig {
         return initialStateHandler.getNumOfCol();
     }
 
+    /**
+     * Gets of the number of rows of the grid
+     * @return  an int as the number of rows of the grid
+     */
     public int getRowNum() {
         if (initialStateHandler.getNumOfRow() == -1) {
             System.out.println("Warning: rowNum has not been changed since initialization.");
@@ -320,6 +367,10 @@ public class SimulationConfig {
         return initialStateHandler.getNumOfRow();
     }
 
+    /**
+     * Gets parameters under "<parameters/>" tag
+     * @return  a list of String of additional parameters
+     */
     public List<String> getOtherParameters() {
         if (otherParameters.size() == 0) {
             System.out.println("Warning: there are no other parameters");
@@ -327,6 +378,11 @@ public class SimulationConfig {
         return otherParameters;
     }
 
+    /**
+     * Sets the limit for states
+     * @param stateLowerBound   an int of the lowest possible state
+     * @param stateUpperBound   an int of the highest possible state
+     */
     public void setStateBounds(int stateLowerBound, int stateUpperBound) {
         this.stateLowerBound = stateLowerBound;
         this.stateUpperBound = stateUpperBound;

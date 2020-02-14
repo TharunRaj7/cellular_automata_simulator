@@ -1,7 +1,17 @@
 package ca.controller;
 
-import ca.exceptions.FileNotValidException;
+/**
+ * This class provides methods to read in initial states in three
+ * different ways. Users can input the initial states as a grid
+ * configuration, as a list of states, or as a file that indicates
+ * coordinates where states should be randomly generated.
+ *
+ * @author Cady Zhou
+ * @version 1.1
+ * @since 1.1
+ */
 
+import ca.exceptions.FileNotValidException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,23 +21,36 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class InitialStateHandler {
-    private String folderName;
-    private GridStatus gridStatus;
-
     public static final String GRID_PREFIX = "grid";
     public static final String LIST_OF_LOCATIONS_PREFIX = "list";
     public static final String RANDOM_PREFIX = "rand";
 
+    private String folderName;
+    private GridStatus gridStatus;
 
+    /**
+     * Creates a new instance of initialStateHandler
+     */
     public InitialStateHandler() {
         gridStatus = new GridStatus(-1, -1, new ArrayList<>());
         folderName = null;
     }
 
+    /**
+     * Sets the name of the folder which the configuration file is in
+     * @param folderName    a String represents the name of the folder
+     */
     public void setFolderName(String folderName) {
         this.folderName = folderName;
     }
 
+    /**
+     * Reads cell initial states of cells with given configuration file
+     * @param nodeName              a String of the name of the configuration file
+     * @param stateLowerBound       the lowest state possible
+     * @param stateUpperBound       the highest state possible
+     * @throws Exception            if the configuration file does not follow naming convention
+     */
     public void readCellStates(String nodeName, int stateLowerBound, int stateUpperBound) throws Exception {
         String type = nodeName.split("_")[0];
         switch (type) {
@@ -44,6 +67,7 @@ public class InitialStateHandler {
                 throw new Exception("Cannot initialize states due to the invalid '" + SimulationConfig.INITIAL_STATES_FILE_TAG + "' tag");
         }
     }
+
 
     private void createRandomStates(String filename, int stateLowerBound, int stateUpperBound) {
         Scanner scanner = initializeGridStatus(filename);
@@ -150,14 +174,26 @@ public class InitialStateHandler {
         return s;
     }
 
+    /**
+     * Gets the number of col of this grid
+     * @return  an int as the number of col
+     */
     public int getNumOfCol() {
         return gridStatus.getNumOfCol();
     }
 
+    /**
+     * Gets the number of row of this grid
+     * @return  an int as the number of row
+     */
     public int getNumOfRow() {
         return gridStatus.getNumOfRow();
     }
-
+    
+    /**
+     * Gets the initial states of this grid
+     * @return  a list of integer representing the initial states
+     */
     public List<Integer> getInitialState() {
         return gridStatus.getInitialState();
     }
