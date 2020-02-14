@@ -15,6 +15,8 @@ import java.util.ResourceBundle;
 /**
  * This method and class creates a button that when clicked, executes a certain method based on the handler. It also
  * creates sliders change the number of columns and number of rows of the grid.
+ *
+ * @author Hannah
  */
 
 public class Styler {

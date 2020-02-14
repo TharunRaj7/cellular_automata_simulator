@@ -1,6 +1,4 @@
 package ca.helpers;
-
-
 import ca.controller.SimulationConfig;
 import ca.model.Grids.Grid;
 import ca.model.Grids.GridBase;

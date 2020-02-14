@@ -189,7 +189,7 @@ public class InitialStateHandler {
     public int getNumOfRow() {
         return gridStatus.getNumOfRow();
     }
-    
+
     /**
      * Gets the initial states of this grid
      * @return  a list of integer representing the initial states
