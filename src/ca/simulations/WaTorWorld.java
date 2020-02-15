@@ -98,9 +98,9 @@ public class WaTorWorld extends Simulation {
 
     private void runSharkHandler(int r, int c) {
         // Logic to eat fish
-        int adjacentFishCells = getNeighborStateNumber(r, c, NeighboringType.NSEW, FISH);
+        int adjacentFishCells = getNumberOfNeighbors(r, c, NeighboringType.NSEW, FISH);
         if (adjacentFishCells > 0){
-            List<Cell> fishCells = getNeighboringCellsWithState(r,c, FISH);
+            List<Cell> fishCells = getNeighborsOfTypeWithState(r,c, NeighboringType.NSEW, FISH);
             Cell currentCell = grid.getCell(r,c);
             eatingProtocol(currentCell, fishCells);
         }else{
@@ -109,16 +109,16 @@ public class WaTorWorld extends Simulation {
     }
 
     private void moveAndBreedCombo(int r, int c, int type) {
-        int adjacentEmptyCells = getNeighborStateNumber(r,c, NeighboringType.NSEW, 0);
+        int adjacentEmptyCells = getNumberOfNeighbors(r,c, NeighboringType.NSEW, 0);
         int numOfTurns = (type == FISH) ? FISH : SHARK;
         if (adjacentEmptyCells > 0){
-            List<Cell> emptyCells = getNeighboringCellsWithState(r,c,0);
+            List<Cell> emptyCells = getNeighborsOfTypeWithState(r,c, NeighboringType.NSEW, 0);
             Cell newCell = movementProtocol(grid.getCell(r,c) , emptyCells); //returns the new cell the fish moved to
 
 
             if (turnsMade.get(newCell).getCol() >= numOfTurns){
                 Pair temp = grid.getPairGivenCell(newCell);
-                emptyCells = getNeighboringCellsWithState(temp.getRow(), temp.getCol(), 0);
+                emptyCells = getNeighborsOfTypeWithState(temp.getRow(), temp.getCol(), NeighboringType.NSEW, 0);
                 breedingProtocol(newCell, emptyCells);
             }
         }

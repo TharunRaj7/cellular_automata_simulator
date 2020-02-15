@@ -84,8 +84,8 @@ public class Segregation extends Simulation {
                 return PLACE_HOLDER;
             }
 
-            int satisfiedAgent = getNeighborStateNumber(r, c, type, currentState);
-            int nonVacantAgent = getNeighborStateNumber(r, c, type, AGENT_1) + getNeighborStateNumber(r, c, type, AGENT_2);
+            int satisfiedAgent = getNumberOfNeighbors(r, c, type, currentState);
+            int nonVacantAgent = getNumberOfNeighbors(r, c, type, AGENT_1) + getNumberOfNeighbors(r, c, type, AGENT_2);
             if ((double) satisfiedAgent / nonVacantAgent < percent && needRelocation.size() < vacantNumber) {
                 needRelocation.add(currentState);
                 return VACANT_CELL;

@@ -34,7 +34,7 @@ public class LangtonLoop extends Simulation{
 
     @Override
     protected int determineCellState(int r, int c) {
-        int neighboursAlive = getNeighborStateNumber(r,c, NeighboringType.ALL, ALIVE);
+        int neighboursAlive = getNumberOfNeighbors(r,c, NeighboringType.ALL, ALIVE);
         if (neighboursAlive < 2 || neighboursAlive > 3){
             return DEAD;
         }

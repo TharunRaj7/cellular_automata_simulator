@@ -46,12 +46,12 @@ public class SpreadingOfFire extends Simulation{
     protected int determineCellState(int r, int c) {
         if (grid.getCellState(r, c) == BURNING_CELL) {
             return EMPTY_CELL;
-        } else if(grid.getCellState(r, c) == TREE_CELL && getNeighborStateNumber(r, c, type, BURNING_CELL) >= 1){
+        } else if(grid.getCellState(r, c) == TREE_CELL && getNumberOfNeighbors(r, c, type, BURNING_CELL) >= 1){
             Random randNum = new Random();
             double randomValue = rangeMin + (rangeMax - rangeMin) * randNum.nextDouble();
             System.out.println(randomValue);
             return (randomValue <= percent) ? BURNING_CELL : TREE_CELL;
-        } else if(grid.getCellState(r, c) == TREE_CELL && getNeighborStateNumber(r, c, type, BURNING_CELL) < 1){
+        } else if(grid.getCellState(r, c) == TREE_CELL && getNumberOfNeighbors(r, c, type, BURNING_CELL) < 1){
             return TREE_CELL;
         }
         return EMPTY_CELL;
