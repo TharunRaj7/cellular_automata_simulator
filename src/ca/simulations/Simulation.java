@@ -6,8 +6,6 @@ import ca.model.Cell;
 import ca.model.CellShape;
 import ca.model.Grids.Grid;
 import ca.model.Grids.GridBase;
-//import javafx.scene.Scene;
-
 import java.util.ArrayList;
 import java.util.List;
 

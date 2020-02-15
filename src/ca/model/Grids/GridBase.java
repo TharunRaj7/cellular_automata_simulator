@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This is the abstract class for all {@@code Grid} implementations.
+ * This is the abstract class for all {@code Grid} implementations.
  * This class contains the cell shape and cells' states of the grid.
  *
  * Note, number(s) of row and number(s) of col are two factors that
