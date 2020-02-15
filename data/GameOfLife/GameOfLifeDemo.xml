@@ -10,7 +10,7 @@
     <initialStates>
         <gridWidth>500</gridWidth>
         <gridHeight>500</gridHeight>
-        <cellConfig>rand_simulation.txt</cellConfig>
+        <cellConfig>rand_gol.txt</cellConfig>
     </initialStates>
 
     <colors>
