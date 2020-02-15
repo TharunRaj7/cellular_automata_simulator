@@ -62,18 +62,11 @@ public abstract class Simulation {
      * @param state     an int representing the state to find
      * @return          the number of neighbors have {@code state}
      */
-    public int getNeighborStateNumber(int r, int c, NeighboringType type, int state) {
-       List<Cell> neighbors = getNeighboringCellsOfState(r, c, type);
-        int num = 0;
-        for (Cell cell: neighbors) {
-            if (cell.getState() == state) {
-                num++;
-            }
-        }
-        return num;
+    public int getNumberOfNeighbors(int r, int c, NeighboringType type, int state) {
+        return getNeighborsOfTypeWithState(r, c, type, state).size();
     }
 
-    private List<Cell> getNeighboringCellsOfState(int r, int c, NeighboringType type) {
+    private List<Cell> getNeighborsOfType(int r, int c, NeighboringType type) {
         List<Cell> neighbors;
         try {
             switch (type) {
@@ -100,15 +93,16 @@ public abstract class Simulation {
      * valid neighboring type.
      * @param r         an int of the row position of this cell
      * @param c         an int of the col position of this cell
+     * @param type      a {@link NeighboringType} that we want to get
      * @param state     an int representing the state to find
      * @return          neighbors of {@code state}
      */
-    public List<Cell> getNeighboringCellsWithState(int r, int c, int state){
+    public List<Cell> getNeighborsOfTypeWithState(int r, int c, NeighboringType type, int state){
         List<Cell> ret = new ArrayList<>();
-        List<Cell> neighbors = grid.getNeighborsByIndex(r, c, neighborsHelper.getNSEWRow(), neighborsHelper.getNSEWCol());
-        for (Cell item : neighbors){
-            if (item.getState() == state) {
-                ret.add(item);
+        List<Cell> neighbors = getNeighborsOfType(r, c, type);
+        for (Cell cell: neighbors){
+            if (cell.getState() == state) {
+                ret.add(cell);
             }
         }
         return ret;
@@ -136,7 +130,7 @@ public abstract class Simulation {
      * @param state     an int representing the state to find
      * @return          the number of cells with that state
      */
-    public int cellStateTotal(int state) {
+    public int getNumOfCellsOfState(int state) {
         List<Cell> allCells = getCellOfState(state);
         return allCells.size();
     }

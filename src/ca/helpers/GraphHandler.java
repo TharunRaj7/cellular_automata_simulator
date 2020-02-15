@@ -70,10 +70,10 @@ public class GraphHandler {
                 int cellState = grid.getCellState(i, j);
                 if (!stateQuantity.containsKey(cellState)) {
                     ArrayList<Integer> stateTotals = new ArrayList<>();
-                    stateTotals.add(step, simulation.cellStateTotal(cellState));
+                    stateTotals.add(step, simulation.getNumOfCellsOfState(cellState));
                     stateQuantity.put(cellState, stateTotals);
                 } else {
-                    stateQuantity.get(cellState).add(step, simulation.cellStateTotal(cellState));
+                    stateQuantity.get(cellState).add(step, simulation.getNumOfCellsOfState(cellState));
                 }
             }
         }
